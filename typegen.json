@@ -1,13 +1,12 @@
 {
   "outDir": "src/types",
-  "specVersions": "https://kusama.archive.subsquid.io/graphql",
+  "specVersions": "https://statemine.archive.subsquid.io/graphql",
   "events": [
-    "Uniques.ApprovalCancelled",
-    "Uniques.ApprovedTransfer",
     "Uniques.AttributeCleared",
     "Uniques.AttributeSet",
     "Uniques.Burned",
     "Uniques.ClassFrozen",
+    "Uniques.ClassMetadataCleared",
     "Uniques.ClassMetadataSet",
     "Uniques.ClassThawed",
     "Uniques.CollectionFrozen",
@@ -17,21 +16,23 @@
     "Uniques.CollectionThawed",
     "Uniques.Created",
     "Uniques.Destroyed",
+    "Uniques.ForceCreated",
     "Uniques.Frozen",
     "Uniques.Issued",
     "Uniques.ItemBought",
     "Uniques.ItemPriceRemoved",
     "Uniques.ItemPriceSet",
-    "Uniques.ItemStatusChanged",
     "Uniques.MetadataCleared",
     "Uniques.MetadataSet",
     "Uniques.OwnerChanged",
     "Uniques.OwnershipAcceptanceChanged",
-    "Uniques.Redeposited",
     "Uniques.TeamChanged",
     "Uniques.Thawed",
     "Uniques.Transferred"
   ],
   "calls": [],
-  "storage": []
+  "storage": [
+    "Uniques.Class",
+    "Uniques.InstanceMetadataOf"
+  ]
 }
