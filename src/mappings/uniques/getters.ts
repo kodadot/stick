@@ -4,7 +4,7 @@ import * as events from '../../types/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ListTokenEvent, TransferTokenEvent } from './types'
+import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ListTokenEvent, LockCollectionEvent, SetCollectionMetadata, TransferTokenEvent } from './types'
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = new events.UniquesCreatedEvent(ctx)
@@ -179,4 +179,42 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
   return {
     collectionId: classId.toString(), caller: addressOf(buyer), sn: instanceId.toString(), price: BigInt(price ?? 0), currentOwner: addressOf(seller),
   }
+}
+
+export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
+  const event = new events.UniquesCollectionMaxSupplySetEvent(ctx)
+  if (event.isV9230) {
+    const { collection: classId, maxSupply: max } = event.asV9230
+    return { id: classId.toString(), max }
+  }
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { collection: classId, mamaxSupply: max } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString(), max }
+}
+
+export function getClearCollectionMetadataEvent(ctx: Context): SetCollectionMetadata {
+  const event = new events.UniquesCollectionMetadataClearedEvent(ctx)
+  if (event.isV9230) {
+    const { collection: classId } = event.asV9230
+    return { id: classId.toString() }
+  }
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { collection: classId } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString() }
+}
+
+export function getCreateCollectionMetadataEvent(ctx: Context): SetCollectionMetadata {
+  const event = new events.UniquesClassMetadataSetEvent(ctx)
+  if (event.isV1) {
+    const [classId, data, isFrozen] = event.asV1
+    return { id: classId.toString(), metadata: data.toString() }
+  }
+  if (event.isV700) {
+    const { class: classId, data, isFrozen } = event.asV700
+    return { id: classId.toString(), metadata: data.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { class: classId, data, isFrozen } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString(), metadata: data.toString() }
 }

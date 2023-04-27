@@ -1,5 +1,9 @@
 import { createTokenId } from '../utils/types'
 
+export type WithId = {
+  id: string;
+}
+
 export type BaseCollectionEvent = {
   id: string;
   caller: string;
@@ -40,8 +44,14 @@ export type BuyTokenEvent = ListTokenEvent & {
 
 export type BurnTokenEvent = CreateTokenEvent;
 
-export type DestroyCollectionEvent = {
-  id: string;
-};
+export type DestroyCollectionEvent = WithId
+
+export type LockCollectionEvent = WithId & {
+  max: number;
+}
+
+export type SetCollectionMetadata = WithId & OptionalMeta;
+
+export type SetTokenMetadata = BaseTokenEvent & OptionalMeta;
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn);
