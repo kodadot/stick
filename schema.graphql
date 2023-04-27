@@ -37,7 +37,6 @@ type NFTEntity @entity {
   meta: MetadataEntity
   metadata: String
   name: String @index
-  offers: [Offer!] @derivedFrom(field: "nft")
   price: BigInt
   recipient: String
   royalty: Float
