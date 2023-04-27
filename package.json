@@ -1,0 +1,43 @@
+{
+  "name": "@kodadot1/stick",
+  "version": "0.0.1",
+  "description": "GraphQL service for Uniques and Assets on Statemine",
+  "private": true,
+  "engines" : {
+    "node" : ">=16"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "update": "npx npm-check-updates --filter /subsquid/ --upgrade && npm i -f",
+    "db:migrate": "npx squid-typeorm-migration apply",
+    "processor:start": "node lib/processor.js",
+    "query-node:start": "squid-graphql-server --subscriptions --max-response-size 10000 --dumb-cache in-memory --dumb-cache-ttl 1000 --dumb-cache-size 100 --dumb-cache-max-age 1000"
+  },
+  "dependencies": {
+    "@kodadot1/metasquid": "^0.1.6-rc.0",
+    "@kodadot1/minipfs": "^0.2.0-rc.0",
+    "@subsquid/archive-registry": "2.1.13",
+    "@subsquid/graphql-server": "3.3.2",
+    "@subsquid/ss58": "0.1.4",
+    "@subsquid/substrate-processor": "2.4.1",
+    "@subsquid/typeorm-migration": "0.1.6",
+    "@subsquid/typeorm-store": "0.2.2",
+    "dotenv": "^16.0.0",
+    "md5": "^2.3.0",
+    "nanoid": "3.3.4",
+    "pg": "^8.10.0",
+    "typeorm": "0.3.15"
+  },
+  "devDependencies": {
+    "@subsquid/typeorm-codegen": "0.3.3",
+    "@subsquid/substrate-metadata-explorer": "1.1.2",
+    "@subsquid/substrate-typegen": "2.2.1",
+    "@types/md5": "^2.3.2",
+    "@types/node": "18.11.18",
+    "@types/pg": "^8.6.6",
+    "eslint": "^8.38.0",
+    "eslint-config-unjs": "^0.1.0",
+    "prettier": "^2.8.7",
+    "typescript": "~5.0.4"
+  }
+}

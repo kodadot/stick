@@ -1,0 +1,106 @@
+type CollectionEntity @entity {
+  blockNumber: BigInt
+  burned: Boolean!
+  createdAt: DateTime!
+  currentOwner: String!
+  distribution: Int!
+  events: [CollectionEvent!] @derivedFrom(field: "collection")
+  floor: BigInt!
+  highestSale: BigInt!
+  id: ID!
+  image: String
+  issuer: String!
+  media: String
+  meta: MetadataEntity
+  metadata: String
+  name: String @index
+  nftCount: Int!
+  nfts: [NFTEntity!] @derivedFrom(field: "collection")
+  ownerCount: Int!
+  supply: Int!
+  type: CollectionType!
+  updatedAt: DateTime!
+  volume: BigInt!
+}
+
+type NFTEntity @entity {
+  blockNumber: BigInt
+  burned: Boolean!
+  collection: CollectionEntity!
+  createdAt: DateTime!
+  currentOwner: String! @index
+  events: [Event!] @derivedFrom(field: "nft")
+  hash: String! @index
+  id: ID!
+  image: String
+  issuer: String!
+  media: String
+  meta: MetadataEntity
+  metadata: String
+  name: String @index
+  offers: [Offer!] @derivedFrom(field: "nft")
+  price: BigInt
+  recipient: String
+  royalty: Float
+  sn: String!
+  updatedAt: DateTime!
+}
+
+type MetadataEntity @entity {
+  id: ID!
+  name: String
+  description: String
+  image: String
+  attributes: [Attribute!]
+  animationUrl: String
+  type: String
+}
+
+type Attribute @jsonField {
+  display: String
+  trait: String
+  value: String!
+}
+
+interface EventType {
+  id: ID!
+  blockNumber: BigInt
+  timestamp: DateTime!
+  caller: String!
+  currentOwner: String
+  interaction: Interaction!
+  meta: String!
+}
+
+type Event implements EventType @entity {
+  id: ID!
+  blockNumber: BigInt
+  timestamp: DateTime!
+  caller: String!
+  currentOwner: String! # currentOwner
+  interaction: Interaction!
+  meta: String!
+  nft: NFTEntity!
+}
+
+type CollectionEvent implements EventType @entity {
+  id: ID!
+  blockNumber: BigInt
+  timestamp: DateTime!
+  caller: String!
+  currentOwner: String # currentOwner
+  interaction: Interaction!
+  meta: String!
+  collection: CollectionEntity!
+}
+
+enum Interaction {
+  BURN
+  BUY
+  CREATE
+  DESTROY
+  LIST
+  MINT
+  SEND
+  UNLIST
+}
