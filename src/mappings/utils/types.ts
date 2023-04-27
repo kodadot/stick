@@ -58,70 +58,6 @@ export interface IEvent<T = OneOfInteraction> {
   meta: string;
 }
 
-export type BaseCollectionEvent = {
-  id: string;
-  caller: string;
-};
-
-export type BaseTokenEvent = {
-  collectionId: string;
-  sn: string;
-};
-
-export type OptionalMeta = {
-  metadata?: string;
-};
-
-export type CreateCollectionEvent = BaseCollectionEvent & OptionalMeta & {
-  type: string;
-};
-
-export type CreateTokenEvent = BaseTokenEvent & {
-  caller: string;
-  metadata?: string;
-};
-
-export type TransferTokenEvent = BaseTokenEvent & {
-  caller: string;
-  to: string;
-};
-
-export type ListTokenEvent = BaseTokenEvent & {
-  caller: string;
-  price?: bigint
-};
-
-export type BuyTokenEvent = ListTokenEvent & {
-  currentOwner: string;
-};
-
-export type BurnTokenEvent = CreateTokenEvent;
-
-export type DestroyCollectionEvent = BaseCollectionEvent;
-
-export type AddRoyaltyEvent = BaseTokenEvent & {
-  recipient: string;
-  royalty: number;
-};
-
-export type PayRoyaltyEvent = AddRoyaltyEvent & WithAmount;
-
-export type BaseOfferEvent = BaseTokenEvent & WithCaller;
-
-export type WithdrawOfferEvent = BaseTokenEvent & {
-  caller: string;
-  maker: string;
-};
-
-export type OfferWithAmountEvent = BaseOfferEvent & WithAmount;
-
-export type AcceptOfferEvent = OfferWithAmountEvent & {
-  maker: string;
-};
-
-export type MakeOfferEvent = OfferWithAmountEvent & {
-  expiresAt: bigint;
-};
 
 export type CallWith<T> = BaseCall & T;
 
@@ -155,9 +91,6 @@ export function ensure<T>(value: unknown): T {
 export const createTokenId = (collection: string, id: string): string => `${collection}-${id}`;
 
 export const eventId = (id: string, event: Interaction): string => `${id}-${event}-${nanoid()}`;
-
-
-export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn);
 
 export type TokenMetadata = {
   name?: string
