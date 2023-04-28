@@ -1,13 +1,12 @@
-import { plsBe } from '@kodadot1/metasquid/consolidator'
 import { getOrCreate } from '@kodadot1/metasquid/entity'
 import {
-  CollectionEntity as CE, Interaction,
+  CollectionEntity as CE
 } from '../../model'
+import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context } from '../utils/types'
 import { getCreateCollectionEvent } from './getters'
-import { handleMetadata } from '../shared/metadata'
 
 const OPERATION = Action.CREATE
 
