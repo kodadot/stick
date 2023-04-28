@@ -29,3 +29,7 @@ export function oneOf<T>(one: T, two: T): T {
   return one || two;
 }
 
+export function isNewUnique(context: Context, event: Event): boolean {
+  return context.event.name === event;
+}
+
