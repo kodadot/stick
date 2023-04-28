@@ -1,3 +1,55 @@
-import { Context } from '../utils/types'
+import { plsBe } from '@kodadot1/metasquid/consolidator'
+import { getOrCreate } from '@kodadot1/metasquid/entity'
+import {
+  CollectionEntity as CE, Interaction,
+} from '../../model'
+import { unwrap } from '../utils/extract'
+import { debug, pending, success } from '../utils/logger'
+import { Action, Context } from '../utils/types'
+import { getCreateCollectionEvent } from './getters'
+import { handleMetadata } from '../shared/metadata'
 
-export async function handleCollectionCreate(context: Context): Promise<void> {}
+const OPERATION = Action.CREATE
+
+export async function handleCollectionCreate(context: Context): Promise<void> {
+  pending(OPERATION, `[COLECTTION++]: ${context.block.height}`);
+  const event = unwrap(context, getCreateCollectionEvent);
+  debug(OPERATION, event);
+  const final = await getOrCreate(context.store, CE, event.id, {});
+  // plsBe(remintable, final);
+
+
+  final.blockNumber = BigInt(event.blockNumber);
+  final.burned = false;
+  final.createdAt = event.timestamp;
+  final.currentOwner = event.caller;
+  final.distribution = 0;
+  final.floor = BigInt(0);
+  // final.hash = md5(collection.id)
+  final.highestSale = BigInt(0);
+  final.id = event.id;
+  final.issuer = event.caller;
+  // final.max = undefined;
+  final.metadata = event.metadata;
+  final.nftCount = 0;
+  final.ownerCount = 0;
+  final.supply = 0;
+  final.updatedAt = event.timestamp;
+  final.volume = BigInt(0);
+
+  
+
+  debug(OPERATION, { metadata: final.metadata});
+
+  if (final.metadata) {
+    const metadata = await handleMetadata(final.metadata, context.store);
+    final.meta = metadata;
+    final.name = metadata?.name;
+    final.image = metadata?.image;
+    final.media = metadata?.animationUrl;
+  }
+
+  success(OPERATION, `[COLLECTION] ${final.id}`);
+  await context.store.save(final);
+  // await createCollectionEvent(final, OPERATION, event, '', context.store);
+}
