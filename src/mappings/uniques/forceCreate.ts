@@ -10,7 +10,7 @@ import { getCreateCollectionEvent } from './getters'
 
 const OPERATION = Action.CREATE
 
-export async function handleCollectionCreate(context: Context): Promise<void> {
+export async function handleForceCollectionCreate(context: Context): Promise<void> {
   pending(OPERATION, `[COLECTTION++]: ${context.block.height}`);
   const event = unwrap(context, getCreateCollectionEvent);
   debug(OPERATION, event);
@@ -27,7 +27,7 @@ export async function handleCollectionCreate(context: Context): Promise<void> {
   // final.hash = md5(collection.id)
   final.highestSale = BigInt(0);
   final.id = event.id;
-  final.issuer = event.caller;
+  final.issuer = event.owner;
   // final.max = undefined;
   final.metadata = event.metadata;
   final.nftCount = 0;

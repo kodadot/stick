@@ -4,7 +4,7 @@ import * as events from '../../types/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ListTokenEvent, LockCollectionEvent, SetMetadata, TransferTokenEvent } from './types'
+import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetMetadata, TransferTokenEvent } from './types'
 import { Event } from '../../processable';
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
@@ -28,6 +28,25 @@ export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
     owner,
   } = ctx._chain.decodeEvent(ctx.event)
   return { id: classId.toString(), caller: addressOf(creator), owner: addressOf(owner) }
+}
+
+export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
+  const event = new events.UniquesForceCreatedEvent(ctx)
+  if (event.isV1) {
+    const [classId, owner] = event.asV1
+    return { id: classId.toString(), owner: addressOf(owner) }
+  }
+  if (event.isV700) {
+    const { class: classId, owner } = event.asV700
+    return { id: classId.toString(), owner: addressOf(owner) }
+  }
+  if (event.isV9230) {
+    const { collection: classId, owner } = event.asV9230
+    return { id: classId.toString(), owner: addressOf(owner) }
+  }
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { collection: classId, owner } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString(), owner: addressOf(owner) }
 }
 
 export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {

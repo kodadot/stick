@@ -22,6 +22,8 @@ export type CreateCollectionEvent = BaseCollectionEvent & OptionalMeta & {
   owner: string;
 };
 
+export type ForceCreateCollectionEvent = Omit<CreateCollectionEvent, 'caller'>
+
 export type CreateTokenEvent = BaseTokenEvent & OptionalMeta & {
   // caller: string; // Not Correct // may you can mint & send in one
   owner: string;
