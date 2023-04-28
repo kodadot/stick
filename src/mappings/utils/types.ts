@@ -4,10 +4,7 @@ import { EntityManager } from 'typeorm';
 // impsort { Interaction } from '../../model/generated/_interaction';
 // import { Attribute } from '../../model/generated/_attribute';
 
-enum Interaction {
-  MINT,
-  DESTROY
-}
+import { Interaction } from '../../model';
 
 export type BaseCall = {
   caller: string;
@@ -15,9 +12,9 @@ export type BaseCall = {
   timestamp: Date;
 };
 
-export { Interaction };
+export { Interaction as Action };
 
-export type CollectionInteraction = Interaction.MINT | Interaction.DESTROY;
+export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY;
 
 type OneOfInteraction = Interaction;
 
