@@ -4,7 +4,8 @@ import * as events from '../../types/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ListTokenEvent, LockCollectionEvent, SetCollectionMetadata, TransferTokenEvent } from './types'
+import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ListTokenEvent, LockCollectionEvent, SetMetadata, TransferTokenEvent } from './types'
+import { Event } from '../../processable';
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = new events.UniquesCreatedEvent(ctx)
@@ -192,29 +193,133 @@ export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
   return { id: classId.toString(), max }
 }
 
-export function getClearCollectionMetadataEvent(ctx: Context): SetCollectionMetadata {
+export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = new events.UniquesCollectionMetadataClearedEvent(ctx)
   if (event.isV9230) {
     const { collection: classId } = event.asV9230
-    return { id: classId.toString() }
+    return { collectionId: classId.toString() }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
   const { collection: classId } = ctx._chain.decodeEvent(ctx.event)
-  return { id: classId.toString() }
+  return { collectionId: classId.toString() }
 }
 
-export function getCreateCollectionMetadataEvent(ctx: Context): SetCollectionMetadata {
-  const event = new events.UniquesClassMetadataSetEvent(ctx)
-  if (event.isV1) {
-    const [classId, data, isFrozen] = event.asV1
-    return { id: classId.toString(), metadata: data.toString() }
-  }
-  if (event.isV700) {
-    const { class: classId, data, isFrozen } = event.asV700
-    return { id: classId.toString(), metadata: data.toString() }
+export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
+  const event = new events.UniquesCollectionMetadataSetEvent(ctx)
+  if (event.isV9230) {
+    const { collection: classId, data, isFrozen } = event.asV9230
+    return { collectionId: classId.toString(), metadata: data.toString() }
   }
 
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
   const { class: classId, data, isFrozen } = ctx._chain.decodeEvent(ctx.event)
-  return { id: classId.toString(), metadata: data.toString() }
+  return { collectionId: classId.toString(), metadata: data.toString() }
+}
+
+export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
+  const event = new events.UniquesClassMetadataClearedEvent(ctx)
+  if (event.isV1) {
+    const classId = event.asV1
+    return { collectionId: classId.toString() }
+  }
+  if (event.isV700) {
+    const { class: classId } = event.asV700
+    return { collectionId: classId.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { class: classId } = ctx._chain.decodeEvent(ctx.event)
+  return { collectionId: classId.toString() }
+}
+
+export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
+  const event = new events.UniquesClassMetadataSetEvent(ctx)
+  if (event.isV1) {
+    const [classId, data, isFrozen] = event.asV1
+    return { collectionId: classId.toString(), metadata: data.toString() }
+  }
+  if (event.isV700) {
+    const { class: classId, data, isFrozen } = event.asV700
+    return { collectionId: classId.toString(), metadata: data.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { class: classId, data, isFrozen } = ctx._chain.decodeEvent(ctx.event)
+  return { collectionId: classId.toString(), metadata: data.toString() }
+}
+
+export function getCreateMetadataEvent(ctx: Context): SetMetadata {
+  const event = new events.UniquesMetadataSetEvent(ctx)
+  if (event.isV1) {
+    const [classId, instanceId, data, isFrozen] = event.asV1
+    return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
+  }
+  if (event.isV700) {
+    const {
+      class: classId,
+      instance: instanceId,
+      data,
+      isFrozen,
+    } = event.asV700
+    return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
+  }
+  if (event.isV9230) {
+    const {
+      collection: classId,
+      item: instanceId,
+      data,
+      isFrozen,
+    } = event.asV9230
+    return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const {
+    collection: classId,
+    item: instanceId,
+    data,
+    isFrozen,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
+}
+
+export function getClearMetadataEvent(ctx: Context): SetMetadata {
+  const event = new events.UniquesMetadataClearedEvent(ctx)
+  if (event.isV1) {
+    const [classId, instanceId] = event.asV1
+    return { collectionId: classId.toString(), sn: instanceId.toString() }
+  }
+  if (event.isV700) {
+    const { class: classId, instance: instanceId } = event.asV700
+    return { collectionId: classId.toString(), sn: instanceId.toString() }
+  }
+  if (event.isV9230) {
+    const { collection: classId, item: instanceId } = event.asV9230
+    return { collectionId: classId.toString(), sn: instanceId.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { collection: classId, item: instanceId } = ctx._chain.decodeEvent(
+    ctx.event
+  )
+  return { collectionId: classId.toString(), sn: instanceId.toString() }
+}
+
+export function getMetadataEvent(ctx: Context): SetMetadata {
+  switch (ctx.event.name) {
+    case Event.clearClassMetadata:
+      return getClearClassMetadataEvent(ctx)
+    case Event.setClassMetadata:
+      return getCreateClassMetadataEvent(ctx)
+    case Event.setCollectionMetadata:
+      return getCreateCollectionMetadataEvent(ctx)
+    case Event.clearCollectionMetadata:
+      return getClearCollectionMetadataEvent(ctx)
+    case Event.setMetadata:
+      return getCreateMetadataEvent(ctx)
+    case Event.clearMetadata:
+      return getClearMetadataEvent(ctx)
+    default:
+      throw new Error('Unsupported event')
+  }
 }
