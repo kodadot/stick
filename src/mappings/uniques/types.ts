@@ -1,4 +1,4 @@
-import { createTokenId } from '../utils/types'
+import { createTokenId } from '../utils/types';
 
 export type WithId = {
   id: string;
@@ -50,8 +50,8 @@ export type LockCollectionEvent = WithId & {
   max: number;
 }
 
-export type SetCollectionMetadata = WithId & OptionalMeta;
-
-export type SetTokenMetadata = BaseTokenEvent & OptionalMeta;
+export type SetMetadata = Omit<BaseTokenEvent, 'sn'> & OptionalMeta & {
+  sn?: string;
+}
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn);
