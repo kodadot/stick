@@ -6,10 +6,12 @@ type CollectionEntity @entity {
   distribution: Int!
   events: [CollectionEvent!] @derivedFrom(field: "collection")
   floor: BigInt!
+  hash: String! @unique
   highestSale: BigInt!
   id: ID!
   image: String
   issuer: String!
+  max: Int!
   media: String
   meta: MetadataEntity
   metadata: String
