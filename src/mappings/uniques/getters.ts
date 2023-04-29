@@ -173,6 +173,14 @@ export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
   return { collectionId: classId.toString(), sn: instanceId.toString(), price: 0n }
 }
 
+export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
+  if (ctx.event.name === Event.setPrice) {
+    return getListTokenEvent(ctx)
+  }
+
+  return getUnListTokenEvent(ctx)
+}
+
 export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
   const event = new events.UniquesItemBoughtEvent(ctx)
 
