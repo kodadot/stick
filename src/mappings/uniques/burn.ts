@@ -6,6 +6,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getBurnTokenEvent } from './getters'
+import { createEvent } from '../shared/event'
 
 const OPERATION = Action.BURN
 
@@ -23,9 +24,10 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   entity.collection.updatedAt = event.timestamp;
   entity.collection.supply -= 1;
 
-  // calculate distribution
+  // TODO: UPDATE COLLECTION DISTRIBUTION
+
   success(OPERATION, `${id} by ${event.caller}}`);
   await context.store.save(entity);
   const meta = entity.metadata ?? '';
-  // await createEvent(entity, OPERATION, event, meta, context.store);
+  await createEvent(entity, OPERATION, event, meta, context.store);
 }
