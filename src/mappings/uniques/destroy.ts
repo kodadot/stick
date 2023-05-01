@@ -1,3 +1,22 @@
-import { Context } from '../utils/types'
+import { getOrFail as get } from '@kodadot1/metasquid/entity'
+import {
+  CollectionEntity as CE,
+} from '../../model'
+import { unwrap } from '../utils/extract'
+import { debug, pending, success } from '../utils/logger'
+import { Action, Context } from '../utils/types'
+import { getDestroyCollectionEvent } from './getters'
 
-export async function handleCollectionDestroy(context: Context): Promise<void> {}
+const OPERATION = Action.DESTROY
+
+export async function handleCollectionDestroy(context: Context): Promise<void> {
+  pending(OPERATION, `${context.block.height}`);
+  const event = unwrap(context, getDestroyCollectionEvent);
+  debug(OPERATION, event);
+
+  const entity = await get(context.store, CE, event.id);
+  entity.burned = true;
+
+  success(OPERATION, `${event.id} by ${event.caller}}`);
+  await context.store.save(entity);
+}
