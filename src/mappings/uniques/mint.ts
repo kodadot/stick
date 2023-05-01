@@ -5,6 +5,7 @@ import {
 import { warn } from 'console'
 import md5 from 'md5'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
+import { createEvent } from '../shared/event'
 import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
@@ -36,7 +37,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.id = id
   final.hash = md5(id)
   final.issuer = event.caller
-  final.currentOwner = event.caller
+  final.currentOwner = event.owner
   final.blockNumber = BigInt(event.blockNumber)
   final.collection = collection
   final.sn = event.sn
@@ -61,5 +62,9 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
   await context.store.save(collection)
-  // await createEvent(final, OPERATION, event, '', context.store);
+  await createEvent(final, OPERATION, event, '', context.store);
+
+  if (final.issuer !== final.currentOwner) {
+    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer);
+  }
 }
