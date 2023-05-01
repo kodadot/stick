@@ -14,7 +14,6 @@ export enum Event {
   thawCollection = 'Uniques.CollectionThawed',
   createCollection = 'Uniques.Created',
   destroyCollection = 'Uniques.Destroyed',
-  forceCreate = 'Uniques.ForceCreated',
   freeze = 'Uniques.Frozen',
   createItem = 'Uniques.Issued',
   sold = 'Uniques.ItemBought',
