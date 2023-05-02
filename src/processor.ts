@@ -2,13 +2,14 @@ import { lookupArchive } from "@subsquid/archive-registry"
 import { SubstrateProcessor } from "@subsquid/substrate-processor"
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import { Event } from './processable'
+import logger from './mappings/utils/logger';
 
 import * as u from './mappings/uniques';
 
 const database = new Database();
 const processor = new SubstrateProcessor(database);
 
-const STARTING_BLOCK = 778425; // 6000 or 1790000 for Prod
+const STARTING_BLOCK = 618838;
 
 processor.setTypesBundle('statemine')
 processor.setBlockRange({ from: STARTING_BLOCK });
@@ -51,3 +52,7 @@ processor.addEventHandler(Event.changeOwnershipAcceptance, dummy);
 processor.addEventHandler(Event.changeTeam, dummy);
 processor.addEventHandler(Event.thaw, dummy);
 processor.addEventHandler(Event.transfer, u.handleTokenTransfer);
+
+logger.info('Welcome to the Processor! Statemine');
+
+processor.run();
