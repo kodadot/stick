@@ -1,4 +1,4 @@
-import { addressOf } from './helper';
+import { addressOf, onlyValue } from './helper';
 import {
   BaseCall, CallWith, Context, UnwrapFunc,
 } from './types';
@@ -12,7 +12,8 @@ import {
 // }
 
 function toBaseEvent(ctx: Context): BaseCall {
-  const caller = addressOf(ctx.event.extrinsic?.signature?.address);
+  const address = onlyValue(ctx.event.extrinsic?.signature?.address)
+  const caller = addressOf(address);
   const blockNumber = ctx.block.height.toString();
   const timestamp = new Date(ctx.block.timestamp);
 
