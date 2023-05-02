@@ -9,7 +9,7 @@ import * as u from './mappings/uniques';
 const database = new Database();
 const processor = new SubstrateProcessor(database);
 
-const STARTING_BLOCK = 618838;
+const STARTING_BLOCK = 323750; //618838;
 
 processor.setTypesBundle('statemine')
 processor.setBlockRange({ from: STARTING_BLOCK });
