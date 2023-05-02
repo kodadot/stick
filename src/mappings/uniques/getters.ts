@@ -1,11 +1,11 @@
 
 import { Interaction } from '../../model'
+import { Event } from '../../processable'
 import * as events from '../../types/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetMetadata, TransferTokenEvent } from './types'
-import { Event } from '../../processable';
+import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetMetadata, TransferTokenEvent } from './types'
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = new events.UniquesCreatedEvent(ctx)
@@ -218,6 +218,27 @@ export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
   const { collection: classId, mamaxSupply: max } = ctx._chain.decodeEvent(ctx.event)
   return { id: classId.toString(), max }
+}
+
+export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
+  const event = new events.UniquesOwnerChangedEvent(ctx)
+  if (event.isV1) {
+    const [classId, newOwner] = event.asV1
+    return { id: classId.toString(), owner: addressOf(newOwner) }
+  }
+  if (event.isV700) {
+    const { class: classId, newOwner } = event.asV700
+    return { id: classId.toString(), owner: addressOf(newOwner) }
+  }
+  if (event.isV9230) {
+    const { collection: classId, newOwner } = event.asV9230
+    return { id: classId.toString(), owner: addressOf(newOwner) }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { collection: classId, newOwner } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString(), owner: addressOf(newOwner) }
+  
 }
 
 export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
