@@ -289,3 +289,12 @@ For instance, account data is passed to the handler context as a plain byte arra
 It is possible to extend `squid-graphql-server(1)` with custom
 [type-graphql](https://typegraphql.com) resolvers and to add request validation.
 For more details, consult [docs](https://docs.subsquid.io/graphql-api/).
+
+
+### Dev hacks 
+
+fast generate event handlers 
+
+```
+pbpaste | cut -d '=' -f 1 | tr -d ' '  | xargs -I_ echo "processor.addEventHandler(Event._, dummy);"
+```
