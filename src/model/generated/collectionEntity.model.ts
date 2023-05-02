@@ -1,5 +1,6 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_, Index as Index_, ManyToOne as ManyToOne_} from "typeorm"
 import * as marshal from "./marshal"
+import {Attribute} from "./_attribute"
 import {CollectionEvent} from "./collectionEvent.model"
 import {MetadataEntity} from "./metadataEntity.model"
 import {NFTEntity} from "./nftEntity.model"
@@ -9,6 +10,9 @@ export class CollectionEntity {
     constructor(props?: Partial<CollectionEntity>) {
         Object.assign(this, props)
     }
+
+    @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
+    attributes!: (Attribute)[] | undefined | null
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
     blockNumber!: bigint | undefined | null
@@ -31,6 +35,10 @@ export class CollectionEntity {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     floor!: bigint
 
+    @Index_({unique: true})
+    @Column_("text", {nullable: false})
+    hash!: string
+
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     highestSale!: bigint
 
@@ -42,6 +50,9 @@ export class CollectionEntity {
 
     @Column_("text", {nullable: false})
     issuer!: string
+
+    @Column_("int4", {nullable: true})
+    max!: number | undefined | null
 
     @Column_("text", {nullable: true})
     media!: string | undefined | null

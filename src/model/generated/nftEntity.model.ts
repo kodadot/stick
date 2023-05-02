@@ -1,5 +1,6 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
+import {Attribute} from "./_attribute"
 import {CollectionEntity} from "./collectionEntity.model"
 import {Event} from "./event.model"
 import {MetadataEntity} from "./metadataEntity.model"
@@ -9,6 +10,9 @@ export class NFTEntity {
     constructor(props?: Partial<NFTEntity>) {
         Object.assign(this, props)
     }
+
+    @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
+    attributes!: (Attribute)[] | undefined | null
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
     blockNumber!: bigint | undefined | null
@@ -42,6 +46,9 @@ export class NFTEntity {
 
     @Column_("text", {nullable: false})
     issuer!: string
+
+    @Column_("bool", {nullable: false})
+    lewd!: boolean
 
     @Column_("text", {nullable: true})
     media!: string | undefined | null

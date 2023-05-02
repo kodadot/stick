@@ -7,4 +7,6 @@ export enum Interaction {
     MINT = "MINT",
     SEND = "SEND",
     UNLIST = "UNLIST",
+    LOCK = "LOCK",
+    CHANGEISSUER = "CHANGEISSUER",
 }

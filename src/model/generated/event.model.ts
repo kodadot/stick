@@ -24,7 +24,7 @@ export class Event {
     @Column_("text", {nullable: false})
     currentOwner!: string
 
-    @Column_("varchar", {length: 7, nullable: false})
+    @Column_("varchar", {length: 12, nullable: false})
     interaction!: Interaction
 
     @Column_("text", {nullable: false})
