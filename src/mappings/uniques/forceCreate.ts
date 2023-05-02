@@ -6,17 +6,17 @@ import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context } from '../utils/types'
-import { getCreateCollectionEvent } from './getters'
+import { getCreateCollectionEvent, getForceCreateCollectionEvent } from './getters'
+import md5 from 'md5'
 
 const OPERATION = Action.CREATE
 
 export async function handleForceCollectionCreate(context: Context): Promise<void> {
-  pending(OPERATION, `[COLECTTION++]: ${context.block.height}`);
-  const event = unwrap(context, getCreateCollectionEvent);
+  pending(OPERATION, `[FORCE]: ${context.block.height}`);
+  const event = unwrap(context, getForceCreateCollectionEvent);
   debug(OPERATION, event);
   const final = await getOrCreate(context.store, CE, event.id, {});
   // plsBe(remintable, final);
-
 
   final.blockNumber = BigInt(event.blockNumber);
   final.burned = false;
@@ -24,19 +24,17 @@ export async function handleForceCollectionCreate(context: Context): Promise<voi
   final.currentOwner = event.owner;
   final.distribution = 0;
   final.floor = BigInt(0);
-  // final.hash = md5(collection.id)
+  final.hash = md5(event.id)
   final.highestSale = BigInt(0);
   final.id = event.id;
-  final.issuer = event.owner;
-  // final.max = undefined;
+  final.issuer = event.caller;
+  final.max = undefined;
   final.metadata = event.metadata;
   final.nftCount = 0;
   final.ownerCount = 0;
   final.supply = 0;
   final.updatedAt = event.timestamp;
   final.volume = BigInt(0);
-
-  
 
   debug(OPERATION, { metadata: final.metadata});
 
