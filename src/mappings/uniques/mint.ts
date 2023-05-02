@@ -46,6 +46,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.burned = false
   final.createdAt = event.timestamp
   final.updatedAt = event.timestamp
+  final.lewd = false;
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
