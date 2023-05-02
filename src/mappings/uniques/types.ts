@@ -52,8 +52,18 @@ export type LockCollectionEvent = WithId & {
   max: number;
 }
 
+export type ChangeCollectionOwnerEvent = WithId & {
+  owner: string;
+}
+
 export type SetMetadata = Omit<BaseTokenEvent, 'sn'> & OptionalMeta & {
   sn?: string;
+}
+
+export type SetAttribute = Omit<BaseTokenEvent, 'sn'> & {
+  sn?: string;
+  trait: string;
+  value?: string; 
 }
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn);
