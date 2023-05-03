@@ -13,7 +13,7 @@ const OPERATION = Action.BUY
 export async function handleTokenBuy(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`);
   const event = unwrap(context, getBuyTokenEvent);
-  debug(OPERATION, event);
+  debug(OPERATION, event, true);
 
 
   const id = createTokenId(event.collectionId, event.sn);

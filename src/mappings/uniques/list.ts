@@ -14,7 +14,7 @@ const UNLIST = Action.UNLIST
 export async function handleTokenList(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`);
   const event = unwrap(context, getPriceTokenEvent);
-  debug(OPERATION, event);
+  debug(OPERATION, event, true);
 
   const id = createTokenId(event.collectionId, event.sn);
   const entity = await getWith(context.store, NE, id, { collection: true });
