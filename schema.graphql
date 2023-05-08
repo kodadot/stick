@@ -1,4 +1,5 @@
 type CollectionEntity @entity {
+  attributes: [Attribute!]
   blockNumber: BigInt
   burned: Boolean!
   createdAt: DateTime!
@@ -6,10 +7,12 @@ type CollectionEntity @entity {
   distribution: Int!
   events: [CollectionEvent!] @derivedFrom(field: "collection")
   floor: BigInt!
+  hash: String! @unique
   highestSale: BigInt!
   id: ID!
   image: String
   issuer: String!
+  max: Int
   media: String
   meta: MetadataEntity
   metadata: String
@@ -18,12 +21,12 @@ type CollectionEntity @entity {
   nfts: [NFTEntity!] @derivedFrom(field: "collection")
   ownerCount: Int!
   supply: Int!
-  type: CollectionType!
   updatedAt: DateTime!
   volume: BigInt!
 }
 
 type NFTEntity @entity {
+  attributes: [Attribute!]
   blockNumber: BigInt
   burned: Boolean!
   collection: CollectionEntity!
@@ -34,11 +37,11 @@ type NFTEntity @entity {
   id: ID!
   image: String
   issuer: String!
+  lewd: Boolean!
   media: String
   meta: MetadataEntity
   metadata: String
   name: String @index
-  offers: [Offer!] @derivedFrom(field: "nft")
   price: BigInt
   recipient: String
   royalty: Float
@@ -103,4 +106,6 @@ enum Interaction {
   MINT
   SEND
   UNLIST
+  LOCK
+  CHANGEISSUER
 }
