@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: stick
-version: 1
+version: 0
 description: 'GraphQL service for Uniques and Assets on Statemine'
 build: 
 deploy:
