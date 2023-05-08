@@ -1,11 +1,14 @@
 manifestVersion: subsquid.io/v0.1
 name: stick
 version: 0
-description: 'GraphQL service for Uniques and Assets on Statemine'
+description: 'SubSquid indexer for Uniques and Assets on Statemine'
 build: 
 deploy:
   addons:
-    postgres: 
+    postgres:
+      config:
+        statement_timeout: 30000
+        log_min_duration_statement: 5000
   processor:
     cmd:
       - node
@@ -22,3 +25,6 @@ deploy:
       - '100'
       - '--dumb-cache-max-age'
       - '1000'
+
+scale:
+  dedicated: true
