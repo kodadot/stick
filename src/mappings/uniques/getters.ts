@@ -1,11 +1,11 @@
 
 import { Interaction } from '../../model'
-import { Event } from '../../processable'
 import * as events from '../../types/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetMetadata, TransferTokenEvent } from './types'
+import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from './types'
+import { Event } from '../../processable';
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = new events.UniquesCreatedEvent(ctx)
@@ -367,6 +367,81 @@ export function getMetadataEvent(ctx: Context): SetMetadata {
       return getCreateMetadataEvent(ctx)
     case Event.clearMetadata:
       return getClearMetadataEvent(ctx)
+    default:
+      throw new Error('Unsupported event')
+  }
+}
+
+function getSetAttributeEvent(
+  ctx: Context
+): SetAttribute {
+  const event = new events.UniquesAttributeSetEvent(ctx)
+  if (event.isV1) {
+    const [classId, instanceId, key, value] = event.asV1
+    return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString(), value: value.toString() }
+  }
+  if (event.isV700) {
+    const {
+      class: classId,
+      maybeInstance: instanceId,
+      key,
+      value,
+    } = event.asV700
+    return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString(), value: value.toString() }
+  }
+  if (event.isV9230) {
+    const {
+      collection: classId,
+      maybeItem: instanceId,
+      key,
+      value,
+    } = event.asV9230
+    return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString(), value: value.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const {
+    collection: classId,
+    maybeItem: instanceId,
+    key,
+    value,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString(), value: value.toString() }
+}
+
+function getClearAttributeEvent(ctx: Context): SetAttribute {
+  const event = new events.UniquesAttributeClearedEvent(ctx)
+
+  if (event.isV1) {
+    const [classId, instanceId, key] = event.asV1
+    return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
+  }
+  if (event.isV700) {
+    const { class: classId, maybeInstance: instanceId, key } = event.asV700
+    return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
+  }
+  if (event.isV9230) {
+    const { collection: classId, maybeItem: instanceId, key } = event.asV9230
+    return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const {
+    collection: classId,
+    maybeItem: instanceId,
+    key,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
+}
+
+
+
+export function getAttributeEvent(ctx: Context): SetAttribute {
+  switch (ctx.event.name) {
+    case Event.setAttribute:
+      return getSetAttributeEvent(ctx)
+    case Event.clearAttribute:
+      return getClearAttributeEvent(ctx)
     default:
       throw new Error('Unsupported event')
   }
