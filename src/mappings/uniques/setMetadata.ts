@@ -6,6 +6,7 @@ import { CollectionEntity, NFTEntity } from '../../model'
 import { tokenIdOf } from './types'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
+import { isFetchable } from '@kodadot1/minipfs'
 
 export async function handleMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getMetadataEvent);
@@ -21,8 +22,11 @@ export async function handleMetadataSet(context: Context): Promise<void> {
     warn('METADATA' as any, `MISSING ${event.collectionId}-${event.sn}`)
     return;
   }
-  
-  final.metadata = event.metadata;
+
+  if (!isFetchable(event.metadata)) {
+    warn('METADATA' as any, `NOT FETCHABLE ${event.collectionId}-${event.sn} ${event.metadata}`)
+    return;
+  }
 
   if (final.metadata) {
     const metadata = await handleMetadata(final.metadata, context.store);
