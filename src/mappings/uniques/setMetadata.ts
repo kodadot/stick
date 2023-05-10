@@ -28,6 +28,8 @@ export async function handleMetadataSet(context: Context): Promise<void> {
     return;
   }
 
+  final.metadata = event.metadata;
+
   if (final.metadata) {
     const metadata = await handleMetadata(final.metadata, context.store);
     final.meta = metadata;
