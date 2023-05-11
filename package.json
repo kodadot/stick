@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "GraphQL service for Uniques and Assets on Statemine",
   "private": true,
-  "engines" : {
-    "node" : ">=16"
+  "engines": {
+    "node": ">=16"
   },
   "scripts": {
     "build": "rm -rf lib && tsc",
@@ -26,12 +26,13 @@
     "md5": "^2.3.0",
     "nanoid": "3.3.4",
     "pg": "^8.10.0",
+    "type-graphql": "^1.2.0-rc.1",
     "typeorm": "0.3.15"
   },
   "devDependencies": {
-    "@subsquid/typeorm-codegen": "0.3.3",
     "@subsquid/substrate-metadata-explorer": "1.1.2",
     "@subsquid/substrate-typegen": "2.2.1",
+    "@subsquid/typeorm-codegen": "0.3.3",
     "@types/md5": "^2.3.2",
     "@types/node": "18.11.18",
     "@types/pg": "^8.6.6",
