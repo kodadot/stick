@@ -17,6 +17,7 @@ deploy:
     cmd:
       - npx
       - squid-graphql-server
+      - '--subscriptions'
       - '--dumb-cache'
       - in-memory
       - '--dumb-cache-ttl'
