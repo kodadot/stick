@@ -48,8 +48,8 @@ processor.addEventHandler(Event.setPrice, u.handleTokenList);
 processor.addEventHandler(Event.clearMetadata, u.handleMetadataSet);
 processor.addEventHandler(Event.setMetadata, u.handleMetadataSet);
 processor.addEventHandler(Event.changeIssuer, u.handleCollectionOwnerChange);
-processor.addEventHandler(Event.changeOwnershipAcceptance, dummy);
-// processor.addEventHandler(Event.changeTeam, dummy);
+// processor.addEventHandler(Event.changeOwnershipAcceptance, dummy);
+processor.addEventHandler(Event.changeTeam, u.handleCollectionTeamChange);
 // processor.addEventHandler(Event.thaw, dummy);
 processor.addEventHandler(Event.transfer, u.handleTokenTransfer);
 

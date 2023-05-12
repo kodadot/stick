@@ -5,17 +5,17 @@ import {
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context } from '../utils/types'
-import { getChangeCollectionOwnerEvent } from './getters'
+import { getChangeTeamEvent } from './getters'
 
 const OPERATION = Action.CHANGEISSUER
 
-export async function handleCollectionOwnerChange(context: Context): Promise<void> {
+export async function handleCollectionTeamChange(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`);
-  const event = unwrap(context, getChangeCollectionOwnerEvent);
+  const event = unwrap(context, getChangeTeamEvent);
   debug(OPERATION, event);
 
   const entity = await get(context.store, CE, event.id);
-  entity.currentOwner = event.owner;
+  entity.issuer = event.issuer;
 
   success(OPERATION, `${event.id} by ${event.caller}}`);
   await context.store.save(entity);

@@ -68,6 +68,12 @@ export type SetAttribute = Omit<BaseTokenEvent, 'sn'> & {
   value?: string; 
 }
 
+export type ChangeCollectionTeam = WithId & {
+  issuer: string;
+  admin: string;
+  freezer: string;
+}
+
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn);
 
 export function attributeFrom(attribute: MetadataAttribute): Attribute {
