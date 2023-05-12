@@ -4,7 +4,7 @@ import * as events from '../../types/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from './types'
+import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, ChangeCollectionTeam, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from './types'
 import { Event } from '../../processable';
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
@@ -445,4 +445,29 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
     default:
       throw new Error('Unsupported event')
   }
+}
+
+export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
+  const event = new events.UniquesTeamChangedEvent(ctx)
+  if (event.isV1) {
+    const [classId, issuer, admin, freezer] = event.asV1
+    return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
+  }
+  if (event.isV700) {
+    const { class: classId, issuer, admin, freezer } = event.asV700
+    return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
+  }
+  if (event.isV9230) {
+    const { collection: classId, issuer, admin, freezer } = event.asV9230
+    return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const {
+    collection: classId,
+    issuer,
+    admin,
+    freezer,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
 }
