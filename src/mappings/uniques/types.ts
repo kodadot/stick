@@ -1,3 +1,5 @@
+import { MetadataAttribute } from '@kodadot1/metasquid/types'
+import { Attribute } from '../../model'
 import { createTokenId } from '../utils/types';
 
 export type WithId = {
@@ -67,3 +69,14 @@ export type SetAttribute = Omit<BaseTokenEvent, 'sn'> & {
 }
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn);
+
+export function attributeFrom(attribute: MetadataAttribute): Attribute {
+  return new Attribute(
+    {},
+    {
+      display: String(attribute.display_type),
+      trait: String(attribute.trait_type),
+      value: String(attribute.value),
+    }
+  )
+}
