@@ -7,6 +7,7 @@ import { tokenIdOf } from './types'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
 import { isFetchable } from '@kodadot1/minipfs'
+import { updateItemMetadataByCollection } from '../utils/cache'
 
 export async function handleMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getMetadataEvent);
@@ -39,4 +40,8 @@ export async function handleMetadataSet(context: Context): Promise<void> {
   }
 
   await context.store.save(final);
+
+  if (!event.sn && final.metadata) {
+    await updateItemMetadataByCollection(context.store, event.collectionId)
+  }
 }
