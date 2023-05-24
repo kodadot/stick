@@ -1,6 +1,6 @@
 
 import { Interaction } from '../../model'
-import * as events from '../../types/events'
+import * as events from '../../types/statemine/events'
 import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
