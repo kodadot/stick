@@ -1,5 +1,5 @@
 {
-  "outDir": "src/types",
+  "outDir": "src/types/statemine",
   "specVersions": "https://statemine.archive.subsquid.io/graphql",
   "events": [
     "Uniques.AttributeCleared",
