@@ -1,10 +1,10 @@
-import { lookupArchive } from "@subsquid/archive-registry"
 import { SubstrateProcessor } from "@subsquid/substrate-processor"
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
+import logger from './mappings/utils/logger'
 import { Event } from './processable'
-import logger from './mappings/utils/logger';
 
-import * as u from './mappings/uniques';
+import { getArchiveUrl, getNodeUrl, CHAIN } from './environment'
+import * as u from './mappings/uniques'
 
 const database = new Database();
 const processor = new SubstrateProcessor(database);
@@ -14,9 +14,8 @@ const STARTING_BLOCK = 323750; //618838;
 processor.setTypesBundle('statemine')
 processor.setBlockRange({ from: STARTING_BLOCK });
 
-// const ARCHIVE = 'https://statemine.archive.subsquid.io/graphql';
-const archive = lookupArchive('statemine', {release: 'FireSquid'} )
-const chain = 'wss://statemine-rpc.polkadot.io'
+const archive = getArchiveUrl();
+const chain = getNodeUrl();
 
 processor.setDataSource({
     archive,
@@ -53,6 +52,6 @@ processor.addEventHandler(Event.changeTeam, u.handleCollectionTeamChange);
 // processor.addEventHandler(Event.thaw, dummy);
 processor.addEventHandler(Event.transfer, u.handleTokenTransfer);
 
-logger.info('Welcome to the Processor! Statemine');
+logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`);
 
 processor.run();

@@ -1,4 +1,5 @@
 default := 'squid'
+types := 'typegen'
 
 process: build
 	node -r dotenv/config lib/processor.js
@@ -28,8 +29,8 @@ build:
 codegen:
 	npx squid-typeorm-codegen
 
-typegen:
-	npx squid-substrate-typegen typegen.json
+typegen TAG=types:
+	npx squid-substrate-typegen {{TAG}}.json
 
 explore:
 	npx squid-substrate-metadata-explorer \

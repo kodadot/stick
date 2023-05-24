@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
-name: stick
-version: 2
-description: 'SubSquid indexer for Uniques and Assets on Statemine'
+name: speck
+version: 1
+description: 'SubSquid indexer for Uniques and Assets on Statemint'
 build: 
 deploy:
   addons:
@@ -14,7 +14,7 @@ deploy:
       - node
       - lib/processor
     env:
-      CHAIN: statemine
+      CHAIN: statemint
   api:
     cmd:
       - npx
@@ -30,4 +30,4 @@ deploy:
       - '1000'
 
 scale:
-  dedicated: true
+  dedicated: false

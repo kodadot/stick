@@ -3,6 +3,9 @@ import { decodeHex } from '@subsquid/substrate-processor'
 import { Event } from '../../processable'
 import { Context, SomethingWithOptionalMeta } from './types'
 import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
+import { isProd } from '../../environment'
+
+const codec = isProd ? 'kusama' : 'polkadot'
 
 export function isEmpty(obj: Record<string, unknown>): boolean {
   // eslint-disable-next-line guard-for-in, @typescript-eslint/naming-convention
@@ -19,7 +22,7 @@ export function addressOf(address: Uint8Array | string): string {
   if (!value) {
     return '';
   }
-  return ss58.codec('kusama').encode(value);
+  return ss58.codec(codec).encode(value);
 }
 
 export function camelCase(str: string): string {
