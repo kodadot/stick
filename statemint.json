@@ -1,0 +1,38 @@
+{
+  "outDir": "src/types/statemint",
+  "specVersions": "https://statemint.archive.subsquid.io/graphql",
+  "events": [
+    "Uniques.AttributeCleared",
+    "Uniques.AttributeSet",
+    "Uniques.Burned",
+    "Uniques.ClassFrozen",
+    "Uniques.ClassMetadataCleared",
+    "Uniques.ClassMetadataSet",
+    "Uniques.ClassThawed",
+    "Uniques.CollectionFrozen",
+    "Uniques.CollectionMaxSupplySet",
+    "Uniques.CollectionMetadataCleared",
+    "Uniques.CollectionMetadataSet",
+    "Uniques.CollectionThawed",
+    "Uniques.Created",
+    "Uniques.Destroyed",
+    "Uniques.ForceCreated",
+    "Uniques.Frozen",
+    "Uniques.Issued",
+    "Uniques.ItemBought",
+    "Uniques.ItemPriceRemoved",
+    "Uniques.ItemPriceSet",
+    "Uniques.MetadataCleared",
+    "Uniques.MetadataSet",
+    "Uniques.OwnerChanged",
+    "Uniques.OwnershipAcceptanceChanged",
+    "Uniques.TeamChanged",
+    "Uniques.Thawed",
+    "Uniques.Transferred"
+  ],
+  "calls": [],
+  "storage": [
+    "Uniques.Class",
+    "Uniques.InstanceMetadataOf"
+  ]
+}
