@@ -1,6 +1,6 @@
 import { lookupArchive } from '@subsquid/archive-registry'
 
-const CHAIN = process.env.CHAIN || 'statemine';
+export const CHAIN = process.env.CHAIN || 'statemine';
 
 // Statemine 
 const ARCHIVE_URL = lookupArchive('statemine', {release: 'FireSquid'} );
