@@ -30,7 +30,7 @@ codegen:
 	npx squid-typeorm-codegen
 
 typegen TAG=types:
-	npx squid-substrate-typegen typegen.json
+	npx squid-substrate-typegen {{TAG}}.json
 
 explore:
 	npx squid-substrate-metadata-explorer \
