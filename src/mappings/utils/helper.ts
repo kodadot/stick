@@ -6,6 +6,8 @@ import { isProd } from '../../environment'
 
 const codec = isProd ? 'kusama' : 'polkadot'
 
+export const U = 'u' as const;
+
 type Optional<T> = T | undefined;
 
 export function isEmpty(obj: Record<string, unknown>): boolean {
