@@ -16,6 +16,7 @@ export function onlyValue(call: ArchiveCallWithOptionalValue): string {
   return call?.value
 }
 
+
 export function addressOf(address: Uint8Array | string): string {
   const value = typeof address === 'string' ? decodeHex(address) : address;
   if (!value) {
@@ -40,3 +41,6 @@ export function isNewUnique(context: Context): boolean {
   return context.event.name.startsWith('Nfts');
 }
 
+export function str<T extends Object>(value: T): string {
+  return value?.toString();
+}
