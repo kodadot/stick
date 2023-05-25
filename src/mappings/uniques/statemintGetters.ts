@@ -5,7 +5,7 @@ import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
 import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, ChangeCollectionTeam, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from './types'
-import { Event } from '../../processable';
+import { Unique } from '../../processable';
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = new events.UniquesCreatedEvent(ctx)

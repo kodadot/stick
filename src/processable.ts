@@ -1,4 +1,4 @@
-export enum Event {
+export enum Unique {
   clearAttribute = 'Uniques.AttributeCleared',
   setAttribute = 'Uniques.AttributeSet',
   burn = 'Uniques.Burned',
