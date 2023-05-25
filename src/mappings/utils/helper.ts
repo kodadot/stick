@@ -1,6 +1,5 @@
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { Event } from '../../processable'
 import { Context, SomethingWithOptionalMeta } from './types'
 import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
 import { isProd } from '../../environment'
@@ -37,7 +36,7 @@ export function oneOf<T>(one: T, two: T): T {
   return one || two;
 }
 
-export function isNewUnique(context: Context, event: Event): boolean {
-  return context.event.name === event;
+export function isNewUnique(context: Context): boolean {
+  return context.event.name.startsWith('Nfts');
 }
 
