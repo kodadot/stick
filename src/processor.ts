@@ -1,10 +1,11 @@
 import { SubstrateProcessor } from "@subsquid/substrate-processor"
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { Unique } from './processable'
+import { Unique, NonFungible } from './processable'
 
 import { getArchiveUrl, getNodeUrl, CHAIN } from './environment'
 import * as u from './mappings/uniques'
+import * as n from './mappings/nfts';
 
 const database = new Database();
 const processor = new SubstrateProcessor(database);
@@ -24,6 +25,9 @@ processor.setDataSource({
 
 const dummy = async () => {}
 
+/**
+ * Uniques nft pallet
+*/
 processor.addEventHandler(Unique.createCollection, u.handleCollectionCreate);
 processor.addEventHandler(Unique.clearAttribute, u.handleAttributeSet);
 processor.addEventHandler(Unique.setAttribute, u.handleAttributeSet);
@@ -51,6 +55,40 @@ processor.addEventHandler(Unique.changeIssuer, u.handleCollectionOwnerChange);
 processor.addEventHandler(Unique.changeTeam, u.handleCollectionTeamChange);
 // processor.addEventHandler(Unique.thaw, dummy);
 processor.addEventHandler(Unique.transfer, u.handleTokenTransfer);
+
+/**
+ * NonFungibles nft pallet
+*/
+processor.addEventHandler(NonFungible.createCollection, n.handleCollectionCreate);
+processor.addEventHandler(NonFungible.clearAttribute, n.handleAttributeSet);
+processor.addEventHandler(NonFungible.setAttribute, n.handleAttributeSet);
+processor.addEventHandler(NonFungible.burn, n.handleTokenBurn);
+
+// Changed
+processor.addEventHandler(NonFungible.forceCreateCollection, n.handleForceCollectionCreate);
+// processor.addEventHandler(NonFungible.freezeClass, dummy);
+processor.addEventHandler(NonFungible.clearCollectionMetadata, n.handleMetadataSet);
+processor.addEventHandler(NonFungible.setCollectionMetadata, n.handleMetadataSet);
+// end changed
+// processor.addEventHandler(NonFungible.thawClass, dummy);
+// processor.addEventHandler(NonFungible.freezeCollection, dummy);
+processor.addEventHandler(NonFungible.setCollectionMaxSupply, n.handleCollectionLock);
+processor.addEventHandler(NonFungible.clearCollectionMetadata, n.handleMetadataSet);
+processor.addEventHandler(NonFungible.setCollectionMetadata, n.handleMetadataSet);
+processor.addEventHandler(NonFungible.thawCollection, dummy);
+processor.addEventHandler(NonFungible.destroyCollection, n.handleCollectionDestroy);
+// processor.addEventHandler(NonFungible.freeze, dummy);
+processor.addEventHandler(NonFungible.createItem, n.handleTokenCreate);
+processor.addEventHandler(NonFungible.sold, n.handleTokenBuy);
+processor.addEventHandler(NonFungible.clearPrice, n.handleTokenList);
+processor.addEventHandler(NonFungible.setPrice, n.handleTokenList);
+processor.addEventHandler(NonFungible.clearMetadata, n.handleMetadataSet);
+processor.addEventHandler(NonFungible.setMetadata, n.handleMetadataSet);
+processor.addEventHandler(NonFungible.changeIssuer, n.handleCollectionOwnerChange);
+// processor.addEventHandler(NonFungible.changeOwnershipAcceptance, dummy);
+processor.addEventHandler(NonFungible.changeTeam, n.handleCollectionTeamChange);
+// processor.addEventHandler(NonFungible.thaw, dummy);
+processor.addEventHandler(NonFungible.transfer, n.handleTokenTransfer);
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`);
 
