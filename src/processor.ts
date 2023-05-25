@@ -1,11 +1,11 @@
 import { SubstrateProcessor } from "@subsquid/substrate-processor"
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { Unique, NonFungible } from './processable'
+import { NonFungible, Unique } from './processable'
 
-import { getArchiveUrl, getNodeUrl, CHAIN, isProd } from './environment'
+import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
+import * as n from './mappings/nfts'
 import * as u from './mappings/uniques'
-import * as n from './mappings/nfts';
 
 const database = new Database();
 const processor = new SubstrateProcessor(database);
