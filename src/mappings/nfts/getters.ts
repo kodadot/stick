@@ -1,11 +1,11 @@
 
 import { Interaction } from '../../model'
+import { NonFungible as Event } from '../../processable'
 import * as events from '../../types/statemine/events'
-import { addressOf, callBack } from '../utils/helper'
+import { addressOf } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
 import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, ChangeCollectionTeam, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from './types'
-import { NonFungible as Event } from '../../processable';
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = new events.NftsCreatedEvent(ctx)
