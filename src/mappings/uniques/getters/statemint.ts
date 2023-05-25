@@ -1,7 +1,7 @@
 
 import { Interaction } from '../../../model'
 import * as events from '../../../types/statemint/events'
-import { addressOf, idOf, U } from '../../utils/helper'
+import { addressOf, idOf, UNIQUE_PREFIX as U } from '../../utils/helper'
 import { warn } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, ChangeCollectionTeam, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from '../types'
