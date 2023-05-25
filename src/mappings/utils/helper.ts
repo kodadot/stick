@@ -6,6 +6,8 @@ import { isProd } from '../../environment'
 
 const codec = isProd ? 'kusama' : 'polkadot'
 
+type Optional<T> = T | undefined;
+
 export function isEmpty(obj: Record<string, unknown>): boolean {
   // eslint-disable-next-line guard-for-in, @typescript-eslint/naming-convention
   for (const _ in obj) { return false; }
@@ -41,6 +43,11 @@ export function isNewUnique(context: Context): boolean {
   return context.event.name.startsWith('Nfts');
 }
 
-export function str<T extends Object>(value: T): string {
-  return value?.toString();
+export function str<T extends Object>(value: Optional<T>): string {
+  return value?.toString() || '';
+}
+
+export function idOf<T extends Object>(value: Optional<T>, prefix: string = ''): string {
+  const val = str(value);
+  return prefix && val ? `${prefix}-${val}` : val;
 }
