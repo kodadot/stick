@@ -15,6 +15,11 @@ export async function handleCollectionTeamChange(context: Context): Promise<void
   debug(OPERATION, event);
 
   const entity = await get(context.store, CE, event.id);
+  if (!event.issuer) {
+    success(OPERATION, `No issuer for ${event.id}`);
+    return;
+  }
+
   entity.issuer = event.issuer;
 
   success(OPERATION, `${event.id} by ${event.caller}}`);

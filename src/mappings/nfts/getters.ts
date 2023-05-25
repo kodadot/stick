@@ -1,7 +1,7 @@
 
 import { Interaction } from '../../model'
 import * as events from '../../types/statemine/events'
-import { addressOf } from '../utils/helper'
+import { addressOf, callBack } from '../utils/helper'
 import { warn } from '../utils/logger'
 import { Context } from '../utils/types'
 import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, ChangeCollectionTeam, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from './types'
@@ -351,25 +351,20 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
   }
 }
 
-// export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
-//   const event = new events.NftsTeamChangedEvent(ctx)
+export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
+  const event = new events.NftsTeamChangedEvent(ctx)
 
-//   if (event.isV9420) {
-//     const { collection: classId, issuer, admin, freezer } = event.asV9420
-//     return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
-//   }
+  if (event.isV9420) {
+    const { collection: classId, issuer, admin, freezer } = event.asV9420
+    return { id: classId.toString(), issuer: addressOf(issuer || ''), admin: addressOf(admin || ''), freezer: addressOf(freezer || '') }
+  }
 
-//   // if (event.isV9400) {
-//   //   const { collection: classId, issuer, admin, freezer } = event.asV9400
-//   //   return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
-//   // }
-
-//   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-//   const {
-//     collection: classId,
-//     issuer,
-//     admin,
-//     freezer,
-//   } = ctx._chain.decodeEvent(ctx.event)
-//   return { id: classId.toString(), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
-// }
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const {
+    collection: classId,
+    issuer,
+    admin,
+    freezer,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return { id: classId.toString(), issuer: addressOf(issuer || ''), admin: addressOf(admin || ''), freezer: addressOf(freezer || '') }
+}
