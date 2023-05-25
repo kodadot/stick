@@ -6,15 +6,14 @@ import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context } from '../utils/types'
-import { getCreateCollectionEvent } from './getters'
+import { getCreateCollectionEvent, getForceCreateCollectionEvent } from './getters'
 import md5 from 'md5'
-import { versionOf } from '../utils/helper'
 
 const OPERATION = Action.CREATE
 
-export async function handleCollectionCreate(context: Context): Promise<void> {
-  pending(OPERATION, `[COLECTTION++]: ${context.block.height}`);
-  const event = unwrap(context, getCreateCollectionEvent);
+export async function handleForceCollectionCreate(context: Context): Promise<void> {
+  pending(OPERATION, `[FORCE]: ${context.block.height}`);
+  const event = unwrap(context, getForceCreateCollectionEvent);
   debug(OPERATION, event);
   const final = await getOrCreate(context.store, CE, event.id, {});
   // plsBe(remintable, final);
@@ -36,7 +35,6 @@ export async function handleCollectionCreate(context: Context): Promise<void> {
   final.supply = 0;
   final.updatedAt = event.timestamp;
   final.volume = BigInt(0);
-  final.version = versionOf(context);
 
   debug(OPERATION, { metadata: final.metadata});
 

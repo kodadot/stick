@@ -78,4 +78,7 @@ export class NFTEntity {
 
     @Column_("timestamp with time zone", {nullable: false})
     updatedAt!: Date
+
+    @Column_("int4", {nullable: false})
+    version!: number
 }
