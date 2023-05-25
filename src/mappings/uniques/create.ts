@@ -38,7 +38,7 @@ export async function handleCollectionCreate(context: Context): Promise<void> {
   final.volume = BigInt(0);
   final.version = versionOf(context);
 
-  debug(OPERATION, { metadata: final.metadata});
+  debug(OPERATION, { version: final.version });
 
   if (final.metadata) {
     const metadata = await handleMetadata(final.metadata, context.store);
