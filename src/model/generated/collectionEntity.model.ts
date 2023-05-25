@@ -83,6 +83,9 @@ export class CollectionEntity {
     @Column_("timestamp with time zone", {nullable: false})
     updatedAt!: Date
 
+    @Column_("int4", {nullable: false})
+    version!: number
+
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     volume!: bigint
 }
