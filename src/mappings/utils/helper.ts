@@ -6,7 +6,8 @@ import { isProd } from '../../environment'
 
 const codec = isProd ? 'kusama' : 'polkadot'
 
-export const U = 'u' as const;
+export const UNIQUE_PREFIX = 'u' as const;
+export const EMPTY = '' as const;
 
 type Optional<T> = T | undefined;
 
@@ -41,8 +42,12 @@ export function oneOf<T>(one: T, two: T): T {
   return one || two;
 }
 
-export function isNewUnique(context: Context): boolean {
-  return context.event.name.startsWith('Nfts');
+export function isUniquePallet(context: Context): boolean {
+  return context.event.name.startsWith('Uniques')
+}
+
+export function isNonFungiblePallet(context: Context): boolean {
+  return context.event.name.startsWith('Nfts')
 }
 
 export function str<T extends Object>(value: Optional<T>): string {
@@ -52,4 +57,24 @@ export function str<T extends Object>(value: Optional<T>): string {
 export function idOf<T extends Object>(value: Optional<T>, prefix: string = ''): string {
   const val = str(value);
   return prefix && val ? `${prefix}-${val}` : val;
+}
+
+export function versionOf(context: Context): 1 | 2  {
+  if (isUniquePallet(context)) {
+    return 1;
+  }
+
+  if (isNonFungiblePallet(context)) {
+    return 2;
+  }
+
+  throw new Error(`Unknown pallet: ${context.event.name}`);
+}
+
+export function prefixOf(context: Context): string {
+  if (isUniquePallet(context)) {
+    return UNIQUE_PREFIX;
+  }
+
+  return EMPTY;
 }
