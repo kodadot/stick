@@ -11,6 +11,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getCreateTokenEvent } from './getters'
+import { versionOf } from '../utils/helper'
 
 const OPERATION = Action.MINT
 
@@ -47,6 +48,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.createdAt = event.timestamp
   final.updatedAt = event.timestamp
   final.lewd = false;
+  final.version = versionOf(context);
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1

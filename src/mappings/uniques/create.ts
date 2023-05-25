@@ -8,6 +8,7 @@ import { debug, pending, success } from '../utils/logger'
 import { Action, Context } from '../utils/types'
 import { getCreateCollectionEvent } from './getters'
 import md5 from 'md5'
+import { versionOf } from '../utils/helper'
 
 const OPERATION = Action.CREATE
 
@@ -35,6 +36,7 @@ export async function handleCollectionCreate(context: Context): Promise<void> {
   final.supply = 0;
   final.updatedAt = event.timestamp;
   final.volume = BigInt(0);
+  final.version = versionOf(context);
 
   debug(OPERATION, { metadata: final.metadata});
 
