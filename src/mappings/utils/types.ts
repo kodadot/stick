@@ -12,7 +12,7 @@ export type BaseCall = {
   timestamp: Date
 }
 
-export { Interaction as Action }
+
 
 export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY
 
@@ -118,3 +118,5 @@ export enum DisplayType {
   'number',
   'boost_percentage',
 }
+
+export { Interaction as Action } from '../../model'

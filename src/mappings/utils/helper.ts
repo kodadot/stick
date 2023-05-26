@@ -1,8 +1,8 @@
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { Context, SomethingWithOptionalMeta, Store } from './types'
 import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
 import { isProd } from '../../environment'
+import { Context, SomethingWithOptionalMeta, Store } from './types'
 
 const codec = isProd ? 'kusama' : 'polkadot'
 
@@ -32,7 +32,7 @@ export function addressOf(address: Uint8Array | string): string {
 }
 
 export function camelCase(str: string): string {
-  return str.replace(/([_][a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''))
+  return str.replace(/(_[a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''))
 }
 
 export function metadataOf({ metadata }: SomethingWithOptionalMeta): string {

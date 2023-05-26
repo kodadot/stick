@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import { Block, BlockContext, Chain, ChainContext, Option, Result, StorageBase } from './support'
 import * as v1 from './v1'
 import * as v9230 from './v9230'

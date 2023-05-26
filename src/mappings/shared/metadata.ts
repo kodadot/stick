@@ -26,7 +26,7 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
     description: metadata.description || '',
     image: metadata.image || metadata.thumbnailUri || metadata.mediaUri,
     animationUrl: metadata.animation_url || metadata.mediaUri,
-    attributes: [], //metadata.attributes?.map(attributeFrom) || [],
+    attributes: [], // metadata.attributes?.map(attributeFrom) || [],
     name: metadata.name || '',
     type: metadata.type || '',
   }

@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import { Chain, ChainContext, EventContext, Event, Result, Option } from './support'
 
 export class UniquesAttributeClearedEvent {

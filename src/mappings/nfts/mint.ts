@@ -1,5 +1,5 @@
+import { warn } from 'node:console'
 import { create, getOptional } from '@kodadot1/metasquid/entity'
-import { warn } from 'console'
 import md5 from 'md5'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { createEvent } from '../shared/event'
@@ -7,8 +7,8 @@ import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { getCreateTokenEvent } from './getters'
 import { calculateCollectionOwnerCountAndDistribution, versionOf } from '../utils/helper'
+import { getCreateTokenEvent } from './getters'
 
 const OPERATION = Action.MINT
 

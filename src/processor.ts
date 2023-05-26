@@ -10,8 +10,8 @@ import * as u from './mappings/uniques'
 const database = new Database()
 const processor = new SubstrateProcessor(database)
 
-const UNIQUE_STARTING_BLOCK = 323750 //618838;
-const _NFT_STARTING_BLOCK = 4556552
+const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
+const _NFT_STARTING_BLOCK = 4_556_552
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 
 processor.setTypesBundle(CHAIN)

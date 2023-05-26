@@ -27,5 +27,5 @@ export async function genericRepositoryQuery<T extends ObjectLiteral, V>(
 export function toSqlInParams(list: string[]): string {
   return JSON.stringify(list)
     .replace(/"/g, "'")
-    .replace(/[[|\]]/g, '')
+    .replace(/[[\]|]/g, '')
 }

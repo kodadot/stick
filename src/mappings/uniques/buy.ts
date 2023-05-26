@@ -4,8 +4,8 @@ import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { getBuyTokenEvent } from './getters'
 import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { getBuyTokenEvent } from './getters'
 
 const OPERATION = Action.BUY
 

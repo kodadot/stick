@@ -1,13 +1,13 @@
-import { get as get } from '@kodadot1/metasquid/entity'
+import { get } from '@kodadot1/metasquid/entity'
+import { isFetchable } from '@kodadot1/minipfs'
 import { unwrap } from '../utils/extract'
 import { Context } from '../utils/types'
-import { getMetadataEvent } from './getters'
 import { CollectionEntity, NFTEntity } from '../../model'
-import { tokenIdOf } from './types'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
-import { isFetchable } from '@kodadot1/minipfs'
 import { updateItemMetadataByCollection } from '../utils/cache'
+import { tokenIdOf } from './types'
+import { getMetadataEvent } from './getters'
 
 export async function handleMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getMetadataEvent)

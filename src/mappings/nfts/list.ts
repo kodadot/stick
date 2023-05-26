@@ -3,8 +3,8 @@ import { NFTEntity as NE } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { getPriceTokenEvent } from './getters'
 import { createEvent } from '../shared/event'
+import { getPriceTokenEvent } from './getters'
 
 const OPERATION = Action.LIST
 const UNLIST = Action.UNLIST

@@ -3,9 +3,9 @@ import { NFTEntity as NE } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { getBurnTokenEvent } from './getters'
 import { createEvent } from '../shared/event'
 import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { getBurnTokenEvent } from './getters'
 
 const OPERATION = Action.BURN
 

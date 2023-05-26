@@ -1,12 +1,12 @@
 import { getOrCreate } from '@kodadot1/metasquid/entity'
+import md5 from 'md5'
 import { CollectionEntity as CE } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context } from '../utils/types'
-import { getCreateCollectionEvent } from './getters'
-import md5 from 'md5'
 import { versionOf } from '../utils/helper'
+import { getCreateCollectionEvent } from './getters'
 
 const OPERATION = Action.CREATE
 
