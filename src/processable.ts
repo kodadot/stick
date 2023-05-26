@@ -36,7 +36,6 @@ export enum Unique {
   // setAssetMetadata = 'AssetRegistry.MetadataSet',
 }
 
-
 export enum NonFungible {
   burn = 'Nfts.Burned',
   changeIssuer = 'Nfts.OwnerChanged',

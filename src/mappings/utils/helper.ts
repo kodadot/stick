@@ -1,45 +1,46 @@
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { Context, SomethingWithOptionalMeta, Store } from './types'
 import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
 import { isProd } from '../../environment'
+import { Context, SomethingWithOptionalMeta, Store } from './types'
 
 const codec = isProd ? 'kusama' : 'polkadot'
 
-export const UNIQUE_PREFIX = 'u' as const;
-export const EMPTY = '' as const;
+export const UNIQUE_PREFIX = 'u' as const
+export const EMPTY = '' as const
 
-type Optional<T> = T | undefined;
+type Optional<T> = T | undefined
 
 export function isEmpty(obj: Record<string, unknown>): boolean {
   // eslint-disable-next-line guard-for-in, @typescript-eslint/naming-convention
-  for (const _ in obj) { return false; }
-  return true;
+  for (const _ in obj) {
+    return false
+  }
+  return true
 }
 
 export function onlyValue(call: ArchiveCallWithOptionalValue): string {
   return call?.value
 }
 
-
 export function addressOf(address: Uint8Array | string): string {
-  const value = typeof address === 'string' ? decodeHex(address) : address;
+  const value = typeof address === 'string' ? decodeHex(address) : address
   if (!value) {
-    return '';
+    return ''
   }
-  return ss58.codec(codec).encode(value);
+  return ss58.codec(codec).encode(value)
 }
 
 export function camelCase(str: string): string {
-  return str.replace(/([_][a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''));
+  return str.replace(/(_[a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''))
 }
 
 export function metadataOf({ metadata }: SomethingWithOptionalMeta): string {
-  return metadata ?? '';
+  return metadata ?? ''
 }
 
 export function oneOf<T>(one: T, two: T): T {
-  return one || two;
+  return one || two
 }
 
 export function isUniquePallet(context: Context): boolean {
@@ -51,32 +52,32 @@ export function isNonFungiblePallet(context: Context): boolean {
 }
 
 export function str<T extends Object>(value: Optional<T>): string {
-  return value?.toString() || '';
+  return value?.toString() || ''
 }
 
 export function idOf<T extends Object>(value: Optional<T>, prefix: string = ''): string {
-  const val = str(value);
-  return prefix && val ? `${prefix}-${val}` : val;
+  const val = str(value)
+  return prefix && val ? `${prefix}-${val}` : val
 }
 
-export function versionOf(context: Context): 1 | 2  {
+export function versionOf(context: Context): 1 | 2 {
   if (isUniquePallet(context)) {
-    return 1;
+    return 1
   }
 
   if (isNonFungiblePallet(context)) {
-    return 2;
+    return 2
   }
 
-  throw new Error(`Unknown pallet: ${context.event.name}`);
+  throw new Error(`Unknown pallet: ${context.event.name}`)
 }
 
 export function prefixOf(context: Context): string {
   if (isUniquePallet(context)) {
-    return UNIQUE_PREFIX;
+    return UNIQUE_PREFIX
   }
 
-  return EMPTY;
+  return EMPTY
 }
 
 export async function calculateCollectionOwnerCountAndDistribution(
@@ -89,25 +90,26 @@ export async function calculateCollectionOwnerCountAndDistribution(
   SELECT COUNT(DISTINCT current_owner) AS distribution,
        COUNT(current_owner) AS owner_count
   ${
-    newOwner ?
-    `
+    newOwner
+      ? `
   ,(SELECT max(CASE
                   WHEN current_owner = '${newOwner}' THEN 0
                   ELSE 1
               END)
    FROM nft_entity) AS adjustment
-  ` : ''
+  `
+      : ''
   } 
   FROM nft_entity
   WHERE collection_id = '${collectionId}'
   ${originalOwner ? `AND current_owner != '${originalOwner}'` : ''}
-  `;
-  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await store.query(query);
+  `
+  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await store.query(query)
 
   const adjustedResults = {
     ownerCount: result.owner_count - (result.adjustment ?? 0),
     distribution: result.distribution - (result.adjustment ?? 0),
-  };
+  }
 
-  return adjustedResults;
+  return adjustedResults
 }

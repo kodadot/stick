@@ -6,7 +6,6 @@ import { Event, Interaction, NFTEntity } from '../../model'
 import { error } from '../utils/logger'
 import { Action, BaseCall, eventFrom } from '../utils/types'
 
-
 export const eventId = (id: string, event: Action) => `${id}-${event}${nanoid()}`
 
 export async function createEvent(

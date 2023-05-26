@@ -1,10 +1,10 @@
-import { Arg, Query, Resolver } from 'type-graphql';
-import type { EntityManager } from 'typeorm';
-import { NFTEntity } from '../../model/generated';
-import { SeriesEntity } from '../model/series.model';
-import { LastEventEntity } from '../model/event.model';
-import { collectionEventHistory } from '../query/event';
-import { makeQuery, toSqlInParams } from '../utils';
+import { Arg, Query, Resolver } from 'type-graphql'
+import type { EntityManager } from 'typeorm'
+import { NFTEntity } from '../../model/generated'
+import { SeriesEntity } from '../model/series.model'
+import { LastEventEntity } from '../model/event.model'
+import { collectionEventHistory } from '../query/event'
+import { makeQuery, toSqlInParams } from '../utils'
 
 enum OrderBy {
   volume = 'volume',
@@ -33,7 +33,7 @@ enum DateRange {
   ALL_DAY = 'ALL DAY',
 }
 
-type CollectionIDs = string[];
+type CollectionIDs = string[]
 @Resolver((of) => SeriesEntity)
 export class SeriesResolver {
   constructor(private tx: () => Promise<EntityManager>) {}
@@ -45,9 +45,10 @@ export class SeriesResolver {
     @Arg('offset', { nullable: true, defaultValue: 0 }) offset: number,
     @Arg('orderBy', { nullable: true, defaultValue: OrderBy.total }) orderBy: OrderBy,
     @Arg('orderDirection', { nullable: true, defaultValue: OrderDirection.DESC }) orderDirection: OrderDirection,
-    @Arg('dateRange', { nullable: false, defaultValue: DateRange.WEEK }) dateRange: DateRange,
+    @Arg('dateRange', { nullable: false, defaultValue: DateRange.WEEK }) dateRange: DateRange
   ): Promise<SeriesEntity[]> {
-    const computedDateRange = dateRange === DateRange.ALL_DAY ? '' : `AND e.timestamp >= NOW() - INTERVAL '${dateRange}'`;
+    const computedDateRange =
+      dateRange === DateRange.ALL_DAY ? '' : `AND e.timestamp >= NOW() - INTERVAL '${dateRange}'`
     const query = `SELECT
         ce.id, ce.name, ce.meta_id as metadata, me.image, ce.issuer, 
         COUNT(distinct ne.meta_id) as unique, 
@@ -66,21 +67,22 @@ export class SeriesResolver {
       WHERE e.interaction = 'BUY' ${computedDateRange}
       GROUP BY ce.id, me.image, ce.name 
       ORDER BY ${orderBy} ${orderDirection}
-      LIMIT ${limit} OFFSET ${offset}`;
-    const result: SeriesEntity[] = await makeQuery(this.tx, NFTEntity, query);
+      LIMIT ${limit} OFFSET ${offset}`
+    const result: SeriesEntity[] = await makeQuery(this.tx, NFTEntity, query)
 
-    return result;
+    return result
   }
 
   @Query(() => [LastEventEntity])
   async seriesInsightBuyHistory(
     @Arg('ids', () => [String!], { nullable: false }) ids: CollectionIDs,
-    @Arg('dateRange', { nullable: false, defaultValue: DateRange.WEEK }) dateRange: DateRange,
+    @Arg('dateRange', { nullable: false, defaultValue: DateRange.WEEK }) dateRange: DateRange
   ) {
-    const idList = toSqlInParams(ids);
-    const computedDateRange = dateRange === DateRange.ALL_DAY ? '' : `AND e.timestamp >= NOW() - INTERVAL '${dateRange}'`;
-    const manager = await this.tx();
-    const result = await manager.getRepository(NFTEntity).query(collectionEventHistory(idList, computedDateRange));
-    return result;
+    const idList = toSqlInParams(ids)
+    const computedDateRange =
+      dateRange === DateRange.ALL_DAY ? '' : `AND e.timestamp >= NOW() - INTERVAL '${dateRange}'`
+    const manager = await this.tx()
+    const result = await manager.getRepository(NFTEntity).query(collectionEventHistory(idList, computedDateRange))
+    return result
   }
 }

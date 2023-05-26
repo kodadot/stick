@@ -1,8 +1,5 @@
-import {
-  create,
-  getOptional
-} from '@kodadot1/metasquid/entity'
-import { warn } from 'console'
+import { warn } from 'node:console'
+import { create, getOptional } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { createEvent } from '../shared/event'
@@ -10,9 +7,8 @@ import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
+import { versionOf , calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { getCreateTokenEvent } from './getters'
-import { versionOf } from '../utils/helper'
-import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 
 const OPERATION = Action.MINT
 
@@ -21,11 +17,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   const event = unwrap(context, getCreateTokenEvent)
   debug(OPERATION, event)
   const id = createTokenId(event.collectionId, event.sn)
-  const collection = await getOptional<CE>(
-    context.store,
-    CE,
-    event.collectionId
-  )
+  const collection = await getOptional<CE>(context.store, CE, event.collectionId)
 
   if (!collection) {
     warn(OPERATION, `collection ${event.collectionId} not found`)
@@ -48,8 +40,8 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.burned = false
   final.createdAt = event.timestamp
   final.updatedAt = event.timestamp
-  final.lewd = false;
-  final.version = versionOf(context);
+  final.lewd = false
+  final.version = versionOf(context)
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
@@ -73,9 +65,9 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
   await context.store.save(collection)
-  await createEvent(final, OPERATION, event, '', context.store);
+  await createEvent(final, OPERATION, event, '', context.store)
 
   if (final.issuer !== final.currentOwner) {
-    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer);
+    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer)
   }
 }

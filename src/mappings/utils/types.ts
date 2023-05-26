@@ -1,28 +1,37 @@
-import { EventHandlerContext } from '@subsquid/substrate-processor';
-import { nanoid } from 'nanoid';
-import { EntityManager } from 'typeorm';
+import { EventHandlerContext } from '@subsquid/substrate-processor'
+import { nanoid } from 'nanoid'
+import { EntityManager } from 'typeorm'
 // impsort { Interaction } from '../../model/generated/_interaction';
 // import { Attribute } from '../../model/generated/_attribute';
 
-import { Interaction } from '../../model';
+import { Interaction } from '../../model'
 
 export type BaseCall = {
-  caller: string;
-  blockNumber: string;
-  timestamp: Date;
-};
-
-export { Interaction as Action };
-
-export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY;
-
-type OneOfInteraction = Interaction;
-
-export function collectionEventFrom(interaction: CollectionInteraction, basecall: BaseCall, meta: string): IEvent<CollectionInteraction> {
-  return eventFrom<CollectionInteraction>(interaction, basecall, meta);
+  caller: string
+  blockNumber: string
+  timestamp: Date
 }
 
-export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }: BaseCall, meta: string, currentOwner?: string): IEvent<T> {
+
+
+export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY
+
+type OneOfInteraction = Interaction
+
+export function collectionEventFrom(
+  interaction: CollectionInteraction,
+  basecall: BaseCall,
+  meta: string
+): IEvent<CollectionInteraction> {
+  return eventFrom<CollectionInteraction>(interaction, basecall, meta)
+}
+
+export function eventFrom<T>(
+  interaction: T,
+  { blockNumber, caller, timestamp }: BaseCall,
+  meta: string,
+  currentOwner?: string
+): IEvent<T> {
   return {
     interaction,
     blockNumber: BigInt(blockNumber),
@@ -30,7 +39,7 @@ export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }:
     currentOwner: currentOwner ?? caller,
     timestamp,
     meta,
-  };
+  }
 }
 
 // export function attributeFrom(attribute: MetadataAttribute): Attribute {
@@ -41,53 +50,52 @@ export function eventFrom<T>(interaction: T, { blockNumber, caller, timestamp }:
 //   });
 // }
 
-export type Store = EntityManager;
-export type Context = EventHandlerContext<Store>;
+export type Store = EntityManager
+export type Context = EventHandlerContext<Store>
 
-export type Optional<T> = T | null;
+export type Optional<T> = T | null
 
 export interface IEvent<T = OneOfInteraction> {
-  interaction: T;
-  blockNumber: bigint,
-  caller: string,
-  currentOwner: string,
-  timestamp: Date,
-  meta: string;
+  interaction: T
+  blockNumber: bigint
+  caller: string
+  currentOwner: string
+  timestamp: Date
+  meta: string
 }
 
-
-export type CallWith<T> = BaseCall & T;
+export type CallWith<T> = BaseCall & T
 
 export type EntityConstructor<T> = {
-  new (...args: any[]): T;
-};
+  new (...args: any[]): T
+}
 
 export type WithAmount = {
-  amount: bigint;
-};
+  amount: bigint
+}
 
 export type WithCaller = {
-  caller: string;
-};
+  caller: string
+}
 
 export type SomethingWithMeta = {
   metadata: string
-};
+}
 
 export type SomethingWithOptionalMeta = {
   metadata?: string
-};
-
-export type UnwrapFunc<T> = (ctx: Context) => T;
-export type SanitizerFunc = (url: string) => string;
-
-export function ensure<T>(value: unknown): T {
-  return value as T;
 }
 
-export const createTokenId = (collection: string, id: string): string => `${collection}-${id}`;
+export type UnwrapFunc<T> = (ctx: Context) => T
+export type SanitizerFunc = (url: string) => string
 
-export const eventId = (id: string, event: Interaction): string => `${id}-${event}-${nanoid()}`;
+export function ensure<T>(value: unknown): T {
+  return value as T
+}
+
+export const createTokenId = (collection: string, id: string): string => `${collection}-${id}`
+
+export const eventId = (id: string, event: Interaction): string => `${id}-${event}-${nanoid()}`
 
 export type TokenMetadata = {
   name?: string
@@ -96,13 +104,13 @@ export type TokenMetadata = {
   image: string
   animation_url?: string
   attributes?: MetadataAttribute[]
-};
+}
 
 export type MetadataAttribute = {
   display_type?: DisplayType
   trait_type?: string
   value: number | string
-};
+}
 
 export enum DisplayType {
   null,
@@ -110,3 +118,5 @@ export enum DisplayType {
   'number',
   'boost_percentage',
 }
+
+export { Interaction as Action } from '../../model'

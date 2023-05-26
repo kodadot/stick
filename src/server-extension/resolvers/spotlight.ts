@@ -1,9 +1,7 @@
-import {
-  Arg, Query, Resolver,
-} from 'type-graphql';
-import type { EntityManager } from 'typeorm';
-import { NFTEntity } from '../../model/generated';
-import { SpotlightEntity } from '../model/spotlight.model';
+import { Arg, Query, Resolver } from 'type-graphql'
+import type { EntityManager } from 'typeorm'
+import { NFTEntity } from '../../model/generated'
+import { SpotlightEntity } from '../model/spotlight.model'
 
 enum OrderBy {
   sold = 'sold',
@@ -30,7 +28,7 @@ export class SpotlightResolver {
     @Arg('limit', { nullable: true, defaultValue: null }) limit: number,
     @Arg('offset', { nullable: true, defaultValue: null }) offset: string,
     @Arg('orderBy', { nullable: true, defaultValue: 'total' }) orderBy: OrderBy,
-    @Arg('orderDirection', { nullable: true, defaultValue: 'DESC' }) orderDirection: OrderDirection,
+    @Arg('orderDirection', { nullable: true, defaultValue: 'DESC' }) orderDirection: OrderDirection
   ): Promise<SpotlightEntity[]> {
     const query = `SELECT
       issuer as id, COUNT(distinct collection_id) as collections, 
@@ -42,10 +40,10 @@ export class SpotlightResolver {
     JOIN event e on e.nft_id = ne.id WHERE e.interaction = 'BUY'
     GROUP BY issuer 
     ORDER BY ${orderBy} ${orderDirection}
-    LIMIT $1 OFFSET $2`;
-    const manager = await this.tx();
-    const result: SpotlightEntity[] = await manager.getRepository(NFTEntity).query(query, [limit, offset]);
+    LIMIT $1 OFFSET $2`
+    const manager = await this.tx()
+    const result: SpotlightEntity[] = await manager.getRepository(NFTEntity).query(query, [limit, offset])
 
-    return result;
+    return result
   }
 }
