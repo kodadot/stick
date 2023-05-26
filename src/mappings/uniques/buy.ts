@@ -25,9 +25,11 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   entity.price = BigInt(0);
   entity.currentOwner = event.caller;
   entity.updatedAt = event.timestamp;
-  if (originalPrice && (originalPrice > entity.collection.highestSale)) {
+  if (originalPrice) {
     entity.collection.volume += originalPrice
-    entity.collection.highestSale = originalPrice
+    if ((originalPrice > entity.collection.highestSale)) {
+      entity.collection.highestSale = originalPrice
+    }
   }
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,

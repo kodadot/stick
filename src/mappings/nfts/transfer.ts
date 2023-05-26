@@ -7,6 +7,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getTransferTokenEvent } from './getters'
+import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 
 const OPERATION = Action.SEND
 
@@ -25,7 +26,14 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   entity.currentOwner = event.to;
   entity.updatedAt = event.timestamp;
 
-  // TODO: UPDATE COLLECTION DISTRIBUTION
+  const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
+    context.store,
+    entity.collection.id,
+    entity.currentOwner,
+    currentOwner
+  )
+  entity.collection.ownerCount = ownerCount
+  entity.collection.distribution = distribution
 
   success(OPERATION, `${id} from ${event.caller} to ${event.to}`);
   await context.store.save(entity);
