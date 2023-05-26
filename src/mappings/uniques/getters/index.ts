@@ -1,9 +1,22 @@
 import { isProd } from '../../../environment'
 import { Context } from '../../utils/types'
-import { BurnTokenEvent, BuyTokenEvent, ChangeCollectionOwnerEvent, ChangeCollectionTeam, CreateCollectionEvent, CreateTokenEvent, DestroyCollectionEvent, ForceCreateCollectionEvent, ListTokenEvent, LockCollectionEvent, SetAttribute, SetMetadata, TransferTokenEvent } from '../types'
+import {
+  BurnTokenEvent,
+  BuyTokenEvent,
+  ChangeCollectionOwnerEvent,
+  ChangeCollectionTeam,
+  CreateCollectionEvent,
+  CreateTokenEvent,
+  DestroyCollectionEvent,
+  ForceCreateCollectionEvent,
+  ListTokenEvent,
+  LockCollectionEvent,
+  SetAttribute,
+  SetMetadata,
+  TransferTokenEvent,
+} from '../types'
 
 const proc = isProd ? require('./statemine') : require('./statemint')
-
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   return proc.getCreateCollectionEvent(ctx)
@@ -12,7 +25,6 @@ export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
 export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
   return proc.getForceCreateCollectionEvent(ctx)
 }
-
 
 export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
   return proc.getCreateTokenEvent(ctx)

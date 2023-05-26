@@ -3,7 +3,7 @@ export const buyEvent = `SELECT
     COALESCE(MAX(e.meta::bigint), 0) as max
     FROM event e
     LEFT JOIN nft_entity ne on ne.id = e.nft_id
-    WHERE e.interaction = 'BUY' AND ne.collection_id = $1;`;
+    WHERE e.interaction = 'BUY' AND ne.collection_id = $1;`
 
 export const lastEventQuery = `SELECT
     DISTINCT ne.id as id,
@@ -31,7 +31,7 @@ WHERE
     AND me.image IS NOT NULL
 GROUP BY ne.id, me.id, e.current_owner, me.image, ce.name
 ORDER BY MAX(e.timestamp) DESC
-LIMIT $2 OFFSET $3`;
+LIMIT $2 OFFSET $3`
 
 export const collectionEventHistory = (idList: string, dateRange: string) => `SELECT
     ce.id as id,
@@ -44,4 +44,4 @@ WHERE e.interaction = 'BUY'
 and ce.id in (${idList})
 ${dateRange}
 GROUP BY ce.id, DATE(e.timestamp)
-ORDER BY DATE(e.timestamp)`;
+ORDER BY DATE(e.timestamp)`

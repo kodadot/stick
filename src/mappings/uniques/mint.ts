@@ -1,7 +1,4 @@
-import {
-  create,
-  getOptional
-} from '@kodadot1/metasquid/entity'
+import { create, getOptional } from '@kodadot1/metasquid/entity'
 import { warn } from 'console'
 import md5 from 'md5'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
@@ -21,11 +18,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   const event = unwrap(context, getCreateTokenEvent)
   debug(OPERATION, event)
   const id = createTokenId(event.collectionId, event.sn)
-  const collection = await getOptional<CE>(
-    context.store,
-    CE,
-    event.collectionId
-  )
+  const collection = await getOptional<CE>(context.store, CE, event.collectionId)
 
   if (!collection) {
     warn(OPERATION, `collection ${event.collectionId} not found`)
@@ -48,8 +41,8 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.burned = false
   final.createdAt = event.timestamp
   final.updatedAt = event.timestamp
-  final.lewd = false;
-  final.version = versionOf(context);
+  final.lewd = false
+  final.version = versionOf(context)
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
@@ -73,9 +66,9 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
   await context.store.save(collection)
-  await createEvent(final, OPERATION, event, '', context.store);
+  await createEvent(final, OPERATION, event, '', context.store)
 
   if (final.issuer !== final.currentOwner) {
-    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer);
+    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer)
   }
 }

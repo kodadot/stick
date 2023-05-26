@@ -49,14 +49,14 @@ enum MetadataQuery {
     AND ne.collection_id = ce.id
     AND ne.metadata is null
     RETURNING ne.id
-  `
+  `,
 }
 
 export async function updateItemMetadataByCollection(store: Store, collectionId: string): Promise<void> {
   try {
-    const rows =  await store.query(MetadataQuery.polyfill, [collectionId]);
-    logger.info(`[METADATA POLYFILL] ${rows.length} NFTs updated`);
+    const rows = await store.query(MetadataQuery.polyfill, [collectionId])
+    logger.info(`[METADATA POLYFILL] ${rows.length} NFTs updated`)
   } catch (e) {
-    logError(e, (err) => logger.error(`[METADATA POLYFILL] ${err.message}`));
+    logError(e, (err) => logger.error(`[METADATA POLYFILL] ${err.message}`))
   }
 }

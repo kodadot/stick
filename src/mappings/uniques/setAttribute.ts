@@ -6,22 +6,24 @@ import { getAttributeEvent } from './getters'
 import { attributeFrom, tokenIdOf } from './types'
 
 export async function handleAttributeSet(context: Context): Promise<void> {
-  const event = unwrap(context, getAttributeEvent);
+  const event = unwrap(context, getAttributeEvent)
 
-  const final = event.sn !== undefined ? await get(context.store, NFTEntity, tokenIdOf(event as any)) : await get(context.store, CollectionEntity, event.collectionId);
+  const final =
+    event.sn !== undefined
+      ? await get(context.store, NFTEntity, tokenIdOf(event as any))
+      : await get(context.store, CollectionEntity, event.collectionId)
 
   if (event.value === null) {
-    final.attributes = final.attributes?.filter((attr) => attr.trait !== event.trait);
+    final.attributes = final.attributes?.filter((attr) => attr.trait !== event.trait)
   } else {
-    const attribute = final.attributes?.find((attr) => attr.trait === event.trait);
+    const attribute = final.attributes?.find((attr) => attr.trait === event.trait)
     if (attribute) {
-      attribute.value = String(event.value);
+      attribute.value = String(event.value)
     } else {
-      const newAttribute = attributeFrom({ trait_type: event.trait, value: String(event.value) });
-      final.attributes?.push(newAttribute);
+      const newAttribute = attributeFrom({ trait_type: event.trait, value: String(event.value) })
+      final.attributes?.push(newAttribute)
     }
   }
-  
 
-  await context.store.save(final);
+  await context.store.save(final)
 }
