@@ -12,6 +12,7 @@ import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getCreateTokenEvent } from './getters'
 import { versionOf } from '../utils/helper'
+import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 
 const OPERATION = Action.MINT
 
@@ -53,6 +54,13 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
   collection.supply += 1
+  const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
+    context.store,
+    collection.id,
+    final.currentOwner
+  )
+  collection.ownerCount = ownerCount
+  collection.distribution = distribution
 
   if (final.metadata) {
     const metadata = await handleMetadata(final.metadata, context.store)

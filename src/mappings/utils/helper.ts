@@ -1,6 +1,6 @@
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { Context, SomethingWithOptionalMeta } from './types'
+import { Context, SomethingWithOptionalMeta, Store } from './types'
 import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
 import { isProd } from '../../environment'
 
@@ -77,4 +77,37 @@ export function prefixOf(context: Context): string {
   }
 
   return EMPTY;
+}
+
+export async function calculateCollectionOwnerCountAndDistribution(
+  store: Store,
+  collectionId: string,
+  newOwner?: string,
+  originalOwner?: string
+): Promise<{ ownerCount: number; distribution: number }> {
+  const query: string = `
+  SELECT COUNT(DISTINCT current_owner) AS distribution,
+       COUNT(current_owner) AS owner_count
+  ${
+    newOwner ?
+    `
+  ,(SELECT max(CASE
+                  WHEN current_owner = '${newOwner}' THEN 0
+                  ELSE 1
+              END)
+   FROM nft_entity) AS adjustment
+  ` : ''
+  } 
+  FROM nft_entity
+  WHERE collection_id = '${collectionId}'
+  ${originalOwner ? `AND current_owner != '${originalOwner}'` : ''}
+  `;
+  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await store.query(query);
+
+  const adjustedResults = {
+    ownerCount: result.owner_count - (result.adjustment ?? 0),
+    distribution: result.distribution - (result.adjustment ?? 0),
+  };
+
+  return adjustedResults;
 }
