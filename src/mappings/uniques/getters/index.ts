@@ -16,6 +16,7 @@ import {
   TransferTokenEvent,
 } from '../types'
 
+// eslint-disable-next-line unicorn/prefer-module
 const proc = isProd ? require('./statemine') : require('./statemint')
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
