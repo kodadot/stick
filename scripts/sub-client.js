@@ -1,5 +1,5 @@
-import WebSocket from 'ws'
-import { createClient } from 'graphql-ws';
+const WebSocket = require('ws')
+const { createClient } = require('graphql-ws');
 
 const port = process.env.GQL_PORT || 4350
 const host = process.env.GQL_HOST || 'localhost'
