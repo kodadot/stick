@@ -17,7 +17,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 
-  const { currentOwner } = entity
+  const oldOwner = entity.currentOwner
   entity.price = BigInt(0)
   entity.currentOwner = event.to
   entity.updatedAt = event.timestamp
@@ -26,12 +26,12 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
     context.store,
     entity.collection.id,
     entity.currentOwner,
-    currentOwner
+    oldOwner
   )
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
 
   success(OPERATION, `${id} from ${event.caller} to ${event.to}`)
   await context.store.save(entity)
-  await createEvent(entity, OPERATION, event, event.to, context.store, currentOwner)
+  await createEvent(entity, OPERATION, event, event.to, context.store, oldOwner)
 }

@@ -177,10 +177,12 @@ export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwn
 
 export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = new events.NftsCollectionMetadataClearedEvent(ctx)
+
   if (event.isV9420) {
     const { collection: classId } = event.asV9420
     return { collectionId: classId.toString() }
   }
+
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
   const { collection: classId } = ctx._chain.decodeEvent(ctx.event)
   return { collectionId: classId.toString() }
@@ -188,6 +190,7 @@ export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
 
 export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = new events.NftsCollectionMetadataSetEvent(ctx)
+
   if (event.isV9420) {
     const { collection: classId, data } = event.asV9420
     return { collectionId: classId.toString(), metadata: data.toString() }
@@ -252,10 +255,6 @@ export function getClearMetadataEvent(ctx: Context): SetMetadata {
 
 export function getMetadataEvent(ctx: Context): SetMetadata {
   switch (ctx.event.name) {
-    case Event.clearCollectionMetadata:
-      return getClearClassMetadataEvent(ctx)
-    case Event.setCollectionMetadata:
-      return getCreateClassMetadataEvent(ctx)
     case Event.setCollectionMetadata:
       return getCreateCollectionMetadataEvent(ctx)
     case Event.clearCollectionMetadata:

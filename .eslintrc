@@ -1,6 +1,6 @@
 {
   "extends": ["eslint-config-unjs"],
-  "ignorePatterns": ["tests/**", "src/model"],
+  "ignorePatterns": ["tests/**", "src/model", "lib/**"],
   "rules": {
     "@typescript-eslint/no-inferrable-types": 0,
     "@typescript-eslint/no-unused-vars": 0,
