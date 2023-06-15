@@ -16,3 +16,25 @@ export async function forceCreateKusamaAsset(context: BlockHandlerContext<Store>
   success(OPERATION,`${asset.id} is ${asset.name || ''}`);
   await context.store.save<AssetEntity>(asset);
 }
+
+export async function forceCreateUsdtAsset(context: BlockHandlerContext<Store>): Promise<void> {
+  pending(OPERATION, `${context.block.height}`);
+  const asset = create<AssetEntity>(AssetEntity, '1984', {
+    name: 'Tether USD',
+    symbol: 'USDt',
+    decimals: 6,
+  });
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
+  await context.store.save<AssetEntity>(asset);
+}
+
+export async function forceCreateRmrkAsset(context: BlockHandlerContext<Store>): Promise<void> {
+  pending(OPERATION, `${context.block.height}`);
+  const asset = create<AssetEntity>(AssetEntity, '8', {
+    name: 'RMRK.app',
+    symbol: 'RMRK',
+    decimals: 10,
+  });
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
+  await context.store.save<AssetEntity>(asset);
+}
