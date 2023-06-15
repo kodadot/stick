@@ -114,3 +114,10 @@ enum Interaction {
   LOCK
   CHANGEISSUER
 }
+
+type AssetEntity @entity {
+  id: ID!
+  name: String
+  symbol: String
+  decimals: Int
+}
