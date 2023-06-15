@@ -3,16 +3,25 @@ import { BlockHandlerContext } from '@subsquid/substrate-processor'
 import { AssetEntity } from '../../model'
 import { Store } from '../utils/types'
 import { pending, success } from '../utils/logger'
+import { isProd } from '../../environment'
 
 const OPERATION = 'ASSET_REGISTER' as any
 
-export async function forceCreateKusamaAsset(context: BlockHandlerContext<Store>): Promise<void> {
+export async function forceCreateSystemAsset(context: BlockHandlerContext<Store>): Promise<void> {
   pending(OPERATION, `${context.block.height}`);
-  const asset = create<AssetEntity>(AssetEntity, '', {
+  const systemAsset = isProd
+  ? {
     name: 'Kusama',
     symbol: 'KSM',
     decimals: 12,
-  });
+  } 
+  : {
+    name: 'Polkadot',
+    symbol: 'DOT',
+    decimals: 10,
+  }
+
+  const asset = create<AssetEntity>(AssetEntity, '', systemAsset);
   success(OPERATION,`${asset.id} is ${asset.name || ''}`);
   await context.store.save<AssetEntity>(asset);
 }
