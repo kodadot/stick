@@ -3,9 +3,10 @@ import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
 import { NonFungible, Unique } from './processable'
 
-import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
+import { CHAIN, getArchiveUrl, getNodeUrl, isProd } from './environment'
 import * as n from './mappings/nfts'
 import * as u from './mappings/uniques'
+import * as a from './mappings/assets'
 
 const database = new Database()
 const processor = new SubstrateProcessor(database)
@@ -60,7 +61,7 @@ processor.addEventHandler(Unique.transfer, u.handleTokenTransfer)
 
 /**
  * NonFungibles nft pallet
- */
+*/
 processor.addEventHandler(NonFungible.createCollection, n.handleCollectionCreate)
 processor.addEventHandler(NonFungible.clearAttribute, n.handleAttributeSet)
 processor.addEventHandler(NonFungible.setAttribute, n.handleAttributeSet)
@@ -91,6 +92,17 @@ processor.addEventHandler(NonFungible.changeIssuer, n.handleCollectionOwnerChang
 processor.addEventHandler(NonFungible.changeTeam, n.handleCollectionTeamChange)
 // processor.addEventHandler(NonFungible.thaw, dummy);
 processor.addEventHandler(NonFungible.transfer, n.handleTokenTransfer)
+
+/**
+ * Assets nft pallet
+*/
+processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateSystemAsset);
+processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateUsdtAsset);
+
+if (isProd) {
+  processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateRmrkAsset);
+}
+
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 

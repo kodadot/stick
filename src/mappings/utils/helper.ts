@@ -51,11 +51,11 @@ export function isNonFungiblePallet(context: Context): boolean {
   return context.event.name.startsWith('Nfts')
 }
 
-export function str<T extends object>(value: Optional<T>): string {
+export function str<T extends object | number>(value: Optional<T>): string {
   return value?.toString() || ''
 }
 
-export function idOf<T extends object>(value: Optional<T>, prefix: string = ''): string {
+export function idOf<T extends object | number>(value: Optional<T>, prefix: string = ''): string {
   const val = str(value)
   return prefix && val ? `${prefix}-${val}` : val
 }
