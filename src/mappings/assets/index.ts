@@ -1,1 +1,1 @@
-export * from './createSystemToken'
+export * from './forceToken'
