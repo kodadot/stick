@@ -4,6 +4,7 @@ import {Attribute} from "./_attribute"
 import {CollectionEntity} from "./collectionEntity.model"
 import {Event} from "./event.model"
 import {MetadataEntity} from "./metadataEntity.model"
+import {TokenEntity} from "./tokenEntity.model"
 
 @Entity_()
 export class NFTEntity {
@@ -81,4 +82,8 @@ export class NFTEntity {
 
     @Column_("int4", {nullable: false})
     version!: number
+
+    @Index_()
+    @ManyToOne_(() => TokenEntity, {nullable: true})
+    token!: TokenEntity
 }
