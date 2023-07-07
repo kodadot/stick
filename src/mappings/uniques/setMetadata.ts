@@ -53,7 +53,7 @@ export async function handleMetadataSet(context: Context): Promise<void> {
         return
       }
       const nft = final as NFTEntity
-      const token = await handleTokenEntity(context, collection, nft) // handling tokenEntity
+      const token = await handleTokenEntity(context, collection, nft)
       if (token) {
         nft.token = token
       }
