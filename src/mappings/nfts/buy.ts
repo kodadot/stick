@@ -16,7 +16,6 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   debug(OPERATION, event, true)
   const holderEventHandler = new HolderEventHandler(context)
 
-
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 

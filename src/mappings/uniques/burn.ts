@@ -17,8 +17,6 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   const holderEventHandler = new HolderEventHandler(context);
   await holderEventHandler.handleBurn(event.owner, event.timestamp)
 
-
-
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 
@@ -32,13 +30,10 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   entity.updatedAt = event.timestamp
   entity.holder = undefined
 
-
   entity.collection.updatedAt = event.timestamp
   entity.collection.supply -= 1
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
-
-
 
   success(OPERATION, `${id} by ${event.caller}}`)
   await context.store.save(entity)

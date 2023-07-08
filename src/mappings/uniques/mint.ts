@@ -2,7 +2,6 @@ import { warn } from 'node:console'
 import { create, getOptional } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
-
 import { createEvent } from '../shared/event'
 import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'

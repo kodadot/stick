@@ -26,7 +26,6 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   }
   const holderEventHandler = new HolderEventHandler(context);
 
-
   const final = create(NE, id, {})
   // plsBe(real, collection);
   // plsBe(remintable, final);
@@ -46,7 +45,6 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.lewd = false
   final.version = versionOf(context)
   final.holder = await holderEventHandler.handleMint(event.owner, event.timestamp)
-
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
