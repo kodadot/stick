@@ -13,16 +13,16 @@ export async function handleTokenEntity(context: Context, collection: CE, nft: N
     return
   }
 
-  const tokenId = md5(`${collection.id}${nftMedia}`)
+  const tokenId = `${collection.id}-${md5(nftMedia)}`
   let token = await getOptional<TE>(context.store, TE, tokenId)
 
   if (!token) {
-    // const tokenName = typeof nft.name === 'string' ? nft.name?.replace(/([#_]\d+$)/g, '') : ''
+    const tokenName = (typeof nft.name === 'string' ? nft.name?.replace(/([#_]\d+$)/g, '').trim() : '')
 
     token = create(TE, tokenId, {
       createdAt: nft.createdAt,
       collection,
-      name: nft.name,
+      name: tokenName,
       count: 1,
       hash: md5(tokenId),
       image: nft.image,

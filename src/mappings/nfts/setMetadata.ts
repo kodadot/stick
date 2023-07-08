@@ -1,7 +1,7 @@
 import { get, getOptional } from '@kodadot1/metasquid/entity'
 import { isFetchable } from '@kodadot1/minipfs'
 import { unwrap } from '../utils/extract'
-import { Context } from '../utils/types'
+import { Context, isNFT } from '../utils/types'
 import { CollectionEntity, NFTEntity } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
@@ -19,9 +19,9 @@ export async function handleMetadataSet(context: Context): Promise<void> {
     return
   }
 
-  const isNFT = event.sn !== undefined
+  const eventIsOnNFT = isNFT(event)
 
-  const final = isNFT
+  const final = eventIsOnNFT
     ? await get(context.store, NFTEntity, tokenIdOf(event as any))
     : await get(context.store, CollectionEntity, event.collectionId)
 
@@ -44,7 +44,7 @@ export async function handleMetadataSet(context: Context): Promise<void> {
     final.image = metadata?.image
     final.media = metadata?.animationUrl
 
-    if (isNFT) {
+    if (eventIsOnNFT) {
       const collection = await getOptional<CollectionEntity>(context.store, CollectionEntity, event.collectionId)
 
       if (!collection) {
