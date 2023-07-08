@@ -5,14 +5,13 @@ import { EntityManager } from 'typeorm'
 // import { Attribute } from '../../model/generated/_attribute';
 
 import { Interaction } from '../../model'
+import { SetMetadata } from '../nfts/types'
 
 export type BaseCall = {
   caller: string
   blockNumber: string
   timestamp: Date
 }
-
-
 
 export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY
 
@@ -24,6 +23,10 @@ export function collectionEventFrom(
   meta: string
 ): IEvent<CollectionInteraction> {
   return eventFrom<CollectionInteraction>(interaction, basecall, meta)
+}
+
+export function isNFT<T extends SetMetadata>(event: T) {
+  return event.sn !== undefined
 }
 
 export function eventFrom<T>(
