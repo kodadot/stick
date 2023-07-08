@@ -2,12 +2,14 @@ import { warn } from 'node:console'
 import { create, getOptional } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
+
 import { createEvent } from '../shared/event'
 import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { versionOf , calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { HolderEventHandler } from '../shared/holderEventHandler'
 import { getCreateTokenEvent } from './getters'
 
 const OPERATION = Action.MINT
@@ -18,6 +20,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   debug(OPERATION, event)
   const id = createTokenId(event.collectionId, event.sn)
   const collection = await getOptional<CE>(context.store, CE, event.collectionId)
+  const holderEventHandler = new HolderEventHandler(context);
 
   if (!collection) {
     warn(OPERATION, `collection ${event.collectionId} not found`)
@@ -42,6 +45,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.updatedAt = event.timestamp
   final.lewd = false
   final.version = versionOf(context)
+  final.holder = await holderEventHandler.handleMint(event.owner, event.timestamp)
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1

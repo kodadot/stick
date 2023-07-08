@@ -8,6 +8,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { calculateCollectionOwnerCountAndDistribution, versionOf } from '../utils/helper'
+import { HolderEventHandler } from '../shared/holderEventHandler'
 import { getCreateTokenEvent } from './getters'
 
 const OPERATION = Action.MINT
@@ -23,6 +24,8 @@ export async function handleTokenCreate(context: Context): Promise<void> {
     warn(OPERATION, `collection ${event.collectionId} not found`)
     return
   }
+  const holderEventHandler = new HolderEventHandler(context);
+
 
   const final = create(NE, id, {})
   // plsBe(real, collection);
@@ -42,6 +45,8 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.updatedAt = event.timestamp
   final.lewd = false
   final.version = versionOf(context)
+  final.holder = await holderEventHandler.handleMint(event.owner, event.timestamp)
+
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1

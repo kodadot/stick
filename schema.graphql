@@ -40,6 +40,16 @@ type TokenEntity @entity {
   count: Int!
 }
 
+type Holder @entity {
+  id: ID!
+  nftCount: Int!
+  totalSold: BigInt!
+  totalBought: BigInt!
+  lastActivity: DateTime!
+  collection: CollectionEntity
+  nfts: [NFTEntity!] @derivedFrom(field: "holder")
+}
+
 type NFTEntity @entity {
   attributes: [Attribute!]
   blockNumber: BigInt
@@ -64,7 +74,7 @@ type NFTEntity @entity {
   updatedAt: DateTime!
   version: Int!
   token: TokenEntity!
-
+  holder: Holder
 }
 
 type MetadataEntity @entity {

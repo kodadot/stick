@@ -5,6 +5,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { HolderEventHandler } from '../shared/holderEventHandler'
 import { getBuyTokenEvent } from './getters'
 
 const OPERATION = Action.BUY
@@ -13,6 +14,8 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getBuyTokenEvent)
   debug(OPERATION, event, true)
+  const holderEventHandler = new HolderEventHandler(context)
+
 
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
@@ -23,6 +26,8 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   entity.price = BigInt(0)
   entity.currentOwner = event.caller
   entity.updatedAt = event.timestamp
+  entity.holder = await holderEventHandler.handleBuy(originalOwner, event.caller, event.timestamp, originalPrice)
+
   if (originalPrice) {
     entity.collection.volume += originalPrice
     if (originalPrice > entity.collection.highestSale) {
