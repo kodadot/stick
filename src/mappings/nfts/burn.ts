@@ -15,11 +15,15 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   const event = unwrap(context, getBurnTokenEvent)
   debug(OPERATION, event)
   const holderEventHandler = new HolderEventHandler(context);
-  await holderEventHandler.handleBurn(event.owner, event.timestamp)
 
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 
+  await holderEventHandler.handleBurn({
+    ownerId: event.owner,
+    collectionId: entity.collection.id,
+    timestamp: event.timestamp,
+  })
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,
     entity.collection.id,

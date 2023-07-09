@@ -14,7 +14,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getTransferTokenEvent)
   debug(OPERATION, event)
-  const holderEventHandler = new HolderEventHandler(context);
+  const holderEventHandler = new HolderEventHandler(context)
 
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
@@ -23,8 +23,12 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   entity.price = BigInt(0)
   entity.currentOwner = event.to
   entity.updatedAt = event.timestamp
-  entity.holder = await holderEventHandler.handleSend(event.caller, event.to, event.timestamp)
-
+  entity.holder = await holderEventHandler.handleBuy({
+    ownerId: oldOwner,
+    newOwnerId: event.to,
+    collection: entity.collection,
+    timestamp: event.timestamp,
+  })
 
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,

@@ -7,7 +7,7 @@ import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { versionOf , calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { versionOf, calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { HolderEventHandler } from '../shared/holderEventHandler'
 import { getCreateTokenEvent } from './getters'
 
@@ -19,12 +19,14 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   debug(OPERATION, event)
   const id = createTokenId(event.collectionId, event.sn)
   const collection = await getOptional<CE>(context.store, CE, event.collectionId)
-  const holderEventHandler = new HolderEventHandler(context);
+  const holderEventHandler = new HolderEventHandler(context)
 
   if (!collection) {
     warn(OPERATION, `collection ${event.collectionId} not found`)
     return
   }
+
+  const holderActivity = await holderEventHandler.handleMint({ ownerId: event.owner, timestamp: event.timestamp, collection })
 
   const final = create(NE, id, {})
   // plsBe(real, collection);
@@ -44,7 +46,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.updatedAt = event.timestamp
   final.lewd = false
   final.version = versionOf(context)
-  final.holder = await holderEventHandler.handleMint(event.owner, event.timestamp)
+  final.holder = holderActivity
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1

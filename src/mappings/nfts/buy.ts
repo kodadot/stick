@@ -25,7 +25,13 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   entity.price = BigInt(0)
   entity.currentOwner = event.caller
   entity.updatedAt = event.timestamp
-  entity.holder = await holderEventHandler.handleBuy(originalOwner, event.caller, event.timestamp, originalPrice)
+  entity.holder = await holderEventHandler.handleBuy({
+    ownerId: originalOwner,
+    newOwnerId: event.caller,
+    collection: entity.collection,
+    amount: originalPrice,
+    timestamp: event.timestamp,
+  })
 
   if (originalPrice) {
     entity.collection.volume += originalPrice
