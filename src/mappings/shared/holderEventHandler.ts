@@ -1,81 +1,146 @@
 import { create, getOptional } from '@kodadot1/metasquid/entity'
-import { Holder } from '../../model'
+import { EntityManager } from 'typeorm'
+import { CollectionEntity, HolderActivity as HA, HolderActivity } from '../../model'
 import { Context } from '../utils/types'
-import { warn } from '../utils/logger'
+import { warn, debug } from '../utils/logger'
+
+type BaseParams = {
+  collection: CollectionEntity
+  timestamp: Date
+  ownerId: string
+}
+
+type HandleMintParams = BaseParams
+
+type HandleSendParams = BaseParams & {
+  newOwnerId: string
+}
+
+type HandleBuyParams = BaseParams & {
+  newOwnerId: string
+  amount?: bigint | null
+}
+
+type HandleBurnParams = {
+  ownerId: string
+  collectionId: string
+  timestamp: Date
+}
 
 export class HolderEventHandler {
-  context: Context
+  store: EntityManager
 
   constructor(context: Context) {
-    this.context = context
+    this.store = context.store
   }
 
-  async getOrCreateHolder(ownerId: string, timestamp: Date): Promise<Holder> {
-    let holder = await getOptional<Holder>(this.context.store, Holder, ownerId)
+  private getHolderId(ownerId: string, collectionId: string): string {
+    return `${ownerId}-${collectionId}`
+  }
 
-    if (!holder) {
-      holder = create(Holder, ownerId, {
-        id: ownerId,
+  async getOrCreateHolder(ownerId: string, collection: CollectionEntity, timestamp: Date): Promise<HA> {
+    const id = this.getHolderId(ownerId, collection.id)
+    let holderActivity = await getOptional<HA>(this.store, HA, id)
+
+    if (!holderActivity) {
+      holderActivity = create(HA, id, {
+        holder: ownerId,
+        id,
         nftCount: 0,
-        totalBought: 0n,
-        totalSold: 0n,
+        totalBought: BigInt(0),
+        totalSold: BigInt(0),
         lastActivity: timestamp,
+        collection,
       })
+      await this.store.save(holderActivity)
     }
-    return holder
+
+    return holderActivity
   }
 
-  async decrementFromHolder(ownerId: string, timestamp: Date, sellPrice?: bigint): Promise<Holder | undefined> {
-    let owner = (await getOptional<Holder>(this.context.store, Holder, ownerId)) as Holder
-    if (!owner) {
-      warn('HolderEventHandler::decrementFromHolder' as any, `holder ${ownerId} not found`)
+  async decrementFromHolder(holderId: string, timestamp: Date, sellPrice?: bigint | null): Promise<void> {
+    let holderActivity = (await getOptional<HA>(this.store, HA, holderId)) as HA
+    if (!holderActivity) {
+      warn('HolderEventHandler::decrementFromHolder' as any, `holder ${holderId} not found`)
       return
     }
 
-    owner.nftCount = owner.nftCount > 0 ? owner.nftCount - 1 : 0
-    owner.lastActivity = timestamp
-    if (sellPrice) {
-      owner.totalSold += sellPrice
-
-      await this.context.store.save(owner)
-      return owner
+    const updateArgs: Partial<HA> = {
+      nftCount: Math.max(holderActivity.nftCount - 1, 0),
+      lastActivity: timestamp,
     }
+    if (sellPrice) {
+      debug('HolderEventHandler::decrementFromHolder' as any, { typeof_sellPrice: typeof sellPrice, sellPrice })
+      updateArgs.totalSold = BigInt(holderActivity.totalSold) + BigInt(sellPrice)
+      debug('HolderEventHandler::decrementFromHolder' as any, updateArgs)
+      debug('HolderEventHandler::decrementFromHolder' as any, holderActivity)
+    }
+
+    await this.store.update(HolderActivity, { id: holderId }, updateArgs)
   }
 
-  async handleMint(ownerId: string, timestamp: Date): Promise<Holder> {
-    const holder = await this.getOrCreateHolder(ownerId, timestamp)
-    holder.nftCount += 1
-    await this.context.store.save(holder)
-    return holder
+  async handleMint({ ownerId, collection, timestamp }: HandleMintParams): Promise<HA> {
+    const holderActivity = await this.getOrCreateHolder(ownerId, collection, timestamp)
+    await this.store.update(
+      HA,
+      { id: holderActivity.id },
+      { nftCount: 1, lastActivity: timestamp }
+    )
+    return holderActivity
   }
 
-  async handleSend(previousOwnerId: string, newOwnerId: string, timestamp: Date): Promise<Holder> {
-    await this.decrementFromHolder(previousOwnerId, timestamp)
+  async handleSend({ ownerId: previousOwnerId, newOwnerId, collection, timestamp }: HandleSendParams): Promise<HA> {
+    const previousHolderActvityId = this.getHolderId(previousOwnerId, collection.id)
+    await this.decrementFromHolder(previousHolderActvityId, timestamp)
 
-    const newOwner = await this.getOrCreateHolder(newOwnerId, timestamp)
-    newOwner.nftCount += 1
-    await this.context.store.save(newOwner)
-
-    return newOwner
+    const newHolderActivity = await this.getOrCreateHolder(newOwnerId, collection, timestamp)
+    await this.store.update(
+      HA,
+      { id: newHolderActivity.id },
+      { nftCount: newHolderActivity.nftCount + 1, lastActivity: timestamp }
+    )
+    return newHolderActivity
   }
 
-  async handleBuy(
-    previousOwnerId: string,
-    newOwnerId: string,
-    timestamp: Date,
-    amount?: bigint | null
-  ): Promise<Holder> {
-    await this.decrementFromHolder(previousOwnerId, timestamp, amount || 0n)
+  async handleBuy({
+    ownerId: previousOwnerId,
+    newOwnerId,
+    collection,
+    timestamp,
+    amount,
+  }: HandleBuyParams): Promise<HA> {
+    const previousHolderActvityId = this.getHolderId(previousOwnerId, collection.id)
+    if (amount) {
+      debug('HolderEventHandler::handleBuy' as any, { typeof_amount: typeof amount, amount })
+      debug('HolderEventHandler::handleBuy' as any, { previousOwnerId, newOwnerId, collection, timestamp, amount })
+    }
 
-    const buyer = await this.getOrCreateHolder(newOwnerId, timestamp)
-    buyer.totalBought += amount || 0n
-    buyer.nftCount += 1
+    await this.decrementFromHolder(previousHolderActvityId, timestamp, amount)
 
-    await this.context.store.save(buyer)
-    return buyer
+    const buyerActivity = await this.getOrCreateHolder(newOwnerId, collection, timestamp)
+
+    const updateArgs: Partial<HA> = {
+      nftCount: buyerActivity.nftCount + 1,
+      lastActivity: timestamp,
+    }
+    if (amount) {
+      debug('HolderEventHandler::handleBuy' as any, { typeof_amount: typeof amount, amount })
+      updateArgs.totalBought = BigInt(buyerActivity.totalBought) + BigInt(amount)
+      debug('HolderEventHandler::handleBuy' as any, updateArgs)
+      debug('HolderEventHandler::handleBuy' as any, { previousOwnerId, newOwnerId, collection, timestamp, amount })
+    }
+
+    await this.store.update(HA, { id: buyerActivity.id }, updateArgs)
+    if (amount) {
+      throw new Error('DEBUG BREAKPOINT - HolderEventHandler::handleBuy')
+    }
+
+    return buyerActivity
   }
 
-  async handleBurn(ownerId: string, timestamp: Date): Promise<Holder | undefined> {
-    return await this.decrementFromHolder(ownerId, timestamp)
+  async handleBurn({ ownerId, collectionId, timestamp }: HandleBurnParams): Promise<void> {
+    const previousHolderActvityId = this.getHolderId(ownerId, collectionId)
+
+    await this.decrementFromHolder(previousHolderActvityId, timestamp)
   }
 }
