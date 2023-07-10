@@ -26,7 +26,11 @@ export async function handleTokenCreate(context: Context): Promise<void> {
     return
   }
 
-  const holderActivity = await holderEventHandler.handleMint({ ownerId: event.owner, timestamp: event.timestamp, collection })
+  const holderActivity = await holderEventHandler.handleMint({
+    ownerId: event.owner,
+    timestamp: event.timestamp,
+    collection,
+  })
 
   const final = create(NE, id, {})
   // plsBe(real, collection);
