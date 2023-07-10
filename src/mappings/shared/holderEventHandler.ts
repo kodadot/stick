@@ -70,10 +70,7 @@ export class HolderEventHandler {
       lastActivity: timestamp,
     }
     if (sellPrice) {
-      debug('HolderEventHandler::decrementFromHolder' as any, { typeof_sellPrice: typeof sellPrice, sellPrice })
       updateArgs.totalSold = BigInt(holderActivity.totalSold) + BigInt(sellPrice)
-      debug('HolderEventHandler::decrementFromHolder' as any, updateArgs)
-      debug('HolderEventHandler::decrementFromHolder' as any, holderActivity)
     }
 
     await this.store.update(HolderActivity, { id: holderId }, updateArgs)
@@ -81,11 +78,7 @@ export class HolderEventHandler {
 
   async handleMint({ ownerId, collection, timestamp }: HandleMintParams): Promise<HA> {
     const holderActivity = await this.getOrCreateHolder(ownerId, collection, timestamp)
-    await this.store.update(
-      HA,
-      { id: holderActivity.id },
-      { nftCount: 1, lastActivity: timestamp }
-    )
+    await this.store.update(HA, { id: holderActivity.id }, { nftCount: 1, lastActivity: timestamp })
     return holderActivity
   }
 
@@ -110,11 +103,6 @@ export class HolderEventHandler {
     amount,
   }: HandleBuyParams): Promise<HA> {
     const previousHolderActvityId = this.getHolderId(previousOwnerId, collection.id)
-    if (amount) {
-      debug('HolderEventHandler::handleBuy' as any, { typeof_amount: typeof amount, amount })
-      debug('HolderEventHandler::handleBuy' as any, { previousOwnerId, newOwnerId, collection, timestamp, amount })
-    }
-
     await this.decrementFromHolder(previousHolderActvityId, timestamp, amount)
 
     const buyerActivity = await this.getOrCreateHolder(newOwnerId, collection, timestamp)
@@ -124,16 +112,10 @@ export class HolderEventHandler {
       lastActivity: timestamp,
     }
     if (amount) {
-      debug('HolderEventHandler::handleBuy' as any, { typeof_amount: typeof amount, amount })
       updateArgs.totalBought = BigInt(buyerActivity.totalBought) + BigInt(amount)
-      debug('HolderEventHandler::handleBuy' as any, updateArgs)
-      debug('HolderEventHandler::handleBuy' as any, { previousOwnerId, newOwnerId, collection, timestamp, amount })
     }
 
     await this.store.update(HA, { id: buyerActivity.id }, updateArgs)
-    if (amount) {
-      throw new Error('DEBUG BREAKPOINT - HolderEventHandler::handleBuy')
-    }
 
     return buyerActivity
   }
