@@ -29,7 +29,7 @@ export async function handleTokenBuy(context: Context): Promise<void> {
     ownerId: originalOwner,
     newOwnerId: event.caller,
     collection: entity.collection,
-    amount: originalPrice,
+    amount: event.price,
     timestamp: event.timestamp,
   })
 
