@@ -23,7 +23,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   entity.price = BigInt(0)
   entity.currentOwner = event.to
   entity.updatedAt = event.timestamp
-  entity.holder = await holderEventHandler.handleBuy({
+  entity.holder = await holderEventHandler.handleSend({
     ownerId: oldOwner,
     newOwnerId: event.to,
     collection: entity.collection,
