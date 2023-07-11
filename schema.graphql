@@ -24,6 +24,31 @@ type CollectionEntity @entity {
   updatedAt: DateTime!
   version: Int!
   volume: BigInt!
+  flippers: [FlipperEntity!] @derivedFrom(field: "collection")
+}
+
+type FlipEvent @entity {
+  id: ID!
+  flipper: FlipperEntity!
+  nft: NFTEntity!
+  soldPrice: BigInt
+  soldTo: String
+  sellTimestamp: DateTime
+  boughtPrice: BigInt!
+  profit: BigInt
+}
+
+
+type FlipperEntity @entity {
+  id: ID! 
+  address: String! @index
+  collection: CollectionEntity!
+  flips: [FlipEvent!] @derivedFrom(field: "flipper")
+  owned: Int!
+  totalBought: BigInt!
+  totalSold: BigInt!
+  bestFlip: BigInt!
+  latestFlipTimestamp: DateTime!
 }
 
 type TokenEntity @entity {

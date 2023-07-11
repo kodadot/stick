@@ -4,6 +4,7 @@ import {Attribute} from "./_attribute"
 import {CollectionEvent} from "./collectionEvent.model"
 import {MetadataEntity} from "./metadataEntity.model"
 import {NFTEntity} from "./nftEntity.model"
+import {FlipperEntity} from "./flipperEntity.model"
 
 @Entity_()
 export class CollectionEntity {
@@ -88,4 +89,7 @@ export class CollectionEntity {
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     volume!: bigint
+
+    @OneToMany_(() => FlipperEntity, e => e.collection)
+    flippers!: FlipperEntity[]
 }
