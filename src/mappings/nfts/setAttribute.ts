@@ -1,6 +1,7 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
 import { CollectionEntity, NFTEntity } from '../../model'
 import { unwrap } from '../utils/extract'
+import { debug } from '../utils/logger'
 import { Context } from '../utils/types'
 import { getAttributeEvent } from './getters'
 import { attributeFrom, tokenIdOf } from './types'
@@ -12,6 +13,10 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     event.sn !== undefined
       ? await get(context.store, NFTEntity, tokenIdOf(event as any))
       : await get(context.store, CollectionEntity, event.collectionId)
+  
+  if (!final.attributes) {
+    final.attributes = []
+  }
 
   if (event.value === null) {
     final.attributes = final.attributes?.filter((attr) => attr.trait !== event.trait)
