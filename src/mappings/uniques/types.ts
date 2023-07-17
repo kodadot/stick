@@ -83,7 +83,7 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
   return new Attribute(
     {},
     {
-      display: String(attribute.display_type),
+      display: String(attribute.display_type || ''),
       trait: String(attribute.trait_type),
       value: String(attribute.value),
     }
