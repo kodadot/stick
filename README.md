@@ -91,8 +91,14 @@ sqd migration:apply
 
 ### Dev hacks 
 
-fast generate event handlers 
+1. fast generate event handlers 
 
 ```
 pbpaste | cut -d '=' -f 1 | tr -d ' '  | xargs -I_ echo "processor.addEventHandler(Event._, dummy);"
+```
+
+2. enable debug logs (in .env)
+
+```
+SQD_DEBUG=squid:log
 ```
