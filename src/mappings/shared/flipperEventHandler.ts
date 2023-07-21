@@ -3,7 +3,7 @@ import { create, getOptional } from '@kodadot1/metasquid/entity'
 import { FlipperEntity, FlipEvent, CollectionEntity, NFTEntity } from '../../model'
 import { CallWith } from '../utils/types'
 import { BuyTokenEvent } from '../nfts/types'
-import {  pending, warn } from '../utils/logger'
+import { pending, warn } from '../utils/logger'
 
 const OPERATION = 'BUY => FlipperEventHandler' as any
 
@@ -39,7 +39,7 @@ export class FlipperEventHandler {
         totalBought: BigInt(0),
         totalSold: BigInt(0),
         bestFlip: BigInt(0),
-        latestFlipTimestamp: timestamp,
+        timestamp,
       })
       await this.store.save(flipper)
     }
@@ -65,7 +65,7 @@ export class FlipperEventHandler {
       {
         owned: flipper.owned + 1,
         totalBought: BigInt(flipper.totalBought) + BigInt(price || 0),
-        latestFlipTimestamp: timestamp,
+        timestamp,
       }
     )
 
@@ -122,7 +122,7 @@ export class FlipperEventHandler {
       {
         owned: previousFlipper.owned - 1,
         totalSold: BigInt(previousFlipper.totalSold) + soldPrice,
-        latestFlipTimestamp: timestamp,
+        timestamp,
         bestFlip:
           previousFlipper.bestFlip > BigInt(profitPercentage) ? previousFlipper.bestFlip : BigInt(profitPercentage),
       }

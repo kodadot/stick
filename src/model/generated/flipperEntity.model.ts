@@ -36,5 +36,5 @@ export class FlipperEntity {
     bestFlip!: bigint
 
     @Column_("timestamp with time zone", {nullable: false})
-    latestFlipTimestamp!: Date
+    timestamp!: Date
 }

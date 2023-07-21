@@ -48,7 +48,7 @@ type FlipperEntity @entity {
   totalBought: BigInt!
   totalSold: BigInt!
   bestFlip: BigInt!
-  latestFlipTimestamp: DateTime!
+  timestamp: DateTime!
 }
 
 type TokenEntity @entity {
