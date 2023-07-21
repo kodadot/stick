@@ -24,7 +24,7 @@ export class FlipperEventHandler {
   }
 
   private getFlipEventId(address: string, collectionId: string, blockNumber: string): string {
-    return `${address}-${collectionId}-${blockNumber}`
+    return `${blockNumber}-${address}-${collectionId}`
   }
 
   async getOrCreateFlipper(address: string, collection: CollectionEntity, timestamp: Date): Promise<FlipperEntity> {
