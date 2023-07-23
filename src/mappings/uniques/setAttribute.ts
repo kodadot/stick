@@ -13,6 +13,10 @@ export async function handleAttributeSet(context: Context): Promise<void> {
       ? await get(context.store, NFTEntity, tokenIdOf(event as any))
       : await get(context.store, CollectionEntity, event.collectionId)
 
+  if (!final.attributes) {
+    final.attributes = []
+  }
+
   if (event.value === null) {
     final.attributes = final.attributes?.filter((attr) => attr.trait !== event.trait)
   } else {

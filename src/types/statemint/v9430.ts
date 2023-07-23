@@ -19,11 +19,15 @@ export interface AttributeNamespace_Account {
     value: Uint8Array
 }
 
-export type PalletAttributes = PalletAttributes_UsedToClaim
+export type PalletAttributes = PalletAttributes_UsedToClaim | PalletAttributes_TransferDisabled
 
 export interface PalletAttributes_UsedToClaim {
     __kind: 'UsedToClaim'
     value: number
+}
+
+export interface PalletAttributes_TransferDisabled {
+    __kind: 'TransferDisabled'
 }
 
 export interface PriceWithDirection {
@@ -31,7 +35,7 @@ export interface PriceWithDirection {
     direction: PriceDirection
 }
 
-export interface Type_348 {
+export interface Type_353 {
     owner: Uint8Array
     ownerDeposit: bigint
     items: number
@@ -40,7 +44,7 @@ export interface Type_348 {
     attributes: number
 }
 
-export interface Type_358 {
+export interface Type_363 {
     deposit: ItemMetadataDeposit
     data: Uint8Array
 }
