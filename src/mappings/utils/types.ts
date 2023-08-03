@@ -77,6 +77,10 @@ export type WithAmount = {
   amount: bigint
 }
 
+export type WithOwner = {
+  owner: string;
+};
+
 export type WithCaller = {
   caller: string
 }
@@ -97,6 +101,8 @@ export function ensure<T>(value: unknown): T {
 }
 
 export const createTokenId = (collection: string, id: string): string => `${collection}-${id}`
+
+export const createSwapId = (collection: string, id: string) => createTokenId(collection, id);
 
 export const eventId = (id: string, event: Interaction): string => `${id}-${event}-${nanoid()}`
 
