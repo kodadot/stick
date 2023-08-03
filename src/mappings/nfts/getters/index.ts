@@ -3,9 +3,12 @@ import { Context } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
+  CancelSwapEvent,
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
+  ClaimSwapEvent,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -109,4 +112,16 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
   return proc.getChangeTeamEvent(ctx);
+}
+
+export function getCreateSwapEvent(ctx: Context): CreateSwapEvent {
+  return proc.getCreateSwapEvent(ctx)
+}
+
+export function getCancelSwapEvent(ctx: Context): CancelSwapEvent {
+  return proc.getCancelSwapEvent(ctx)
+}
+
+export function getClaimSwapEvent(ctx: Context): ClaimSwapEvent {
+  return proc.getClaimSwapEvent(ctx)
 }
