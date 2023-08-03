@@ -1,6 +1,8 @@
 import { MetadataAttribute } from '@kodadot1/metasquid/types'
 import { Attribute } from '../../model'
-import { createTokenId } from '../utils/types'
+import { WithAmount, WithOwner, createTokenId } from '../utils/types'
+import { str } from '../utils/helper'
+import { PriceDirection } from '../../types/statemine/v9420'
 
 export type WithId = {
   id: string
@@ -75,6 +77,39 @@ export type ChangeCollectionTeam = WithId & {
   issuer: string
   admin: string
   freezer: string
+}
+
+export type CreateSwapEvent = BaseTokenEvent & WithAmount & {
+  expiresAt: bigint;
+  surcharge?: 'Offer' | 'Consideration';
+  consideration: Consideration;
+}
+
+export type CancelSwapEvent = CreateSwapEvent
+
+export type ClaimSwapEvent = CreateSwapEvent & WithOwner & {
+  consideration: Consideration & WithOwner;
+}
+
+export type Consideration = BaseTokenEvent & {
+  sn?: string;
+}
+
+
+export const considerationOf = (collection: number, tokenId: number | undefined): Consideration => ({
+  collectionId: str(collection),
+  sn: tokenId ? str(tokenId) : '',
+})
+
+export const priceDirectionOf = (direction?: PriceDirection): 'Offer' | 'Consideration' | undefined => {
+  switch (direction?.__kind) {
+    case 'Send':
+      return 'Offer'
+    case 'Receive':
+      return 'Consideration'
+    default:
+      return undefined
+  }
 }
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn)
