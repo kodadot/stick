@@ -7,9 +7,12 @@ import { Context } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
+  CancelSwapEvent,
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
+  ClaimSwapEvent,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -18,6 +21,8 @@ import {
   SetAttribute,
   SetMetadata,
   TransferTokenEvent,
+  considerationOf,
+  priceDirectionOf,
 } from '../types'
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
@@ -334,5 +339,137 @@ export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
     issuer: addressOf(issuer || ''),
     admin: addressOf(admin || ''),
     freezer: addressOf(freezer || ''),
+  }
+}
+export function getCreateSwapEvent(ctx: Context): CreateSwapEvent {
+  const event = new events.NftsSwapCreatedEvent(ctx)
+
+  if (event.isV9420) {
+    const {
+      offeredCollection: classId,
+      offeredItem: instanceId,
+      desiredCollection,
+      desiredItem,
+      price,
+      deadline,
+    } = event.asV9420
+    return {
+      collectionId: classId.toString(),
+      sn: instanceId.toString(),
+      amount: price?.amount || 0n,
+      surcharge: priceDirectionOf(price?.direction),
+      expiresAt: BigInt(deadline),
+      consideration: considerationOf(desiredCollection, desiredItem),
+    }
+  }
+
+  const {
+    offeredCollection: classId,
+    offeredItem: instanceId,
+    desiredCollection,
+    desiredItem,
+    price,
+    deadline,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return {
+    collectionId: classId.toString(),
+    sn: instanceId.toString(),
+    amount: price?.amount || 0n,
+    surcharge: priceDirectionOf(price?.direction),
+    expiresAt: BigInt(deadline),
+    consideration: considerationOf(desiredCollection, desiredItem),
+  }
+}
+
+export function getCancelSwapEvent(ctx: Context): CancelSwapEvent {
+  const event = new events.NftsSwapCancelledEvent(ctx)
+
+  if (event.isV9420) {
+    const {
+      offeredCollection: classId,
+      offeredItem: instanceId,
+      desiredCollection,
+      desiredItem,
+      price,
+      deadline,
+    } = event.asV9420
+    return {
+      collectionId: classId.toString(),
+      sn: instanceId.toString(),
+      amount: price?.amount || 0n,
+      surcharge: priceDirectionOf(price?.direction),
+      expiresAt: BigInt(deadline),
+      consideration: considerationOf(desiredCollection, desiredItem),
+    }
+  }
+
+  const {
+    offeredCollection: classId,
+    offeredItem: instanceId,
+    desiredCollection,
+    desiredItem,
+    price,
+    deadline,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return {
+    collectionId: classId.toString(),
+    sn: instanceId.toString(),
+    amount: price?.amount || 0n,
+    surcharge: priceDirectionOf(price?.direction),
+    expiresAt: BigInt(deadline),
+    consideration: considerationOf(desiredCollection, desiredItem),
+  }
+}
+
+export function getClaimSwapEvent(ctx: Context): ClaimSwapEvent {
+  const event = new events.NftsSwapClaimedEvent(ctx)
+
+  if (event.isV9420) {
+    const {
+      sentCollection: classId,
+      sentItem: instanceId,
+      sentItemOwner,
+      receivedCollection,
+      receivedItem,
+      receivedItemOwner,
+      price,
+      deadline,
+    } = event.asV9420
+    return {
+      collectionId: classId.toString(),
+      sn: instanceId.toString(),
+      owner: addressOf(sentItemOwner),
+      amount: price?.amount || 0n,
+      surcharge: priceDirectionOf(price?.direction),
+      expiresAt: BigInt(deadline),
+      consideration: {
+        ...considerationOf(receivedCollection, receivedItem),
+        owner: addressOf(receivedItemOwner),
+      }
+      // mayber fullfiller?
+    }
+  }
+
+  const {
+    sentCollection: classId,
+    sentItem: instanceId,
+    sentItemOwner,
+    receivedCollection,
+    receivedItem,
+    receivedItemOwner,
+    price,
+    deadline,
+  } = ctx._chain.decodeEvent(ctx.event)
+  return {
+    collectionId: classId.toString(),
+    sn: instanceId.toString(),
+    owner: addressOf(sentItemOwner),
+    amount: price?.amount || 0n,
+    surcharge: priceDirectionOf(price?.direction),
+    expiresAt: BigInt(deadline),
+    consideration: {
+      ...considerationOf(receivedCollection, receivedItem),
+      owner: addressOf(receivedItemOwner),
+    }
   }
 }
