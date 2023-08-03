@@ -61,6 +61,9 @@ type NFTEntity @entity {
   recipient: String
   royalty: Float
   sn: String!
+  swap: Swap @derivedFrom(field: "nft")
+  # offers: [Swap!] @derivedFrom(field: "nft")
+  # transferable: Boolean!
   updatedAt: DateTime!
   version: Int!
   token: TokenEntity!
@@ -136,4 +139,32 @@ type AssetEntity @entity {
   name: String
   symbol: String
   decimals: Int
+}
+
+type Swap @entity {
+  id: ID! # should be a just nft-id
+  blockNumber: BigInt!
+  caller: String!
+  createdAt: DateTime!
+  collection: CollectionEntity
+  # events: [OfferEvent!] @derivedFrom(field: "offer")
+  expiration: BigInt!
+  item: NFTEntity 
+  nft: NFTEntity! @unique
+  price: BigInt!
+  surcharge: SwapSurchargeType
+  status: SwapStatus!
+  updatedAt: DateTime
+}
+
+enum SwapSurchargeType {
+  Offer
+  Consideration
+}
+
+enum SwapStatus {
+  ACTIVE
+  ACCEPTED
+  EXPIRED
+  WITHDRAWN
 }
