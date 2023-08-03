@@ -102,3 +102,9 @@ pbpaste | cut -d '=' -f 1 | tr -d ' '  | xargs -I_ echo "processor.addEventHandl
 ```
 SQD_DEBUG=squid:log
 ```
+
+3. generate metagetters from getters 
+
+```
+pbpaste | grep 'export'  | xargs -I_ echo "_  return proc.  }"
+```
