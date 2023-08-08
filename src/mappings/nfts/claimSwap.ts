@@ -16,13 +16,13 @@ export async function handleSwapClaim(context: Context): Promise<void> {
   debug(OPERATION, event, true);
 
   const id = createTokenId(event.collectionId, event.sn);
-  const targetId = createTokenId(event.target.collectionId, event.target.sn);
+  const targetId = createTokenId(event.consideration.collectionId, event.consideration.sn);
   const swapId = createSwapId(event.collectionId, event.sn);
 
   const entity = await get(context.store, NE, id);
   const target = await get(context.store, NE, targetId);
 
-  entity.currentOwner = event.target.owner;
+  entity.currentOwner = event.consideration.owner;
   entity.updatedAt = event.timestamp;
 
   target.currentOwner = event.owner;
