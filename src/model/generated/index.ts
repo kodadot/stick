@@ -1,6 +1,7 @@
 export * from "./collectionEntity.model"
 export * from "./_attribute"
 export * from "./tokenEntity.model"
+export * from "./holderActivity.model"
 export * from "./nftEntity.model"
 export * from "./metadataEntity.model"
 export * from "./event.model"

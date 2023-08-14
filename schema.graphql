@@ -24,6 +24,7 @@ type CollectionEntity @entity {
   updatedAt: DateTime!
   version: Int!
   volume: BigInt!
+  holders: [HolderActivity!] @derivedFrom(field: "collection")
 }
 
 type TokenEntity @entity {
@@ -38,6 +39,17 @@ type TokenEntity @entity {
   updatedAt: DateTime!
   createdAt: DateTime!
   count: Int!
+}
+
+type HolderActivity @entity {
+  id: ID!
+  holder: String! @index
+  nftCount: Int!
+  totalSold: BigInt!
+  totalBought: BigInt!
+  lastActivity: DateTime!
+  collection: CollectionEntity!
+  nfts: [NFTEntity!] @derivedFrom(field: "holder")
 }
 
 type NFTEntity @entity {
@@ -64,7 +76,7 @@ type NFTEntity @entity {
   updatedAt: DateTime!
   version: Int!
   token: TokenEntity!
-
+  holder: HolderActivity
 }
 
 type MetadataEntity @entity {

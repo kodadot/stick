@@ -5,6 +5,7 @@ import {CollectionEntity} from "./collectionEntity.model"
 import {Event} from "./event.model"
 import {MetadataEntity} from "./metadataEntity.model"
 import {TokenEntity} from "./tokenEntity.model"
+import {HolderActivity} from "./holderActivity.model"
 
 @Entity_()
 export class NFTEntity {
@@ -86,4 +87,8 @@ export class NFTEntity {
     @Index_()
     @ManyToOne_(() => TokenEntity, {nullable: true})
     token!: TokenEntity
+
+    @Index_()
+    @ManyToOne_(() => HolderActivity, {nullable: true})
+    holder!: HolderActivity | undefined | null
 }
