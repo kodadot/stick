@@ -1,14 +1,14 @@
 type CollectionEntity @entity {
   attributes: [Attribute!]
-  blockNumber: BigInt
+  blockNumber: BigInt @index
   burned: Boolean!
-  createdAt: DateTime!
+  createdAt: DateTime! @index
   currentOwner: String!
   distribution: Int!
   events: [CollectionEvent!] @derivedFrom(field: "collection")
-  floor: BigInt!
+  floor: BigInt! @index
   hash: String! @unique
-  highestSale: BigInt!
+  highestSale: BigInt! @index
   id: ID!
   image: String
   issuer: String!
@@ -17,13 +17,13 @@ type CollectionEntity @entity {
   meta: MetadataEntity
   metadata: String
   name: String @index
-  nftCount: Int!
+  nftCount: Int! @index
   nfts: [NFTEntity!] @derivedFrom(field: "collection")
   ownerCount: Int!
-  supply: Int!
-  updatedAt: DateTime!
+  supply: Int! @index
+  updatedAt: DateTime! @index
   version: Int!
-  volume: BigInt!
+  volume: BigInt! @index
 }
 
 type TokenEntity @entity {
@@ -42,7 +42,7 @@ type TokenEntity @entity {
 
 type NFTEntity @entity {
   attributes: [Attribute!]
-  blockNumber: BigInt
+  blockNumber: BigInt @index
   burned: Boolean!
   collection: CollectionEntity!
   createdAt: DateTime!
@@ -57,14 +57,13 @@ type NFTEntity @entity {
   meta: MetadataEntity
   metadata: String
   name: String @index
-  price: BigInt
+  price: BigInt @index
   recipient: String
   royalty: Float
-  sn: String!
-  updatedAt: DateTime!
+  sn: String! @index
+  updatedAt: DateTime! @index
   version: Int!
   token: TokenEntity!
-
 }
 
 type MetadataEntity @entity {

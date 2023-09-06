@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_, Index as Index_, ManyToOne as ManyToOne_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, OneToMany as OneToMany_, ManyToOne as ManyToOne_} from "typeorm"
 import * as marshal from "./marshal"
 import {Attribute} from "./_attribute"
 import {CollectionEvent} from "./collectionEvent.model"
@@ -14,12 +14,14 @@ export class CollectionEntity {
     @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
     attributes!: (Attribute)[] | undefined | null
 
+    @Index_()
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
     blockNumber!: bigint | undefined | null
 
     @Column_("bool", {nullable: false})
     burned!: boolean
 
+    @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     createdAt!: Date
 
@@ -32,6 +34,7 @@ export class CollectionEntity {
     @OneToMany_(() => CollectionEvent, e => e.collection)
     events!: CollectionEvent[]
 
+    @Index_()
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     floor!: bigint
 
@@ -39,6 +42,7 @@ export class CollectionEntity {
     @Column_("text", {nullable: false})
     hash!: string
 
+    @Index_()
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     highestSale!: bigint
 
@@ -68,6 +72,7 @@ export class CollectionEntity {
     @Column_("text", {nullable: true})
     name!: string | undefined | null
 
+    @Index_()
     @Column_("int4", {nullable: false})
     nftCount!: number
 
@@ -77,15 +82,18 @@ export class CollectionEntity {
     @Column_("int4", {nullable: false})
     ownerCount!: number
 
+    @Index_()
     @Column_("int4", {nullable: false})
     supply!: number
 
+    @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     updatedAt!: Date
 
     @Column_("int4", {nullable: false})
     version!: number
 
+    @Index_()
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     volume!: bigint
 }
