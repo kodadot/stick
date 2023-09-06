@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, ManyToOne as ManyToOne_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
 import {Attribute} from "./_attribute"
 import {CollectionEntity} from "./collectionEntity.model"
@@ -15,6 +15,7 @@ export class NFTEntity {
     @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
     attributes!: (Attribute)[] | undefined | null
 
+    @Index_({unique: true})
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
     blockNumber!: bigint | undefined | null
 
@@ -65,6 +66,7 @@ export class NFTEntity {
     @Column_("text", {nullable: true})
     name!: string | undefined | null
 
+    @Index_()
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
     price!: bigint | undefined | null
 
@@ -74,9 +76,11 @@ export class NFTEntity {
     @Column_("numeric", {transformer: marshal.floatTransformer, nullable: true})
     royalty!: number | undefined | null
 
+    @Index_()
     @Column_("text", {nullable: false})
     sn!: string
 
+    @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     updatedAt!: Date
 
