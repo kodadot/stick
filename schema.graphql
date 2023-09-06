@@ -1,6 +1,6 @@
 type CollectionEntity @entity {
   attributes: [Attribute!]
-  blockNumber: BigInt @index @unique
+  blockNumber: BigInt @index
   burned: Boolean!
   createdAt: DateTime! @index
   currentOwner: String!
@@ -42,7 +42,7 @@ type TokenEntity @entity {
 
 type NFTEntity @entity {
   attributes: [Attribute!]
-  blockNumber: BigInt @index @unique
+  blockNumber: BigInt @index
   burned: Boolean!
   collection: CollectionEntity!
   createdAt: DateTime!
