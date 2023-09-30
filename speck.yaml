@@ -34,3 +34,4 @@ scale:
   addons:
     postgres:
       storage: 5G
+      profile: medium
