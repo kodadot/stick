@@ -30,4 +30,4 @@ deploy:
       - '1000'
 
 scale:
-  dedicated: false
+  dedicated: true
