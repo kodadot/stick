@@ -63,7 +63,7 @@ type NFTEntity @entity {
   sn: String! @index
   updatedAt: DateTime! @index
   version: Int!
-  token: TokenEntity!
+  token: TokenEntity
 }
 
 type MetadataEntity @entity {

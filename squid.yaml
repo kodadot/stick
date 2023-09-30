@@ -31,3 +31,6 @@ deploy:
 
 scale:
   dedicated: true
+  addons:
+    postgres:
+      storage: 5G

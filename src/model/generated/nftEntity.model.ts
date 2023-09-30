@@ -89,5 +89,5 @@ export class NFTEntity {
 
     @Index_()
     @ManyToOne_(() => TokenEntity, {nullable: true})
-    token!: TokenEntity
+    token!: TokenEntity | undefined | null
 }
