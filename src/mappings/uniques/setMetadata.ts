@@ -52,11 +52,7 @@ export async function handleMetadataSet(context: Context): Promise<void> {
         warn(OPERATION, `collection ${event.collectionId} not found`)
         return
       }
-      const nft = final as NFTEntity
-      const token = await handleTokenEntity(context, collection, nft)
-      if (token) {
-        nft.token = token
-      }
+      (final as NFTEntity).token = await handleTokenEntity(context, collection, final as NFTEntity)  
     }
   }
 
