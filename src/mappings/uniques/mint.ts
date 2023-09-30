@@ -63,10 +63,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
     final.media = metadata?.animationUrl
   }
 
-  const token = await handleTokenEntity(context, collection, final)
-  if (token) {
-    final.token = token
-  }
+  final.token = await handleTokenEntity(context, collection, final)
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
