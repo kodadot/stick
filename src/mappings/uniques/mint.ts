@@ -8,7 +8,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { versionOf , calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
-import { handleTokenEntity } from '../shared/handleTokenEntity'
+import { eventHandlers } from '../shared/handleTokenEntity'
 import { getCreateTokenEvent } from './getters'
 
 const OPERATION = Action.MINT
@@ -63,10 +63,8 @@ export async function handleTokenCreate(context: Context): Promise<void> {
     final.media = metadata?.animationUrl
   }
 
-  const token = await handleTokenEntity(context, collection, final)
-  if (token) {
-    final.token = token
-  }
+  await eventHandlers.mintHandler(context, collection, final)
+
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)

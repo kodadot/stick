@@ -1,4 +1,4 @@
-import { get, getOptional } from '@kodadot1/metasquid/entity'
+import { get, getOptional, getWith } from '@kodadot1/metasquid/entity'
 import { isFetchable } from '@kodadot1/minipfs'
 import { unwrap } from '../utils/extract'
 import { Context, isNFT } from '../utils/types'
@@ -6,7 +6,7 @@ import { CollectionEntity, NFTEntity } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
 import { updateItemMetadataByCollection } from '../utils/cache'
-import { handleTokenEntity } from '../shared/handleTokenEntity'
+import { eventHandlers } from '../shared/handleTokenEntity'
 import { tokenIdOf } from './types'
 import { getMetadataEvent } from './getters'
 
@@ -52,11 +52,8 @@ export async function handleMetadataSet(context: Context): Promise<void> {
         warn(OPERATION, `collection ${event.collectionId} not found`)
         return
       }
-      const nft = final as NFTEntity
-      const token = await handleTokenEntity(context, collection, nft)
-      if (token) {
-        nft.token = token
-      }
+
+      await eventHandlers.setMetadataHandler(context, collection, final as NFTEntity)
     }
   }
 
