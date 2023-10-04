@@ -6,12 +6,9 @@ import { Context } from '../utils/types'
 
 const OPERATION = 'TokenEntity' as any
 
-function wait(seconds = 60): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
-}
 
-function generateTokenId(collection: CE, nftMedia: string): string {
-  return `${collection.id}-${md5(nftMedia)}`
+function generateTokenId(collectionId: string, nftMedia: string): string {
+  return `${collectionId}-${md5(nftMedia)}`
 }
 
 async function createToken(context: Context, collection: CE, nft: NE): Promise<TE | undefined> {
@@ -20,7 +17,7 @@ async function createToken(context: Context, collection: CE, nft: NE): Promise<T
     warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
     return
   }
-  const tokenId = generateTokenId(collection, nftMedia)
+  const tokenId = generateTokenId(collection.id, nftMedia)
   debug(OPERATION, { createToken: `Create TOKEN ${tokenId} for NFT ${nft.id}` })
   const tokenName = typeof nft.name === 'string' ? nft.name?.replace(/([#_]\d+$)/g, '').trim() : ''
 
@@ -82,7 +79,7 @@ async function mintHandler(context: Context, collection: CE, nft: NE): Promise<T
     return
   }
 
-  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection, nftMedia))
+  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia))
   return await (existingToken ? addNftToToken(context, nft, existingToken) : createToken(context, collection, nft))
 }
 
@@ -103,7 +100,7 @@ async function handleMetadataSet(context: Context, collection: CE, nft: NE): Pro
   } catch (error) {
     warn(OPERATION, `ERROR ${error}`)
   }
-  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection, nftMedia))
+  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia))
   debug(OPERATION, { existingToken: `existingToken ${Boolean(existingToken)}` })
   return await (existingToken ? addNftToToken(context, nft, existingToken) : createToken(context, collection, nft))
 }
@@ -116,7 +113,7 @@ async function handleBurn(context: Context, nft: NE): Promise<void> {
     return
   }
 
-  const token = await getOptional<TE>(context.store, TE, generateTokenId(nft.collection, nftMedia))
+  const token = await getOptional<TE>(context.store, TE, generateTokenId(nft.collection.id, nftMedia))
 
   if (!token) {
     return
