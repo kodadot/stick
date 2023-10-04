@@ -19,6 +19,10 @@ export class TokenEntity {
     @ManyToOne_(() => CollectionEntity, {nullable: true})
     collection!: CollectionEntity | undefined | null
 
+    @Index_()
+    @ManyToOne_(() => NFTEntity, {nullable: true})
+    cheapestNFT!: NFTEntity | undefined | null
+
     @OneToMany_(() => NFTEntity, e => e.token)
     nfts!: NFTEntity[]
 

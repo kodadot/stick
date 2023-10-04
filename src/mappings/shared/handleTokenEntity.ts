@@ -121,8 +121,37 @@ async function handleBurn(context: Context, nft: NE): Promise<void> {
   await context.store.update(TE, token.id, { count: token.count - 1, updatedAt: nft.updatedAt })
 }
 
+async function listHandler(context: Context, nft: NE): Promise<TE | undefined> {
+  const nftMedia = nft.image ?? nft.media
+
+  if (!nftMedia || nftMedia === '') {
+    warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
+    return
+  }
+
+  try {
+    const nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
+    if (!nftWithToken.token) {
+      warn(OPERATION, `nft ${nft.id} is not linked to a token`)
+      return
+    }
+    const cheapestNFT = nftWithToken.token.cheapestNFT
+    if (!nft.price && !cheapestNFT?.price) {
+      return;
+  }
+
+    if (!cheapestNFT?.price || (nft.price && nft.price < cheapestNFT.price)) {
+      context.store.update(TE, nftWithToken.token.id, { cheapestNFT: nft, updatedAt: nft.updatedAt })
+    }
+  } catch (error) {
+    warn(OPERATION, `ERROR ${error}`)
+  }
+}
+
+
 export const eventHandlers = {
   setMetadataHandler: handleMetadataSet,
   mintHandler,
   burnHandler: handleBurn,
+  listHandler
 }
