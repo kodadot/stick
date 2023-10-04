@@ -6,7 +6,6 @@ import { Context } from '../utils/types'
 
 const OPERATION = 'TokenEntity' as any
 
-
 function generateTokenId(collectionId: string, nftMedia: string): string {
   return `${collectionId}-${md5(nftMedia)}`
 }
@@ -38,18 +37,16 @@ async function createToken(context: Context, collection: CE, nft: NE): Promise<T
   await context.store.save(token)
   await context.store.save(nft)
 
-
   return token
 }
 
 async function addNftToToken(context: Context, nft: NE, token: TE): Promise<TE> {
-  debug(OPERATION, { updateToken: `Update TOKEN ${token.id} for NFT ${nft.id}` })
+  debug(OPERATION, { updateToken: `Add NFT ${nft.id} to TOKEN ${token.id} for ` })
   token.count += 1
   token.updatedAt = nft.updatedAt
   nft.token = token
   await context.store.save(token)
   await context.store.save(nft)
-
 
   return token
 }
@@ -58,7 +55,7 @@ async function removeNftFromToken(context: Context, nft: NE, token: TE): Promise
   if (!token) {
     return
   }
-  debug(OPERATION, { handleExistingToken: `Unlink TOKEN ${token.id} from  NFT ${nft.id}` })
+  debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id} for ` })
 
   await context.store.update(NE, nft.id, { token: null })
   await context.store.update(TE, token.id, { count: token.count - 1, updatedAt: nft.updatedAt })
@@ -84,6 +81,7 @@ async function mintHandler(context: Context, collection: CE, nft: NE): Promise<T
 }
 
 async function handleMetadataSet(context: Context, collection: CE, nft: NE): Promise<TE | undefined> {
+  debug(OPERATION, { handleMetadataSet: `Handle set metadata for NFT ${nft.id}` })
   const nftMedia = nft.image ?? nft.media
 
   if (!nftMedia || nftMedia === '') {
@@ -94,18 +92,17 @@ async function handleMetadataSet(context: Context, collection: CE, nft: NE): Pro
     const nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
     const token = nftWithToken.token
     if (token) {
-      debug(OPERATION, { removeNftFromToken: `removeNftFromToken TOKEN ${token.id} for NFT ${nft.id}` })
       await removeNftFromToken(context, nft, token)
     }
   } catch (error) {
     warn(OPERATION, `ERROR ${error}`)
   }
   const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia))
-  debug(OPERATION, { existingToken: `existingToken ${Boolean(existingToken)}` })
   return await (existingToken ? addNftToToken(context, nft, existingToken) : createToken(context, collection, nft))
 }
 
 async function handleBurn(context: Context, nft: NE): Promise<void> {
+  debug(OPERATION, { handleBurn: `Handle Burn for NFT ${nft.id}` })
   const nftMedia = nft.image ?? nft.media
 
   if (!nftMedia || nftMedia === '') {
@@ -119,7 +116,7 @@ async function handleBurn(context: Context, nft: NE): Promise<void> {
     return
   }
 
-  debug(OPERATION, { handleBurn: `Handle burn for NFT ${nft.id}` })
+  debug(OPERATION, { BURN: `decrement Token's ${token.id} count`  })
 
   await context.store.update(TE, token.id, { count: token.count - 1, updatedAt: nft.updatedAt })
 }
