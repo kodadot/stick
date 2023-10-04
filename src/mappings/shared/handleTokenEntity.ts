@@ -41,12 +41,6 @@ async function createToken(context: Context, collection: CE, nft: NE): Promise<T
   await context.store.save(token)
   await context.store.save(nft)
 
-  debug(OPERATION, { createToken: `Token After Create:` })
-  const newToken = await getOptional<TE>(context.store, TE, token.id)
-  const nftIds = (await getWith(context.store, TE, token.id, { nfts: true })).nfts.map((nft) => nft.id)
-  debug(OPERATION, { createToken: `id: ${newToken?.id}, count: ${newToken?.count}, last_nft: ${nftIds.slice(-1)} ` })
-  debug(OPERATION, { nftTokenRef: `nft.token.id: ${nft.token?.id}` })
-  // await wait(5)
 
   return token
 }
@@ -59,11 +53,6 @@ async function addNftToToken(context: Context, nft: NE, token: TE): Promise<TE> 
   await context.store.save(token)
   await context.store.save(nft)
 
-  debug(OPERATION, { updateToken: `Token After Update:` })
-  const newToken = await getOptional<TE>(context.store, TE, token.id)
-  const nftIds = (await getWith(context.store, TE, token.id, { nfts: true })).nfts.map((nft) => nft.id)
-  debug(OPERATION, { updateToken: `id: ${newToken?.id}, count: ${newToken?.count}, last_nft: ${nftIds.slice(-1)} ` })
-  // await wait(5)
 
   return token
 }
