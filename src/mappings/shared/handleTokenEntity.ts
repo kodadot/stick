@@ -28,6 +28,8 @@ async function createToken(context: Context, collection: CE, nft: NE): Promise<T
     hash: md5(tokenId),
     image: nft.image,
     media: nft.media,
+    metadata: nft.metadata,
+    meta: nft.meta,
     blockNumber: nft.blockNumber,
     updatedAt: nft.updatedAt,
     id: tokenId,
@@ -63,6 +65,7 @@ async function removeNftFromToken(context: Context, nft: NE, token: TE): Promise
 
   if (updatedCount === 0) {
     debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
+    
     await context.store.delete(TE, token.id)
   }
 }

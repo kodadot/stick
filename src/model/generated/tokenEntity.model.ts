@@ -2,6 +2,7 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import * as marshal from "./marshal"
 import {CollectionEntity} from "./collectionEntity.model"
 import {NFTEntity} from "./nftEntity.model"
+import {MetadataEntity} from "./metadataEntity.model"
 
 @Entity_()
 export class TokenEntity {
@@ -35,6 +36,13 @@ export class TokenEntity {
 
     @Column_("text", {nullable: true})
     media!: string | undefined | null
+
+    @Index_()
+    @ManyToOne_(() => MetadataEntity, {nullable: true})
+    meta!: MetadataEntity | undefined | null
+
+    @Column_("text", {nullable: true})
+    metadata!: string | undefined | null
 
     @Index_()
     @Column_("text", {nullable: true})

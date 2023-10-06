@@ -35,6 +35,8 @@ type TokenEntity @entity {
   hash: String! @index
   image: String
   media: String
+  meta: MetadataEntity
+  metadata: String
   name: String @index
   updatedAt: DateTime!
   createdAt: DateTime!
