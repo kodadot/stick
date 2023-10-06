@@ -55,13 +55,13 @@ async function removeNftFromToken(context: Context, nft: NE, token: TE): Promise
   if (!token) {
     return
   }
-  debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id} for ` })
+  debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}` })
 
   await context.store.update(NE, nft.id, { token: null })
-  await context.store.update(TE, token.id, { count: token.count - 1, updatedAt: nft.updatedAt })
+  const updatedCount = token.count - 1
+  await context.store.update(TE, token.id, { count: updatedCount, updatedAt: nft.updatedAt })
 
-  const tokenNfts = (await getWith(context.store, TE, token.id, { nfts: true })).nfts
-  if (tokenNfts.length === 0) {
+  if (updatedCount === 0) {
     debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
     await context.store.delete(TE, token.id)
   }
@@ -88,16 +88,20 @@ async function handleMetadataSet(context: Context, collection: CE, nft: NE): Pro
     warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
     return
   }
+
+  let nftWithToken, existingToken
   try {
-    const nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
-    const token = nftWithToken.token
-    if (token) {
-      await removeNftFromToken(context, nft, token)
-    }
+    [nftWithToken, existingToken] = await Promise.all([
+      getWith(context.store, NE, nft.id, { token: true }),
+      getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia)),
+    ])
   } catch (error) {
     warn(OPERATION, `ERROR ${error}`)
+    return
   }
-  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia))
+  if (nftWithToken.token) {
+    await removeNftFromToken(context, nft, nftWithToken.token)
+  }
   return await (existingToken ? addNftToToken(context, nft, existingToken) : createToken(context, collection, nft))
 }
 
@@ -116,7 +120,7 @@ async function handleBurn(context: Context, nft: NE): Promise<void> {
     return
   }
 
-  debug(OPERATION, { BURN: `decrement Token's ${token.id} count`  })
+  debug(OPERATION, { BURN: `decrement Token's ${token.id} count` })
 
   await context.store.update(TE, token.id, { count: token.count - 1, updatedAt: nft.updatedAt })
 }
