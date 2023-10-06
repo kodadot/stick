@@ -3,6 +3,7 @@ module.exports = class Data1689623692588 {
 
     async up(db) {
         await db.query(`CREATE TABLE "token_entity" ("id" character varying NOT NULL, "block_number" numeric, "hash" text NOT NULL, "image" text, "media" text, "name" text, "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL, "count" integer NOT NULL, "collection_id" character varying, CONSTRAINT "PK_687443f2a51af49b5472e2c5ddc" PRIMARY KEY ("id"))`)
+        await db.query(`ALTER TABLE "token_entity" ADD "total_count" integer NOT NULL`)
         await db.query(`CREATE INDEX "IDX_0eb2ed7929c3e81941fa1b51b3" ON "token_entity" ("collection_id") `)
         await db.query(`CREATE INDEX "IDX_40d6049fd30532dada71922792" ON "token_entity" ("hash") `)
         await db.query(`CREATE INDEX "IDX_47b385945a425667b9e690bc02" ON "token_entity" ("name") `)

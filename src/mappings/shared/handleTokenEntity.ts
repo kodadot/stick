@@ -25,6 +25,7 @@ async function createToken(context: Context, collection: CE, nft: NE): Promise<T
     collection,
     name: tokenName,
     count: 1,
+    totalCount: 1,
     hash: md5(tokenId),
     image: nft.image,
     media: nft.media,
@@ -43,6 +44,7 @@ async function createToken(context: Context, collection: CE, nft: NE): Promise<T
 async function addNftToToken(context: Context, nft: NE, token: TE): Promise<TE> {
   debug(OPERATION, { updateToken: `Add NFT ${nft.id} to TOKEN ${token.id} for ` })
   token.count += 1
+  token.totalCount += 1
   token.updatedAt = nft.updatedAt
   nft.token = token
   await context.store.save(token)
@@ -58,10 +60,10 @@ async function removeNftFromToken(context: Context, nft: NE, token: TE): Promise
   debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}` })
 
   await context.store.update(NE, nft.id, { token: null })
-  const updatedCount = token.count - 1
-  await context.store.update(TE, token.id, { count: updatedCount, updatedAt: nft.updatedAt })
+  const updatedTotalCount = token.totalCount - 1
+  await context.store.update(TE, token.id, { count: token.count - 1, totalCount: updatedTotalCount , updatedAt: nft.updatedAt })
 
-  if (updatedCount === 0) {
+  if (updatedTotalCount === 0) {
     debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
     await context.store.delete(TE, token.id)
   }
@@ -91,7 +93,7 @@ async function handleMetadataSet(context: Context, collection: CE, nft: NE): Pro
 
   let nftWithToken, existingToken
   try {
-    [nftWithToken, existingToken] = await Promise.all([
+    ;[nftWithToken, existingToken] = await Promise.all([
       getWith(context.store, NE, nft.id, { token: true }),
       getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia)),
     ])

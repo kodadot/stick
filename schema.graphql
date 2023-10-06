@@ -38,6 +38,7 @@ type TokenEntity @entity {
   updatedAt: DateTime!
   createdAt: DateTime!
   count: Int!
+  totalCount: Int!
 }
 
 type NFTEntity @entity {
