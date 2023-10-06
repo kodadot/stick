@@ -56,4 +56,7 @@ export class TokenEntity {
 
     @Column_("int4", {nullable: false})
     count!: number
+
+    @Column_("int4", {nullable: false})
+    totalCount!: number
 }
