@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType} from 'type-graphql';
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
 
 
 export enum OrderBy {
@@ -37,6 +37,22 @@ class Collection {
     name!: string;
 }
 
+
+@ObjectType()
+ class PartialMetadataEntity {
+    @Field(() => String, { nullable: false })
+    id!: string;
+
+    @Field(() => String, { nullable: true })
+    description?: string;
+
+    @Field(() => String, { nullable: true })
+    image?: string;
+
+    @Field(() => String, { nullable: true })
+    animationUrl?: string;
+}
+
 @ObjectType()
 export class TokenEntityByOwner {
     @Field(() => String, { nullable: false })
@@ -50,6 +66,12 @@ export class TokenEntityByOwner {
 
     @Field(() => String, { nullable: true })
     media!: string;
+
+    @Field(() => String, { nullable: true })
+    metadata?: string;
+
+    @Field(() => PartialMetadataEntity, { nullable: true })
+    meta?: PartialMetadataEntity;
 
     @Field(() => Date, { nullable: false })
     createdAt!: Date;
@@ -112,6 +134,18 @@ export class TokenEntityByOwnerQueryResult {
 
     @Field(() => String, { nullable: false })
     collectionName!: string;
+
+    @Field(() => String, { nullable: false })
+    metaId!: string;
+
+    @Field(() => String, { nullable: true })
+    metaDescription?: string;
+
+    @Field(() => String, { nullable: true })
+    metaImage?: string;
+
+    @Field(() => String, { nullable: true })
+    metaAnimationUrl?: string;
 
 
 

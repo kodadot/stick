@@ -15,6 +15,11 @@ SELECT
     t.name as name,
     t.image as image,
     t.media as media,
+    t.metadata as metadata,
+    me.id as "metaId",
+    me.description as "metaDescription",
+    me.image as "metaImage",
+    me.animation_url as "metaAnimationUrl",
     t.block_number as "blockNumber",
     t.created_at AS "createdAt",
     t.updated_at AS "updatedAt",
@@ -29,8 +34,9 @@ FROM
     LEFT JOIN nft_entity as ne ON t.id = ne.token_id AND ne.current_owner = $1
     LEFT JOIN CheapestNFT as c ON t.id = c.token_id
     LEFT JOIN collection_entity as col ON t.collection_id = col.id
+    LEFT JOIN metadata_entity as me ON t.meta_id = me.id
 GROUP BY
-    t.id, c."cheapestNFTPrice", col.id
+    t.id, c."cheapestNFTPrice", col.id, me.id
 HAVING 
     COUNT(ne.id) > 0 AND
     ($5::bigint IS NULL OR c."cheapestNFTPrice" >= $5::bigint) AND

@@ -96,7 +96,7 @@ async function handleMetadataSet(context: Context, collection: CE, nft: NE): Pro
 
   let nftWithToken, existingToken
   try {
-    ;[nftWithToken, existingToken] = await Promise.all([
+    [nftWithToken, existingToken] = await Promise.all([
       getWith(context.store, NE, nft.id, { token: true }),
       getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia)),
     ])

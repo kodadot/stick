@@ -41,6 +41,12 @@ export class TokenResolver {
         id: row.collectionId,
         name: row.collectionName,
       },
+      meta: {
+        id: row.metaId,
+        description: row.metaDescription,
+        animationUrl: row.metaAnimationUrl,
+        image: row.metaImage,
+      }
     }))
   }
 
