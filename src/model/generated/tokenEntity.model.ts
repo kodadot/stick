@@ -22,7 +22,7 @@ export class TokenEntity {
 
     @Index_()
     @ManyToOne_(() => NFTEntity, {nullable: true})
-    cheapestNFT!: NFTEntity | undefined | null
+    cheapest!: NFTEntity | undefined | null
 
     @OneToMany_(() => NFTEntity, e => e.token)
     nfts!: NFTEntity[]
@@ -55,8 +55,8 @@ export class TokenEntity {
     createdAt!: Date
 
     @Column_("int4", {nullable: false})
-    count!: number
+    supply!: number
 
     @Column_("int4", {nullable: false})
-    totalCount!: number
+    count!: number
 }
