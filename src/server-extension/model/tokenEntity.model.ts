@@ -20,7 +20,7 @@ registerEnumType(OrderBy, {
 
 
 @ObjectType()
-class CheapestNFT {
+class Cheapest {
     @Field(() => String, { nullable: true })
     id!: string;
 
@@ -85,8 +85,8 @@ export class TokenEntityByOwner {
     @Field(() => Number, { nullable: false })
     count!: number;
 
-    @Field(() => CheapestNFT)
-    cheapestNFT!: CheapestNFT;
+    @Field(() => Cheapest)
+    cheapest!: Cheapest;
 
     @Field(() => Collection)
     collection!: Collection;
@@ -112,40 +112,40 @@ export class TokenEntityByOwnerQueryResult {
     media!: string;
 
     @Field(() => Date, { nullable: false })
-    createdAt!: Date;
+    created_at!: Date;
 
     @Field(() => Date, { nullable: false })
-    updatedAt!: Date;
+    updated_at!: Date;
 
     @Field(() => BigInt, { nullable: false })
-    blockNumber!: bigint;
+    block_number!: bigint;
 
     @Field(() => Number, { nullable: false })
     count!: number;
 
     @Field(() => String, { nullable: true })
-    cheapestNFTId!: string;
+    cheapest_id!: string;
 
     @Field(() => BigInt, { nullable: true })
-    cheapestNFTPrice!: bigint;
+    cheapest_price!: bigint;
 
     @Field(() => String, { nullable: false })
-    collectionId!: string;
+    collection_id!: string;
 
     @Field(() => String, { nullable: false })
-    collectionName!: string;
+    collection_name!: string;
 
     @Field(() => String, { nullable: false })
-    metaId!: string;
+    meta_id!: string;
 
     @Field(() => String, { nullable: true })
-    metaDescription?: string;
+    meta_description?: string;
 
     @Field(() => String, { nullable: true })
-    metaImage?: string;
+    meta_image?: string;
 
     @Field(() => String, { nullable: true })
-    metaAnimationUrl?: string;
+    meta_animation_url?: string;
 
 
 

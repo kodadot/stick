@@ -31,23 +31,30 @@ export class TokenResolver {
       price_gt,
       price_lte,
     ])
-    return result.map((row) => ({
+    return result.map(this.mapRowToTokenEntityByOwner)
+  }
+
+  private mapRowToTokenEntityByOwner(row: TokenEntityByOwnerQueryResult): TokenEntityByOwner {
+    return {
       ...row,
-      cheapestNFT: {
-        id: row.cheapestNFTId,
-        price: row.cheapestNFTPrice,
+      blockNumber: row.block_number,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      cheapest: {
+        id: row.cheapest_id,
+        price: row.cheapest_price,
       },
       collection: {
-        id: row.collectionId,
-        name: row.collectionName,
+        id: row.collection_id,
+        name: row.collection_name,
       },
       meta: {
-        id: row.metaId,
-        description: row.metaDescription,
-        animationUrl: row.metaAnimationUrl,
-        image: row.metaImage,
-      }
-    }))
+        id: row.meta_id,
+        description: row.meta_description,
+        animationUrl: row.meta_animation_url,
+        image: row.meta_image,
+      },
+    }
   }
 
   private getOrderByQuery(orderBy?: OrderBy): string {

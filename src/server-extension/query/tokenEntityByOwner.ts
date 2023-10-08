@@ -1,13 +1,18 @@
-export const tokenEntityByOwner = `WITH CheapestNFT AS (
+export const tokenEntityByOwner = `WITH cheapest_nft AS (
     SELECT 
         ne.token_id,
-        MIN(ne.price) AS "cheapestNFTPrice"
+        ne.id AS nft_id,
+        ne.price AS cheapest,
+        ROW_NUMBER() OVER(PARTITION BY ne.token_id ORDER BY ne.price ASC) AS rnk
     FROM 
         nft_entity ne
     WHERE 
         ne.current_owner = $1
-    GROUP BY
-        ne.token_id
+),
+nft_count AS (
+    SELECT token_id, COUNT(*) as count
+    FROM nft_entity
+    GROUP BY token_id
 )
 
 SELECT
@@ -16,32 +21,28 @@ SELECT
     t.image as image,
     t.media as media,
     t.metadata as metadata,
-    me.id as "metaId",
-    me.description as "metaDescription",
-    me.image as "metaImage",
-    me.animation_url as "metaAnimationUrl",
-    t.block_number as "blockNumber",
-    t.created_at AS "createdAt",
-    t.updated_at AS "updatedAt",
-    COUNT(ne.id) as count,
-    
-    c."cheapestNFTPrice",
-    
-    col.id AS "collectionId",
-    col.name AS "collectionName"
+    me.id as meta_id,
+    me.description as meta_description,
+    me.image as meta_image,
+    me.animation_url as meta_animation_url,
+    t.block_number as block_number,
+    t.created_at AS created_at,
+    t.updated_at AS updated_at,
+    nft_count.count as count,
+    c.nft_id as cheapest_id,
+    c.cheapest as cheapest_price,
+    col.id AS collection_id,
+    col.name AS collection_name
 FROM
     token_entity as t
-    LEFT JOIN nft_entity as ne ON t.id = ne.token_id AND ne.current_owner = $1
-    LEFT JOIN CheapestNFT as c ON t.id = c.token_id
-    LEFT JOIN collection_entity as col ON t.collection_id = col.id
-    LEFT JOIN metadata_entity as me ON t.meta_id = me.id
-GROUP BY
-    t.id, c."cheapestNFTPrice", col.id, me.id
-HAVING 
-    COUNT(ne.id) > 0 AND
-    ($5::bigint IS NULL OR c."cheapestNFTPrice" >= $5::bigint) AND
-    ($6::bigint IS NULL OR c."cheapestNFTPrice" > $6::bigint) AND
-    ($7::bigint IS NULL OR c."cheapestNFTPrice" <= $7::bigint)
+        JOIN cheapest_nft as c ON t.id = c.token_id AND c.rnk = 1
+        JOIN collection_entity as col ON t.collection_id = col.id
+        JOIN metadata_entity as me ON t.meta_id = me.id
+        JOIN nft_count ON t.id = nft_count.token_id
+WHERE
+    ($5::bigint IS NULL OR c.cheapest >= $5::bigint) AND
+    ($6::bigint IS NULL OR c.cheapest > $6::bigint) AND
+    ($7::bigint IS NULL OR c.cheapest <= $7::bigint)
 
 ORDER BY $4 LIMIT $2 OFFSET $3;
 
