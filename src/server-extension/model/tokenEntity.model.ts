@@ -85,6 +85,9 @@ export class TokenEntityByOwner {
     @Field(() => Number, { nullable: false })
     count!: number;
 
+    @Field(() => Number, { nullable: false })
+    supply!: number;
+
     @Field(() => Cheapest)
     cheapest!: Cheapest;
 
@@ -122,6 +125,9 @@ export class TokenEntityByOwnerQueryResult {
 
     @Field(() => Number, { nullable: false })
     count!: number;
+
+    @Field(() => Number, { nullable: false })
+    supply!: number;
 
     @Field(() => String, { nullable: true })
     cheapest_id!: string;

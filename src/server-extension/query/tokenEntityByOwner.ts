@@ -10,9 +10,16 @@ export const tokenEntityByOwner = `WITH cheapest_nft AS (
         ne.current_owner = $1
 ),
 nft_count AS (
-    SELECT token_id, COUNT(*) as count
-    FROM nft_entity
-    GROUP BY token_id
+    SELECT 
+        token_id, 
+        COUNT(*) as count,
+        COUNT(CASE WHEN burned = false THEN 1 END) as supply
+    FROM 
+        nft_entity
+    WHERE 
+        current_owner = $1
+    GROUP BY 
+        token_id
 )
 
 SELECT
@@ -29,6 +36,7 @@ SELECT
     t.created_at AS created_at,
     t.updated_at AS updated_at,
     nft_count.count as count,
+    nft_count.supply as supply,
     c.nft_id as cheapest_id,
     c.cheapest as cheapest_price,
     col.id AS collection_id,
