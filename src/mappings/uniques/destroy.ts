@@ -8,13 +8,13 @@ import { getDestroyCollectionEvent } from './getters'
 const OPERATION = Action.DESTROY
 
 export async function handleCollectionDestroy(context: Context): Promise<void> {
-  // pending(OPERATION, `${context.block.height}`)
-  // const event = unwrap(context, getDestroyCollectionEvent)
-  // debug(OPERATION, event)
+  pending(OPERATION, `${context.block.height}`)
+  const event = unwrap(context, getDestroyCollectionEvent)
+  debug(OPERATION, event)
 
-  // const entity = await get(context.store, CE, event.id)
-  // entity.burned = true
+  const entity = await get(context.store, CE, event.id)
+  entity.burned = true
 
-  // success(OPERATION, `${event.id} by ${event.caller}}`)
-  // await context.store.save(entity)
+  success(OPERATION, `${event.id} by ${event.caller}}`)
+  await context.store.save(entity)
 }
