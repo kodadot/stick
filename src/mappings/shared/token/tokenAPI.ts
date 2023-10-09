@@ -2,26 +2,24 @@ import { create as createEntity } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { Store } from '../../utils/types'
 import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
-import { debug, warn } from '../../utils/logger'
-import { OPERATION, generateTokenId } from './utils'
+import { debug } from '../../utils/logger'
+import { OPERATION, generateTokenId, mediaOf, tokenName } from './utils'
 
 export class TokenAPI {
   constructor(private store: Store) {}
 
   async create(collection: CE, nft: NE): Promise<TE | undefined> {
-    const nftMedia = nft.image ?? nft.media
-    if (!nftMedia || nftMedia === '') {
-      warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
+    const nftMedia = mediaOf(nft)
+    if (!nftMedia) {
       return
     }
     const tokenId = generateTokenId(collection.id, nftMedia)
     debug(OPERATION, { createToken: `Create TOKEN ${tokenId} for NFT ${nft.id}` })
-    const tokenName = typeof nft.name === 'string' ? nft.name?.replace(/([#_]\d+$)/g, '').trim() : ''
 
     const token = createEntity(TE, tokenId, {
       createdAt: nft.createdAt,
       collection,
-      name: tokenName,
+      name: tokenName(nft.name),
       count: 1,
       supply: 1,
       hash: md5(tokenId),

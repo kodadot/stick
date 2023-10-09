@@ -18,3 +18,6 @@ export const mediaOf = (nft: NE): string | undefined => {
 
   return nftMedia
 }
+
+export const tokenName = (nftName: string | undefined | null): string =>
+  typeof nftName === 'string' ? nftName?.replace(/([#_]\d+$)/g, '').trim() : ''
