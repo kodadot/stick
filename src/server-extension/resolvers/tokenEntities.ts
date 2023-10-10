@@ -52,7 +52,6 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       collection: {
         id: row.collection_id,
         name: row.collection_name,
-        floorPrice: row.collection_floor_price,
       },
       meta: {
         id: row.meta_id,

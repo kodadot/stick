@@ -1,27 +1,24 @@
 export const tokenEntities = `WITH 
+filters_applied AS (
+    SELECT *
+    FROM nft_entity c
+    WHERE
+        ($1::text IS NULL OR c.current_owner = $1) AND 
+        ($7::text[] IS NULL OR c.issuer NOT IN (SELECT unnest($7))) AND
+        ($4::bigint IS NULL OR c.price >= $4::bigint) AND
+        ($5::bigint IS NULL OR c.price > $5::bigint) AND
+        ($6::bigint IS NULL OR c.price <= $6::bigint)
+),
 nft_count AS (
     SELECT 
         token_id, 
         COUNT(*) as count,
         COUNT(CASE WHEN burned = false THEN 1 END) as supply
     FROM 
-        nft_entity ne
-    WHERE 
-    ($1::text IS NULL OR ne.current_owner = $1) AND 
-    ($7::text[] IS NULL OR ne.issuer NOT IN (SELECT unnest($7)))
+        filters_applied
+
     GROUP BY 
         token_id
-),
- collection_floor_price AS (
-    SELECT
-        collection_id,
-        MIN(price) as floor_price
-    FROM 
-        nft_entity
-    WHERE 
-        burned = false
-    GROUP BY 
-        collection_id
 )
 
 SELECT
@@ -37,22 +34,18 @@ SELECT
     t.block_number as block_number,
     t.created_at AS created_at,
     t.updated_at AS updated_at,
-    c.id as cheapest_id,
-    c.price as cheapest_price,
-    nft_count.count as count,
-    nft_count.supply as supply,
+    cheapest.id as cheapest_id,
+    cheapest.price as cheapest_price,
+    nc.count as count,
+    nc.supply as supply,
     col.id AS collection_id,
     col.name AS collection_name,
-    cfp.floor_price AS collection_floor_price
 FROM
     token_entity as t
         JOIN collection_entity as col ON t.collection_id = col.id
         JOIN metadata_entity as me ON t.meta_id = me.id
-        JOIN nft_count ON t.id = nft_count.token_id
-        JOIN collection_floor_price as cfp ON t.collection_id = cfp.collection_id
-        LEFT JOIN nft_entity as c ON t.cheapest_id = c.id
+        JOIN nft_count as nc ON t.id = nc.token_id
+        LEFT JOIN filters_applied cheapest ON t.cheapest_id = fa.id
 WHERE
-    ($4::bigint IS NULL OR c.price >= $4::bigint) AND
-    ($5::bigint IS NULL OR c.price > $5::bigint) AND
-    ($6::bigint IS NULL OR c.price <= $6::bigint)
+    nc.supply > 0
 `

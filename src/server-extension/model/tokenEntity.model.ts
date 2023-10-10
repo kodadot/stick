@@ -35,9 +35,6 @@ class Collection {
 
     @Field(() => String, { nullable: true })
     name!: string;
-
-    @Field(() => String, { nullable: true })
-    floorPrice!: string;
 }
 
 
@@ -144,8 +141,6 @@ export class TokenEntityQueryResult {
     @Field(() => String, { nullable: false })
     collection_name!: string;
 
-    @Field(() => String, { nullable: false })
-    collection_floor_price!: string;
 
     @Field(() => String, { nullable: false })
     meta_id!: string;
