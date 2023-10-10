@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { Arg, Query, Resolver } from 'type-graphql'
+import { Arg, Int, Query, Resolver } from 'type-graphql'
 import { EntityManager } from 'typeorm'
 import { OrderBy, TokenEntityModel, TokenEntityQueryResult } from '../model/tokenEntity.model'
 import { makeQuery } from '../utils'
@@ -11,22 +11,22 @@ export class TokenResolver {
 
   @Query(() => [TokenEntityModel])
   async tokenEntityList(
+    @Arg('limit', () => Int, { nullable: false, defaultValue: 40 }) limit: number,
+
     @Arg('owner', { nullable: true }) owner?: string,
-    @Arg('limit', { nullable: true }) limit?: number,
-    @Arg('offset', { nullable: true, defaultValue: 0 }) offset?: number,
-    @Arg('orderBy', { nullable: true, defaultValue: OrderBy.blockNumber_DESC }) orderBy?: OrderBy,
+    @Arg('offset', () => Int, { nullable: true, defaultValue: 0 }) offset?: number,
+    @Arg('orderBy', () => [String], { nullable: true, defaultValue: [OrderBy.blockNumber_DESC] }) orderBy?: string[],
     @Arg('price_gte', { nullable: true }) price_gte?: number,
     @Arg('price_gt', { nullable: true }) price_gt?: number,
     @Arg('price_lte', { nullable: true }) price_lte?: number,
     @Arg('denyList', () => [String], { nullable: true }) denyList?: string[]
-    ): Promise<TokenEntityModel[]> {
+  ): Promise<TokenEntityModel[]> {
     const orderQuery = this.getOrderByQuery(orderBy)
 
     const fullSQLQuery = `
 ${tokenEntities}
 ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
 `
-
     const result: TokenEntityQueryResult[] = await makeQuery(this.tx, TokenEntityModel, fullSQLQuery, [
       owner,
       limit,
@@ -52,6 +52,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       collection: {
         id: row.collection_id,
         name: row.collection_name,
+        floorPrice: row.collection_floor_price,
       },
       meta: {
         id: row.meta_id,
@@ -62,7 +63,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
     }
   }
 
-  ORDER_BY_MAPPING: Record<OrderBy, string> = {
+  ORDER_BY_MAPPING: Record<string, string> = {
     [OrderBy.blockNumber_ASC]: 'block_number ASC',
     [OrderBy.blockNumber_DESC]: 'block_number DESC',
     [OrderBy.createdAt_ASC]: 'created_at ASC',
@@ -73,7 +74,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
     [OrderBy.price_DESC]: 'cheapest_price DESC',
   }
 
-  private getOrderByQuery(orderBy: OrderBy = OrderBy.blockNumber_DESC): string {
-    return this.ORDER_BY_MAPPING[orderBy] || 'block_number DESC' // default to "block_number DESC" if not found
+  private getOrderByQuery(orderBy: string[] = [OrderBy.blockNumber_DESC]): string {
+    return orderBy.map((order) => this.ORDER_BY_MAPPING[order]).join(', ')
   }
 }
