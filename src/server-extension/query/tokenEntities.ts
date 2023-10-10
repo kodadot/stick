@@ -1,4 +1,4 @@
-export const tokenEntityByOwner = `WITH cheapest_nft AS (
+export const tokenEntities = `WITH cheapest_nft AS (
     SELECT 
         ne.token_id,
         ne.id AS nft_id,
@@ -7,7 +7,8 @@ export const tokenEntityByOwner = `WITH cheapest_nft AS (
     FROM 
         nft_entity ne
     WHERE 
-        ne.current_owner = $1
+    ($1::text IS NULL OR ne.current_owner = $1) AND 
+    ($7::text[] IS NULL OR ne.issuer NOT IN (SELECT unnest($7)))
 ),
 nft_count AS (
     SELECT 
@@ -15,9 +16,10 @@ nft_count AS (
         COUNT(*) as count,
         COUNT(CASE WHEN burned = false THEN 1 END) as supply
     FROM 
-        nft_entity
+        nft_entity ne
     WHERE 
-        current_owner = $1
+    ($1::text IS NULL OR ne.current_owner = $1) AND 
+    ($7::text[] IS NULL OR ne.issuer NOT IN (SELECT unnest($7)))
     GROUP BY 
         token_id
 )
@@ -48,10 +50,7 @@ FROM
         JOIN metadata_entity as me ON t.meta_id = me.id
         JOIN nft_count ON t.id = nft_count.token_id
 WHERE
-    ($5::bigint IS NULL OR c.cheapest >= $5::bigint) AND
-    ($6::bigint IS NULL OR c.cheapest > $6::bigint) AND
-    ($7::bigint IS NULL OR c.cheapest <= $7::bigint)
-
-ORDER BY $4 LIMIT $2 OFFSET $3;
-
+    ($4::bigint IS NULL OR c.cheapest >= $4::bigint) AND
+    ($5::bigint IS NULL OR c.cheapest > $5::bigint) AND
+    ($6::bigint IS NULL OR c.cheapest <= $6::bigint)
 `

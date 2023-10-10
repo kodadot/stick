@@ -54,7 +54,7 @@ class Collection {
 }
 
 @ObjectType()
-export class TokenEntityByOwner {
+export class TokenEntityModel {
     @Field(() => String, { nullable: false })
     id!: string;
 
@@ -95,13 +95,13 @@ export class TokenEntityByOwner {
     collection!: Collection;
 
 
-    constructor(props: Partial<TokenEntityByOwner>) {
+    constructor(props: Partial<TokenEntityModel>) {
         Object.assign(this, props);
     }
 }
 
 @ObjectType()
-export class TokenEntityByOwnerQueryResult {
+export class TokenEntityQueryResult {
     @Field(() => String, { nullable: false })
     id!: string;
 
@@ -156,7 +156,7 @@ export class TokenEntityByOwnerQueryResult {
 
 
 
-    constructor(props: Partial<TokenEntityByOwner>) {
+    constructor(props: Partial<TokenEntityModel>) {
         Object.assign(this, props);
     }
 }
