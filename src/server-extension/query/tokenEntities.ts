@@ -1,13 +1,13 @@
 export const tokenEntities = `WITH 
 filters_applied AS (
     SELECT *
-    FROM nft_entity c
+    FROM nft_entity ne
     WHERE
-        ($1::text IS NULL OR c.current_owner = $1) AND 
-        ($7::text[] IS NULL OR c.issuer NOT IN (SELECT unnest($7))) AND
-        ($4::bigint IS NULL OR c.price >= $4::bigint) AND
-        ($5::bigint IS NULL OR c.price > $5::bigint) AND
-        ($6::bigint IS NULL OR c.price <= $6::bigint)
+        ($1::text IS NULL OR ne.current_owner = $1) AND 
+        ($7::text[] IS NULL OR ne.issuer NOT IN (SELECT unnest($7))) AND
+        ($4::bigint IS NULL OR ne.price >= $4::bigint) AND
+        ($5::bigint IS NULL OR ne.price > $5::bigint) AND
+        ($6::bigint IS NULL OR ne.price <= $6::bigint)
 ),
 nft_count AS (
     SELECT 
@@ -39,13 +39,13 @@ SELECT
     nc.count as count,
     nc.supply as supply,
     col.id AS collection_id,
-    col.name AS collection_name,
+    col.name AS collection_name
 FROM
     token_entity as t
         JOIN collection_entity as col ON t.collection_id = col.id
         JOIN metadata_entity as me ON t.meta_id = me.id
         JOIN nft_count as nc ON t.id = nc.token_id
-        LEFT JOIN filters_applied cheapest ON t.cheapest_id = fa.id
+        LEFT JOIN filters_applied cheapest ON t.cheapest_id = cheapest.id
 WHERE
     nc.supply > 0
 `
