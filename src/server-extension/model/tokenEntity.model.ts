@@ -26,6 +26,9 @@ class Cheapest {
 
     @Field(() => BigInt, { nullable: true })
     price!: bigint;
+
+    @Field(() => String, { nullable: true })
+    currentOwner!: string;
 }
 
 @ObjectType()
@@ -131,6 +134,9 @@ export class TokenEntityQueryResult {
 
     @Field(() => String, { nullable: true })
     cheapest_id!: string;
+
+    @Field(() => String, { nullable: true })
+    cheapest_current_owner!: string;
 
     @Field(() => BigInt, { nullable: true })
     cheapest_price!: bigint;

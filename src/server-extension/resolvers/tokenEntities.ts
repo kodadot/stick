@@ -48,6 +48,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       cheapest: {
         id: row.cheapest_id,
         price: row.cheapest_price,
+        currentOwner: row.cheapest_current_owner,
       },
       collection: {
         id: row.collection_id,

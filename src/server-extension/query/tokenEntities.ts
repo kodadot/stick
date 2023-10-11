@@ -26,6 +26,7 @@ cheapest AS (
             token_id,
             id,
             price,
+            current_owner,
             ROW_NUMBER() OVER(PARTITION BY token_id ORDER BY price ASC, id ASC) AS rnk
         FROM
             filters_applied
@@ -33,6 +34,7 @@ cheapest AS (
             burned = false
     )
     SELECT
+        current_owner,
         token_id,
         id,
         price
@@ -58,6 +60,7 @@ SELECT
     t.updated_at AS updated_at,
     cheapest.id as cheapest_id,
     cheapest.price as cheapest_price,
+    cheapest.current_owner as cheapest_current_owner,
     nc.count as count,
     nc.supply as supply,
     col.id AS collection_id,
