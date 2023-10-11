@@ -21,27 +21,14 @@ nft_count AS (
         token_id
 ),
 cheapest AS (
-    WITH Ranked AS (
-        SELECT
-            token_id,
-            id,
-            price,
-            current_owner,
-            ROW_NUMBER() OVER(PARTITION BY token_id ORDER BY price ASC, id ASC) AS rnk
-        FROM
-            filters_applied
-        WHERE
-            burned = false
-    )
-    SELECT
+    SELECT DISTINCT ON (token_id)
         current_owner,
         token_id,
         id,
         price
-    FROM
-        Ranked
-    WHERE
-        rnk = 1
+    FROM filters_applied
+    WHERE burned = false AND price > 0
+    ORDER BY token_id, price ASC, id ASC
 )
 
 
