@@ -11,7 +11,7 @@ export class TokenResolver {
 
   @Query(() => [TokenEntityModel])
   async tokenEntityList(
-    @Arg('limit', () => Int, { nullable: false, defaultValue: 40 }) limit: number,
+    @Arg('limit', () => Int, { nullable: true, defaultValue: 40 }) limit: number,
 
     @Arg('owner', { nullable: true }) owner?: string,
     @Arg('offset', () => Int, { nullable: true, defaultValue: 0 }) offset?: number,

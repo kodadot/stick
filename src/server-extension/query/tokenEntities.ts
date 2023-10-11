@@ -19,7 +19,29 @@ nft_count AS (
 
     GROUP BY 
         token_id
+),
+cheapest AS (
+    WITH Ranked AS (
+        SELECT
+            token_id,
+            id,
+            price,
+            ROW_NUMBER() OVER(PARTITION BY token_id ORDER BY price ASC, id ASC) AS rnk
+        FROM
+            filters_applied
+        WHERE
+            burned = false
+    )
+    SELECT
+        token_id,
+        id,
+        price
+    FROM
+        Ranked
+    WHERE
+        rnk = 1
 )
+
 
 SELECT
     t.id as id,
@@ -45,7 +67,7 @@ FROM
         JOIN collection_entity as col ON t.collection_id = col.id
         JOIN metadata_entity as me ON t.meta_id = me.id
         JOIN nft_count as nc ON t.id = nc.token_id
-        LEFT JOIN filters_applied cheapest ON t.cheapest_id = cheapest.id
+        LEFT JOIN cheapest ON t.id = cheapest.token_id
 WHERE
     nc.supply > 0
 `

@@ -4,7 +4,6 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { createEvent } from '../shared/event'
-import { listHandler } from '../shared/token'
 import { getPriceTokenEvent } from './getters'
 
 const OPERATION = Action.LIST
@@ -23,8 +22,6 @@ export async function handleTokenList(context: Context): Promise<void> {
   if (entity.price && (entity.collection.floor === 0n || entity.price < entity.collection.floor)) {
     entity.collection.floor = entity.price
   }
-  await listHandler(context, entity)
-
   success(OPERATION, `${id} by ${event.caller}} for ${String(event.price)}`)
   await context.store.save(entity)
   const meta = String(event.price || '')

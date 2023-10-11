@@ -30,7 +30,6 @@ type TokenEntity @entity {
   id: ID!
   blockNumber: BigInt
   collection: CollectionEntity
-  cheapest: NFTEntity
   nfts: [NFTEntity!] @derivedFrom(field: "token")
   hash: String! @index
   image: String
