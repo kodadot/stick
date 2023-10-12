@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: stick
-version: 4
+version: 5
 description: 'SubSquid indexer for Uniques and Assets on Statemine'
 build: 
 deploy:
@@ -34,3 +34,4 @@ scale:
   addons:
     postgres:
       storage: 5G
+      profile: medium
