@@ -38,6 +38,7 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
 
+
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
   const meta = String(event.price || '')

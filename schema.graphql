@@ -34,9 +34,12 @@ type TokenEntity @entity {
   hash: String! @index
   image: String
   media: String
+  meta: MetadataEntity
+  metadata: String
   name: String @index
   updatedAt: DateTime!
   createdAt: DateTime!
+  supply: Int!
   count: Int!
 }
 
@@ -63,7 +66,7 @@ type NFTEntity @entity {
   sn: String! @index
   updatedAt: DateTime! @index
   version: Int!
-  token: TokenEntity!
+  token: TokenEntity
 }
 
 type MetadataEntity @entity {

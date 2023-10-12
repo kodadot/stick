@@ -6,7 +6,7 @@ import { CollectionEntity, NFTEntity } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
 import { updateItemMetadataByCollection } from '../utils/cache'
-import { handleTokenEntity } from '../shared/handleTokenEntity'
+import { setMetadataHandler } from '../shared/token'
 import { tokenIdOf } from './types'
 import { getMetadataEvent } from './getters'
 
@@ -51,17 +51,15 @@ export async function handleMetadataSet(context: Context): Promise<void> {
         warn(OPERATION, `collection ${event.collectionId} not found`)
         return
       }
-      const nft = final as NFTEntity
-      const token = await handleTokenEntity(context, collection, nft)
-      if (token) {
-        nft.token = token
+      if (final instanceof NFTEntity) {
+        await setMetadataHandler(context, collection, final)
       }
     }
-  }
 
-  await context.store.save(final)
+    await context.store.save(final)
 
-  if (!event.sn && final.metadata) {
-    await updateItemMetadataByCollection(context.store, event.collectionId)
+    if (!event.sn && final.metadata) {
+      await updateItemMetadataByCollection(context.store, event.collectionId)
+    }
   }
 }

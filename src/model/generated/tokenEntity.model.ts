@@ -2,6 +2,7 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import * as marshal from "./marshal"
 import {CollectionEntity} from "./collectionEntity.model"
 import {NFTEntity} from "./nftEntity.model"
+import {MetadataEntity} from "./metadataEntity.model"
 
 @Entity_()
 export class TokenEntity {
@@ -33,6 +34,13 @@ export class TokenEntity {
     media!: string | undefined | null
 
     @Index_()
+    @ManyToOne_(() => MetadataEntity, {nullable: true})
+    meta!: MetadataEntity | undefined | null
+
+    @Column_("text", {nullable: true})
+    metadata!: string | undefined | null
+
+    @Index_()
     @Column_("text", {nullable: true})
     name!: string | undefined | null
 
@@ -41,6 +49,9 @@ export class TokenEntity {
 
     @Column_("timestamp with time zone", {nullable: false})
     createdAt!: Date
+
+    @Column_("int4", {nullable: false})
+    supply!: number
 
     @Column_("int4", {nullable: false})
     count!: number
