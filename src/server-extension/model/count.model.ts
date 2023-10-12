@@ -9,3 +9,15 @@ export class CountEntity {
     this.total = totalCount;
   }
 }
+
+
+@ObjectType()
+export class CountEntityQueryResult {
+    @Field(() => Number, { nullable: false })
+    total_count!: number;
+
+
+    constructor(props: Partial<CountEntityQueryResult>) {
+        Object.assign(this, props);
+    }
+}

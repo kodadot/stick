@@ -22,7 +22,6 @@ export async function handleTokenList(context: Context): Promise<void> {
   if (entity.price && (entity.collection.floor === 0n || entity.price < entity.collection.floor)) {
     entity.collection.floor = entity.price
   }
-
   success(OPERATION, `${id} by ${event.caller}} for ${String(event.price)}`)
   await context.store.save(entity)
   const meta = String(event.price || '')
