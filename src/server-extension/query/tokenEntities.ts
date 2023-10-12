@@ -27,7 +27,7 @@ cheapest AS (
         id,
         price
     FROM filters_applied
-    WHERE burned = false AND price > 0
+    WHERE burned = false
     ORDER BY token_id, price ASC, id ASC
 )
 
