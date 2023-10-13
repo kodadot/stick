@@ -14,6 +14,7 @@ export class TokenResolver {
     @Arg('limit', () => Int, { nullable: true, defaultValue: 40 }) limit: number,
 
     @Arg('owner', { nullable: true }) owner?: string,
+    @Arg('issuer', { nullable: true }) issuer?: string,
     @Arg('offset', () => Int, { nullable: true, defaultValue: 0 }) offset?: number,
     @Arg('orderBy', () => [String], { nullable: true, defaultValue: [OrderBy.blockNumber_DESC] }) orderBy?: string[],
     @Arg('price_gte', { nullable: true }) price_gte?: number,
@@ -35,6 +36,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       price_gt,
       price_lte,
       denyList,
+      issuer,
     ])
     return result.map(this.mapRowToTokenEntityByOwner)
   }
