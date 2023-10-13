@@ -4,6 +4,7 @@ filters_applied AS (
     FROM nft_entity ne
     WHERE
         ($1::text IS NULL OR ne.current_owner = $1) AND 
+        ($8::text IS NULL OR ne.issuer = $8) AND 
         ($7::text[] IS NULL OR ne.issuer NOT IN (SELECT unnest($7))) AND
         ($4::bigint IS NULL OR ne.price >= $4::bigint) AND
         ($5::bigint IS NULL OR ne.price > $5::bigint) AND
