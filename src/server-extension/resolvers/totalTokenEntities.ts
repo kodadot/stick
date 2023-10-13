@@ -12,6 +12,7 @@ export class TokenCountResolver {
   @Query(() => CountEntity)
   async tokenEntityCount(
     @Arg('owner', { nullable: true }) owner?: string,
+    @Arg('issuer', { nullable: true }) issuer?: string,
     @Arg('price_gte', { nullable: true }) price_gte?: number,
     @Arg('price_gt', { nullable: true }) price_gt?: number,
     @Arg('price_lte', { nullable: true }) price_lte?: number,
@@ -23,6 +24,7 @@ export class TokenCountResolver {
       price_gt,
       price_lte,
       denyList,
+      issuer,
     ])
     return new CountEntity(rawData[0].total_count)
   }
