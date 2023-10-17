@@ -21,7 +21,8 @@ export class TokenResolver {
     @Arg('price_gt', { nullable: true }) price_gt?: number,
     @Arg('price_lte', { nullable: true }) price_lte?: number,
     @Arg('denyList', () => [String], { nullable: true }) denyList?: string[],
-    @Arg('collections', () => [String], { nullable: true }) collections?: string[]
+    @Arg('collections', () => [String], { nullable: true }) collections?: string[],
+    @Arg('name_containsInsensitive', { nullable: true }) name_containsInsensitive?: string
   ): Promise<TokenEntityModel[]> {
     const orderQuery = this.getOrderByQuery(orderBy)
 
@@ -39,6 +40,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       denyList,
       issuer,
       collections,
+      name_containsInsensitive
     ])
     return result.map(this.mapRowToTokenEntityByOwner)
   }

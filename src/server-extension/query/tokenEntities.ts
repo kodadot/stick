@@ -61,5 +61,6 @@ FROM
         JOIN nft_count as nc ON t.id = nc.token_id
         LEFT JOIN cheapest ON t.id = cheapest.token_id
 WHERE
-    nc.supply > 0
+    nc.supply > 0 AND 
+    ($10::text IS NULL OR LOWER(t.name) LIKE LOWER('%' || $10 || '%'))
 `
