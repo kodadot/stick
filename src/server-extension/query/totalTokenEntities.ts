@@ -8,5 +8,6 @@ WHERE
     ($2::bigint IS NULL OR price >= $2::bigint) AND
     ($3::bigint IS NULL OR price > $3::bigint) AND
     ($4::bigint IS NULL OR price <= $4::bigint) AND
-    ($7::text[] IS NULL OR nft_entity.collection_id = ANY($7));
+    ($7::text[] IS NULL OR nft_entity.collection_id = ANY($7)) AND
+    ($8::text IS NULL OR LOWER(nft_entity.name) LIKE LOWER('%' || $8 || '%'));
 `
