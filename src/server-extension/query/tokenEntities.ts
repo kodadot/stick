@@ -8,7 +8,8 @@ filters_applied AS (
         ($7::text[] IS NULL OR ne.issuer NOT IN (SELECT unnest($7))) AND
         ($4::bigint IS NULL OR ne.price >= $4::bigint) AND
         ($5::bigint IS NULL OR ne.price > $5::bigint) AND
-        ($6::bigint IS NULL OR ne.price <= $6::bigint)
+        ($6::bigint IS NULL OR ne.price <= $6::bigint) AND
+        ($9::text[] IS NULL OR ne.collection_id = ANY($9))
 ),
 nft_count AS (
     SELECT 
