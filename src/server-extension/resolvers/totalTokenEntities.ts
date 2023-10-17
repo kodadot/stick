@@ -18,7 +18,7 @@ export class TokenCountResolver {
     @Arg('price_lte', { nullable: true }) price_lte?: number,
     @Arg('denyList', () => [String], { nullable: true }) denyList?: string[],
     @Arg('collections', () => [String], { nullable: true }) collections?: string[],
-    @Arg('name_containsInsensitive', { nullable: true }) name_containsInsensitive?: string
+    @Arg('name', { nullable: true }) name?: string
   ): Promise<CountEntity> {
     const rawData: CountEntityQueryResult[] = await makeQuery(this.tx, CountEntity, totalTokenEntities, [
       owner,
@@ -28,7 +28,7 @@ export class TokenCountResolver {
       denyList,
       issuer,
       collections,
-      name_containsInsensitive,
+      name,
     ])
     return new CountEntity(rawData[0].total_count)
   }
