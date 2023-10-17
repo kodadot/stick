@@ -1,5 +1,5 @@
 export const totalTokenEntities = `
-SELECT COUNT(DISTINCT token_id) as total_count    
+SELECT COUNT(DISTINCT token_id) as total_count
 FROM nft_entity
 WHERE
     ($1::text IS NULL OR current_owner = $1) AND
