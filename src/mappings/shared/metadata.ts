@@ -4,7 +4,7 @@ import { Optional, TokenMetadata } from '@kodadot1/metasquid/types'
 import { logger } from '@kodadot1/metasquid/logger'
 import { MetadataEntity as Metadata } from '../../model/generated'
 import { fetchMetadata } from '../utils/metadata'
-import { Store } from '../utils/types'
+import { Store, attributeFrom } from '../utils/types'
 import { isEmpty } from '../utils/helper'
 
 export async function handleMetadata(id: string, store: Store): Promise<Optional<Metadata>> {
@@ -26,7 +26,7 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
     description: metadata.description || '',
     image: metadata.image || metadata.thumbnailUri || metadata.mediaUri,
     animationUrl: metadata.animation_url || metadata.mediaUri,
-    attributes: [], // metadata.attributes?.map(attributeFrom) || [],
+    attributes: metadata.attributes?.map(attributeFrom) || [],
     name: metadata.name || '',
     type: metadata.type || '',
   }

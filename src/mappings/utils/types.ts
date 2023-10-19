@@ -2,7 +2,7 @@ import { EventHandlerContext } from '@subsquid/substrate-processor'
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
 // impsort { Interaction } from '../../model/generated/_interaction';
-// import { Attribute } from '../../model/generated/_attribute';
+import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
 import { SetMetadata } from '../nfts/types'
@@ -45,13 +45,16 @@ export function eventFrom<T>(
   }
 }
 
-// export function attributeFrom(attribute: MetadataAttribute): Attribute {
-//   return new Attribute({}, {
-//     display: String(attribute.display_type),
-//     trait: String(attribute.trait_type),
-//     value: String(attribute.value),
-//   });
-// }
+export function attributeFrom(attribute: MetadataAttribute): Attribute {
+  return new Attribute(
+    {},
+    {
+      display: attribute.display_type ? String(attribute.display_type) : null,
+      trait: String(attribute.trait_type),
+      value: String(attribute.value),
+    }
+  )
+}
 
 export type Store = EntityManager
 export type Context = EventHandlerContext<Store>
