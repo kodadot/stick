@@ -15,6 +15,6 @@ export async function handleCollectionDestroy(context: Context): Promise<void> {
   const entity = await get(context.store, CE, event.id)
   entity.burned = true
 
-  success(OPERATION, `${event.id} by ${event.caller}}`)
+  success(OPERATION, `${event.id} by ${event.caller}`)
   await context.store.save(entity)
 }

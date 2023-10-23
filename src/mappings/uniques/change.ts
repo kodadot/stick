@@ -15,6 +15,6 @@ export async function handleCollectionOwnerChange(context: Context): Promise<voi
   const entity = await get(context.store, CE, event.id)
   entity.currentOwner = event.owner
 
-  success(OPERATION, `${event.id} by ${event.caller}}`)
+  success(OPERATION, `${event.id} by ${event.caller}`)
   await context.store.save(entity)
 }

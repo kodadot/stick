@@ -15,6 +15,6 @@ export async function handleCollectionTeamChange(context: Context): Promise<void
   const entity = await get(context.store, CE, event.id)
   entity.issuer = event.issuer
 
-  success(OPERATION, `${event.id} by ${event.caller}}`)
+  success(OPERATION, `${event.id} by ${event.caller}`)
   await context.store.save(entity)
 }
