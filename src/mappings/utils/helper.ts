@@ -24,10 +24,6 @@ export function onlyValue(call: ArchiveCallWithOptionalValue): string {
 }
 
 export function addressOf(address: Uint8Array | string): string {
-  if (!address) {
-    return ''
-  }
-
   const value = typeof address === 'string' ? decodeHex(address) : address
   if (!value) {
     return ''
