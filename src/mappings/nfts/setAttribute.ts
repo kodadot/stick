@@ -30,7 +30,7 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     const attribute = final.attributes?.find((attr) => attr.trait === event.trait)
     if (attribute) {
       attribute.value = String(event.value)
-    } else {
+    } else if (event.trait !== 'royalty' && event.trait !== 'recipient') {
       const newAttribute = attributeFrom({ trait_type: event.trait, value: String(event.value) })
       final.attributes?.push(newAttribute)
     }
