@@ -1,7 +1,6 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
 import { CollectionEntity, NFTEntity } from '../../model'
 import { unwrap } from '../utils/extract'
-import { addressOf } from '../utils/helper'
 import { Context, isNFT } from '../utils/types'
 import { getAttributeEvent } from './getters'
 import { attributeFrom, tokenIdOf } from './types'
@@ -13,13 +12,12 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     isNFT(event)
       ? await get(context.store, NFTEntity, tokenIdOf(event as any))
       : await get(context.store, CollectionEntity, event.collectionId)
-  
   if (!final.attributes) {
     final.attributes = []
   }
 
   if ('royalty' in final && event.trait === 'royalty') {
-    final.royalty = final.royalty ?? Number.parseInt(event.value as string)
+    final.royalty = final.royalty ?? Number.parseFloat(event.value as string)
   }
 
   if ('recipient' in final && event.trait === 'recipient') {
