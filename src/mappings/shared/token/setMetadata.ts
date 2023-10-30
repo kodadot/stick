@@ -15,7 +15,7 @@ export async function setMetadataHandler(context: Context, collection: CE, nft: 
 
   try {
     const nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
-    if (nftWithToken.token) {
+    if (nftWithToken?.token) {
       await tokenAPI.removeNftFromToken(nft, nftWithToken.token)
     }
   } catch (error) {
