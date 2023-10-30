@@ -321,9 +321,9 @@ export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
     const { collection: classId, issuer, admin, freezer } = event.asV9430
     return {
       id: classId.toString(),
-      issuer: addressOf(issuer || ''),
-      admin: addressOf(admin || ''),
-      freezer: addressOf(freezer || ''),
+      issuer: issuer ? addressOf(issuer) : '',
+      admin: admin ? addressOf(admin) : '',
+      freezer: freezer ? addressOf(freezer) : '',
     }
   }
 
@@ -331,8 +331,8 @@ export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
   const { collection: classId, issuer, admin, freezer } = ctx._chain.decodeEvent(ctx.event)
   return {
     id: classId.toString(),
-    issuer: addressOf(issuer || ''),
-    admin: addressOf(admin || ''),
-    freezer: addressOf(freezer || ''),
+    issuer: issuer ? addressOf(issuer) : '',
+    admin: admin ? addressOf(admin) : '',
+    freezer: freezer ? addressOf(freezer) : '',
   }
 }

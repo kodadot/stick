@@ -39,6 +39,8 @@ export async function handleMetadataSet(context: Context): Promise<void> {
 
   if (final.metadata) {
     const metadata = await handleMetadata(final.metadata, context.store)
+    const previousNftMedia = final?.image || final?.media
+    const newNftMedia = metadata?.image || metadata?.animationUrl
     final.meta = metadata
     final.name = metadata?.name
     final.image = metadata?.image
@@ -51,7 +53,7 @@ export async function handleMetadataSet(context: Context): Promise<void> {
         warn(OPERATION, `collection ${event.collectionId} not found`)
         return
       }
-      if (final instanceof NFTEntity) {
+      if (final instanceof NFTEntity && newNftMedia !== previousNftMedia) {
         await setMetadataHandler(context, collection, final)
       }
     }
