@@ -12,12 +12,9 @@ export async function setMetadataHandler(context: Context, collection: CE, nft: 
     return
   }
 
-  let nftWithToken, existingToken
+  let nftWithToken
   try {
-    [nftWithToken, existingToken] = await Promise.all([
-      getWith(context.store, NE, nft.id, { token: true }),
-      getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia)),
-    ])
+    nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
   } catch (error) {
     warn(OPERATION, `ERROR ${error}`)
     return
@@ -28,5 +25,6 @@ export async function setMetadataHandler(context: Context, collection: CE, nft: 
   if (nftWithToken.token) {
     await tokenAPI.removeNftFromToken(nft, nftWithToken.token)
   }
+  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia))
   return await (existingToken ? tokenAPI.addNftToToken(nft, existingToken) : tokenAPI.create(collection, nft))
 }
