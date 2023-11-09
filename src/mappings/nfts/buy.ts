@@ -1,5 +1,5 @@
-import { getWith } from '@kodadot1/metasquid/entity'
-import { NFTEntity as NE } from '../../model'
+import { getOptional, getWith } from '@kodadot1/metasquid/entity'
+import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
@@ -15,18 +15,20 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await getWith(context.store, NE, id, { collection: true })
+  const entity = await getWith<NE>(context.store, NE, id, { collection: true })
+  const collection = await getWith<CE>(context.store, CE, event.collectionId)
 
-  const originalPrice = entity.price
+  const originalPrice = event.price
   const originalOwner = entity.currentOwner ?? undefined
 
   entity.price = BigInt(0)
   entity.currentOwner = event.caller
   entity.updatedAt = event.timestamp
+  
   if (originalPrice) {
-    entity.collection.volume += originalPrice
-    if (originalPrice > entity.collection.highestSale) {
-      entity.collection.highestSale = originalPrice
+    collection.volume += BigInt(originalPrice)
+    if (BigInt(originalPrice) > BigInt(collection.highestSale)) {
+      collection.highestSale = BigInt(originalPrice)
     }
   }
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
@@ -35,11 +37,12 @@ export async function handleTokenBuy(context: Context): Promise<void> {
     entity.currentOwner,
     originalOwner
   )
-  entity.collection.ownerCount = ownerCount
-  entity.collection.distribution = distribution
+  collection.ownerCount = ownerCount
+  collection.distribution = distribution
 
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
+  await context.store.save(collection)
   const meta = String(event.price || '')
   await createEvent(entity, OPERATION, event, meta, context.store, event.currentOwner)
 }

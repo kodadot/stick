@@ -1,5 +1,5 @@
 import { getWith } from '@kodadot1/metasquid/entity'
-import { NFTEntity as NE } from '../../model'
+import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
@@ -15,15 +15,17 @@ export async function handleTokenList(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await getWith(context.store, NE, id, { collection: true })
+  const entity = await getWith<NE>(context.store, NE, id, { collection: true })
+  const collection = await getWith<CE>(context.store, CE, event.collectionId)
 
   entity.price = event.price
 
-  if (entity.price && (entity.collection.floor === 0n || entity.price < entity.collection.floor)) {
-    entity.collection.floor = entity.price
+  if (event.price && (collection.floor === 0n || event.price < collection.floor)) {
+    collection.floor = event.price
   }
   success(OPERATION, `${id} by ${event.caller}} for ${String(event.price)}`)
   await context.store.save(entity)
+  await context.store.save(collection)
   const meta = String(event.price || '')
   const interaction = event.price ? OPERATION : UNLIST
   await createEvent(entity, interaction, event, meta, context.store)
