@@ -1,4 +1,4 @@
-import { getOptional, getWith } from '@kodadot1/metasquid/entity'
+import { getWith } from '@kodadot1/metasquid/entity'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
