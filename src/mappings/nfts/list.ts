@@ -22,8 +22,8 @@ export async function handleTokenList(context: Context): Promise<void> {
 
   if (event.price && (collection.floor === 0n || event.price < collection.floor)) {
     collection.floor = event.price
-    success(OPERATION, `NEW FLOOR PRICE`)
   }
+
   success(OPERATION, `${id} by ${event.caller}} for ${String(event.price)}`)
   await context.store.save(entity)
   await context.store.save(collection)
