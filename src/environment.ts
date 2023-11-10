@@ -14,5 +14,5 @@ export const isProd = CHAIN === 'statemine'
 
 console.log(`Using ${CHAIN} chain ${isProd ? 'production' : 'development'} environment`)
 
-export const getArchiveUrl = (): string => (isProd ? ARCHIVE_URL : DEV_ARCHIVE_URL)
-export const getNodeUrl = (): string => (isProd ? NODE_URL : DEV_NODE_URL)
+export const getArchiveUrl = (): string => (false ? ARCHIVE_URL : DEV_ARCHIVE_URL)
+export const getNodeUrl = (): string => (false ? NODE_URL : DEV_NODE_URL)
