@@ -17,7 +17,6 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getOrFail<NE>(context.store, NE, id)
   const collection = await getOrFail<CE>(context.store, CE, event.collectionId)
-  debug(OPERATION, entity, true)
 
   const originalPrice = event.price
   const originalOwner = entity.currentOwner ?? undefined
