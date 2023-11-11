@@ -1,6 +1,7 @@
 import md5 from 'md5'
 import { NFTEntity as NE } from '../../../model'
 import { warn } from '../../utils/logger'
+import { CHAIN } from '../../../environment'
 
 export const OPERATION = 'TokenEntity' as any
 
@@ -19,17 +20,18 @@ export const mediaOf = (nft: NE): string | undefined => {
   return nftMedia
 }
 
-const doNotAlter = ['chained']
+export const collectionsToKeepNameAsIs: Record<string, string[]> = {
+  statemine: [
+    '176', // chained - generative art
+  ],
+}
 
-export const tokenName = (nftName: string | undefined | null): string => {
+export const tokenName = (nftName: string | undefined | null, collectionId: string): string => {
   if (typeof nftName !== 'string') {
     return ''
   }
 
-  const trimmed = nftName.trim()
-  // Check if nftName starts with any of the entries in doNotAlter
-  const shouldNotAlter = doNotAlter
-  .some((prefix) => trimmed.toLowerCase().startsWith(prefix))
+  const doNotAlter = collectionsToKeepNameAsIs[CHAIN].includes(collectionId)
 
-  return shouldNotAlter ? trimmed : trimmed.replace(/([#_]\d+$)/g, '')
+  return doNotAlter ? nftName : nftName.replace(/([#_]\d+$)/g, '')
 }
