@@ -19,5 +19,17 @@ export const mediaOf = (nft: NE): string | undefined => {
   return nftMedia
 }
 
-export const tokenName = (nftName: string | undefined | null): string =>
-  typeof nftName === 'string' ? nftName?.replace(/([#_]\d+$)/g, '').trim() : ''
+const doNotAlter = ['chained']
+
+export const tokenName = (nftName: string | undefined | null): string => {
+  if (typeof nftName !== 'string') {
+    return ''
+  }
+
+  const trimmed = nftName.trim()
+  // Check if nftName starts with any of the entries in doNotAlter
+  const shouldNotAlter = doNotAlter
+  .some((prefix) => trimmed.toLowerCase().startsWith(prefix))
+
+  return shouldNotAlter ? trimmed : trimmed.replace(/([#_]\d+$)/g, '')
+}
