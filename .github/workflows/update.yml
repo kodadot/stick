@@ -1,5 +1,5 @@
 name: Update Squid
-run-name: Update "${{ inputs.squid }" by @${{ github.actor }}
+run-name: Update "${{ inputs.squid }}" by @${{ github.actor }}
 on:
   workflow_dispatch:
     inputs:
