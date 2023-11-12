@@ -31,7 +31,7 @@ export const tokenName = (nftName: string | undefined | null, collectionId: stri
     return ''
   }
 
-  const doNotAlter = collectionsToKeepNameAsIs[CHAIN].includes(collectionId)
+  const doNotAlter = collectionsToKeepNameAsIs[CHAIN]?.includes(collectionId)
 
   return doNotAlter ? nftName : nftName.replace(/([#_]\d+$)/g, '')
 }
