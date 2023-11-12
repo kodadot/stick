@@ -1,4 +1,4 @@
-import { getOrFail, getWith } from '@kodadot1/metasquid/entity'
+import { getOrFail } from '@kodadot1/metasquid/entity'
 import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
@@ -15,7 +15,7 @@ export async function handleTokenList(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await getWith<NE>(context.store, NE, id, { collection: true })
+  const entity = await getOrFail<NE>(context.store, NE, id)
   const collection = await getOrFail<CE>(context.store, CE, event.collectionId)
 
   entity.price = event.price
