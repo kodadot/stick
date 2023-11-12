@@ -1,6 +1,7 @@
 import md5 from 'md5'
 import { NFTEntity as NE } from '../../../model'
 import { warn } from '../../utils/logger'
+import { CHAIN } from '../../../environment'
 
 export const OPERATION = 'TokenEntity' as any
 
@@ -19,5 +20,18 @@ export const mediaOf = (nft: NE): string | undefined => {
   return nftMedia
 }
 
-export const tokenName = (nftName: string | undefined | null): string =>
-  typeof nftName === 'string' ? nftName?.replace(/([#_]\d+$)/g, '').trim() : ''
+export const collectionsToKeepNameAsIs: Record<string, string[]> = {
+  statemine: [
+    '176', // chained - generative art
+  ],
+}
+
+export const tokenName = (nftName: string | undefined | null, collectionId: string): string => {
+  if (typeof nftName !== 'string') {
+    return ''
+  }
+
+  const doNotAlter = collectionsToKeepNameAsIs[CHAIN]?.includes(collectionId)
+
+  return doNotAlter ? nftName : nftName.replace(/([#_]\d+$)/g, '')
+}
