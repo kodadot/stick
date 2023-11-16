@@ -19,7 +19,7 @@ export class TokenAPI {
     const token = createEntity(TE, tokenId, {
       createdAt: nft.createdAt,
       collection,
-      name: tokenName(nft.name),
+      name: tokenName(nft.name, collection.id),
       count: 1,
       supply: 1,
       hash: md5(tokenId),
