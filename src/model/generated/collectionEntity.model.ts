@@ -82,6 +82,12 @@ export class CollectionEntity {
     @Column_("int4", {nullable: false})
     ownerCount!: number
 
+    @Column_("text", {nullable: true})
+    recipient!: string | undefined | null
+
+    @Column_("numeric", {transformer: marshal.floatTransformer, nullable: true})
+    royalty!: number | undefined | null
+
     @Index_()
     @Column_("int4", {nullable: false})
     supply!: number

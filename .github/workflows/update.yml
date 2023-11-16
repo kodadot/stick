@@ -1,0 +1,31 @@
+name: Update Squid
+run-name: Update "${{ inputs.squid }}" by @${{ github.actor }}
+on:
+  workflow_dispatch:
+    inputs:
+      squid:
+        description: 'Name of the squid'
+        required: true
+        default: 'squid'
+        type: choice
+        options:
+        - squid
+        - speck
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: ${{ github.event.inputs.squid }} update
+          title: ${{ github.event.inputs.squid }} update
+          body: |
+            Update ${{ github.event.inputs.squid }}
+          base: release-${{ github.event.inputs.squid }}
+          branch: main
+          assignees: ${{ github.actor }}
