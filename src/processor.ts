@@ -1,5 +1,9 @@
-import { SubstrateProcessor } from '@subsquid/substrate-processor'
-import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
+import {
+  DataHandlerContext,
+  FieldSelection,
+  SubstrateBatchProcessor as SubstrateProcessor,
+} from '@subsquid/substrate-processor'
+import { TypeormDatabase as Database, Store } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
 import { NonFungible, Unique } from './processable'
 
@@ -9,7 +13,7 @@ import * as u from './mappings/uniques'
 import * as a from './mappings/assets'
 
 const database = new Database()
-const processor = new SubstrateProcessor(database)
+const processor = new SubstrateProcessor()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 const _NFT_STARTING_BLOCK = 4_556_552
@@ -31,79 +35,82 @@ const dummy = async () => {}
 /**
  * Uniques nft pallet
  */
-processor.addEventHandler(Unique.createCollection, u.handleCollectionCreate)
-processor.addEventHandler(Unique.clearAttribute, u.handleAttributeSet)
-processor.addEventHandler(Unique.setAttribute, u.handleAttributeSet)
-processor.addEventHandler(Unique.burn, u.handleTokenBurn)
-processor.addEventHandler(Unique.forceCreateClass, u.handleForceCollectionCreate)
-// processor.addEventHandler(Unique.freezeClass, dummy);
-processor.addEventHandler(Unique.clearClassMetadata, u.handleMetadataSet)
-processor.addEventHandler(Unique.setClassMetadata, u.handleMetadataSet)
-// processor.addEventHandler(Unique.thawClass, dummy);
-// processor.addEventHandler(Unique.freezeCollection, dummy);
-processor.addEventHandler(Unique.setCollectionMaxSupply, u.handleCollectionLock)
-processor.addEventHandler(Unique.clearCollectionMetadata, u.handleMetadataSet)
-processor.addEventHandler(Unique.setCollectionMetadata, u.handleMetadataSet)
-processor.addEventHandler(Unique.thawCollection, dummy)
-processor.addEventHandler(Unique.destroyCollection, u.handleCollectionDestroy)
-// processor.addEventHandler(Unique.freeze, dummy);
-processor.addEventHandler(Unique.createItem, u.handleTokenCreate)
-processor.addEventHandler(Unique.sold, u.handleTokenBuy)
-processor.addEventHandler(Unique.clearPrice, u.handleTokenList)
-processor.addEventHandler(Unique.setPrice, u.handleTokenList)
-processor.addEventHandler(Unique.clearMetadata, u.handleMetadataSet)
-processor.addEventHandler(Unique.setMetadata, u.handleMetadataSet)
-processor.addEventHandler(Unique.changeIssuer, u.handleCollectionOwnerChange)
-// processor.addEventHandler(Unique.changeOwnershipAcceptance, dummy);
-processor.addEventHandler(Unique.changeTeam, u.handleCollectionTeamChange)
-// processor.addEventHandler(Unique.thaw, dummy);
-processor.addEventHandler(Unique.transfer, u.handleTokenTransfer)
+processor.addEvent({ name: [Unique.createCollection], call: true, extrinsic: true }) // u..handleCollectionCreate)
+processor.addEvent({ name: [Unique.clearAttribute], call: true, extrinsic: true }) // u..handleAttributeSet)
+processor.addEvent({ name: [Unique.setAttribute], call: true, extrinsic: true }) // u..handleAttributeSet)
+processor.addEvent({ name: [Unique.burn], call: true, extrinsic: true }) // u..handleTokenBurn)
+processor.addEvent({ name: [Unique.forceCreateClass], call: true, extrinsic: true }) // u..handleForceCollectionCreate)
+// processor.addEvent({   name: [Unique.freezeClass, dummy);
+processor.addEvent({ name: [Unique.clearClassMetadata], call: true, extrinsic: true }) // u..handleMetadataSet)
+processor.addEvent({ name: [Unique.setClassMetadata], call: true, extrinsic: true }) // u..handleMetadataSet)
+// processor.addEvent({   name: [Unique.thawClass, dummy);
+// processor.addEvent({   name: [Unique.freezeCollection, dummy);
+processor.addEvent({ name: [Unique.setCollectionMaxSupply], call: true, extrinsic: true }) // u..handleCollectionLock)
+processor.addEvent({ name: [Unique.clearCollectionMetadata], call: true, extrinsic: true }) // u..handleMetadataSet)
+processor.addEvent({ name: [Unique.setCollectionMetadata], call: true, extrinsic: true }) // u..handleMetadataSet)
+// processor.addEvent({   name: [Unique.thawCollection], call: true, extrinsic: true  }) // dummy)
+processor.addEvent({ name: [Unique.destroyCollection], call: true, extrinsic: true }) // u..handleCollectionDestroy)
+// processor.addEvent({   name: [Unique.freeze, dummy);
+processor.addEvent({ name: [Unique.createItem], call: true, extrinsic: true }) // u..handleTokenCreate)
+processor.addEvent({ name: [Unique.sold], call: true, extrinsic: true }) // u..handleTokenBuy)
+processor.addEvent({ name: [Unique.clearPrice], call: true, extrinsic: true }) // u..handleTokenList)
+processor.addEvent({ name: [Unique.setPrice], call: true, extrinsic: true }) // u..handleTokenList)
+processor.addEvent({ name: [Unique.clearMetadata], call: true, extrinsic: true }) // u..handleMetadataSet)
+processor.addEvent({ name: [Unique.setMetadata], call: true, extrinsic: true }) // u..handleMetadataSet)
+processor.addEvent({ name: [Unique.changeIssuer], call: true, extrinsic: true }) // u..handleCollectionOwnerChange)
+// processor.addEvent({   name: [Unique.changeOwnershipAcceptance, dummy);
+processor.addEvent({ name: [Unique.changeTeam], call: true, extrinsic: true }) // u..handleCollectionTeamChange)
+// processor.addEvent({   name: [Unique.thaw, dummy);
+processor.addEvent({ name: [Unique.transfer], call: true, extrinsic: true }) // u..handleTokenTransfer)
 
 /**
  * NonFungibles nft pallet
-*/
-processor.addEventHandler(NonFungible.createCollection, n.handleCollectionCreate)
-processor.addEventHandler(NonFungible.clearAttribute, n.handleAttributeSet)
-processor.addEventHandler(NonFungible.setAttribute, n.handleAttributeSet)
-processor.addEventHandler(NonFungible.burn, n.handleTokenBurn)
+ */
+processor.addEvent({ name: [NonFungible.createCollection], call: true, extrinsic: true }) // n..handleCollectionCreate)
+processor.addEvent({ name: [NonFungible.clearAttribute], call: true, extrinsic: true }) // n..handleAttributeSet)
+processor.addEvent({ name: [NonFungible.setAttribute], call: true, extrinsic: true }) // n..handleAttributeSet)
+processor.addEvent({ name: [NonFungible.burn], call: true, extrinsic: true }) // n..handleTokenBurn)
 
 // Changed
-processor.addEventHandler(NonFungible.forceCreateCollection, n.handleForceCollectionCreate)
-// processor.addEventHandler(NonFungible.freezeClass, dummy);
-processor.addEventHandler(NonFungible.clearCollectionMetadata, n.handleMetadataSet)
-processor.addEventHandler(NonFungible.setCollectionMetadata, n.handleMetadataSet)
+processor.addEvent({ name: [NonFungible.forceCreateCollection], call: true, extrinsic: true }) // n..handleForceCollectionCreate)
+// processor.addEvent({   name: [NonFungible.freezeClass, dummy);
+processor.addEvent({ name: [NonFungible.clearCollectionMetadata], call: true, extrinsic: true }) // n..handleMetadataSet)
+processor.addEvent({ name: [NonFungible.setCollectionMetadata], call: true, extrinsic: true }) // n..handleMetadataSet)
 // end changed
-// processor.addEventHandler(NonFungible.thawClass, dummy);
-// processor.addEventHandler(NonFungible.freezeCollection, dummy);
-processor.addEventHandler(NonFungible.setCollectionMaxSupply, n.handleCollectionLock)
-processor.addEventHandler(NonFungible.clearCollectionMetadata, n.handleMetadataSet)
-processor.addEventHandler(NonFungible.setCollectionMetadata, n.handleMetadataSet)
-processor.addEventHandler(NonFungible.thawCollection, dummy)
-processor.addEventHandler(NonFungible.destroyCollection, n.handleCollectionDestroy)
-// processor.addEventHandler(NonFungible.freeze, dummy);
-processor.addEventHandler(NonFungible.createItem, n.handleTokenCreate)
-processor.addEventHandler(NonFungible.sold, n.handleTokenBuy)
-processor.addEventHandler(NonFungible.clearPrice, n.handleTokenList)
-processor.addEventHandler(NonFungible.setPrice, n.handleTokenList)
-processor.addEventHandler(NonFungible.clearMetadata, n.handleMetadataSet)
-processor.addEventHandler(NonFungible.setMetadata, n.handleMetadataSet)
-processor.addEventHandler(NonFungible.changeIssuer, n.handleCollectionOwnerChange)
-// processor.addEventHandler(NonFungible.changeOwnershipAcceptance, dummy);
-processor.addEventHandler(NonFungible.changeTeam, n.handleCollectionTeamChange)
-// processor.addEventHandler(NonFungible.thaw, dummy);
-processor.addEventHandler(NonFungible.transfer, n.handleTokenTransfer)
+// processor.addEvent({   name: [NonFungible.thawClass, dummy);
+// processor.addEvent({   name: [NonFungible.freezeCollection, dummy);
+processor.addEvent({ name: [NonFungible.setCollectionMaxSupply], call: true, extrinsic: true }) // n..handleCollectionLock)
+processor.addEvent({ name: [NonFungible.clearCollectionMetadata], call: true, extrinsic: true }) // n..handleMetadataSet)
+processor.addEvent({ name: [NonFungible.setCollectionMetadata], call: true, extrinsic: true }) // n..handleMetadataSet)
+// processor.addEvent({   name: [NonFungible.thawCollection], call: true, extrinsic: true  }) // dummy)
+processor.addEvent({ name: [NonFungible.destroyCollection], call: true, extrinsic: true }) // n..handleCollectionDestroy)
+// processor.addEvent({   name: [NonFungible.freeze, dummy);
+processor.addEvent({ name: [NonFungible.createItem], call: true, extrinsic: true }) // n..handleTokenCreate)
+processor.addEvent({ name: [NonFungible.sold], call: true, extrinsic: true }) // n..handleTokenBuy)
+processor.addEvent({ name: [NonFungible.clearPrice], call: true, extrinsic: true }) // n..handleTokenList)
+processor.addEvent({ name: [NonFungible.setPrice], call: true, extrinsic: true }) // n..handleTokenList)
+processor.addEvent({ name: [NonFungible.clearMetadata], call: true, extrinsic: true }) // n..handleMetadataSet)
+processor.addEvent({ name: [NonFungible.setMetadata], call: true, extrinsic: true }) // n..handleMetadataSet)
+processor.addEvent({ name: [NonFungible.changeIssuer], call: true, extrinsic: true }) // n..handleCollectionOwnerChange)
+// processor.addEvent({   name: [NonFungible.changeOwnershipAcceptance, dummy);
+processor.addEvent({ name: [NonFungible.changeTeam], call: true, extrinsic: true }) // n..handleCollectionTeamChange)
+// processor.addEvent({   name: [NonFungible.thaw, dummy);
+processor.addEvent({ name: [NonFungible.transfer], call: true, extrinsic: true }) // n..handleTokenTransfer)
 
 /**
  * Assets nft pallet
-*/
-processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateSystemAsset);
-processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateUsdtAsset);
+ */
+// processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateSystemAsset);
+// processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateUsdtAsset);
 
-if (isProd) {
-  processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateRmrkAsset);
-}
-
+// if (CHAIN === 'kusama') {
+//   processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateRmrkAsset);
+// }
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
-processor.run()
+// handler: (ctx: DataHandlerContext<Store, {}>) => Promise<void>
+
+const handler = async <T extends FieldSelection>(ctx: DataHandlerContext<Store, T>) => {}
+
+processor.run(database, handler)
