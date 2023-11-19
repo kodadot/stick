@@ -14,7 +14,7 @@ deploy:
       - node
       - lib/processor
     env:
-      CHAIN: statemine
+      CHAIN: kusama
   api:
     cmd:
       - npx
