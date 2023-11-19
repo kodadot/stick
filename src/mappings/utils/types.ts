@@ -1,4 +1,12 @@
-import { EventHandlerContext } from '@subsquid/substrate-processor'
+import {
+ BlockHeader, DEFAULT_FIELDS,
+  DataHandlerContext,
+  SubstrateBatchProcessorFields,
+  Event as _Event,
+  Call as _Call,
+  Extrinsic as _Extrinsic, 
+  SubstrateBatchProcessor as SubstrateProcessor,
+} from '@subsquid/substrate-processor'
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
 // impsort { Interaction } from '../../model/generated/_interaction';
@@ -12,6 +20,19 @@ export type BaseCall = {
   blockNumber: string
   timestamp: Date
 }
+// In case of fire consult this repo:
+// https://github.com/subsquid-labs/squid-substrate-template/tree/main
+
+export const fieldSelection = { ...DEFAULT_FIELDS, block: { hash: true, height: true, timestamp: true } } as const
+
+export type FieldSelection = typeof fieldSelection
+
+type Fields = SubstrateBatchProcessorFields<typeof SubstrateProcessor<FieldSelection>>
+export type Block = BlockHeader<Fields>
+export type Event = _Event<Fields>
+export type Call = _Call<Fields>
+export type Extrinsic = _Extrinsic<Fields>
+
 
 export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY
 
@@ -57,7 +78,7 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
 }
 
 export type Store = EntityManager
-export type Context = EventHandlerContext<Store>
+export type Context<S = Store> = DataHandlerContext<S, Fields>
 
 export type Optional<T> = T | null
 
