@@ -1,6 +1,8 @@
 import {
+  DEFAULT_FIELDS,
   DataHandlerContext,
   FieldSelection,
+  SubstrateBatchProcessorFields,
   SubstrateBatchProcessor as SubstrateProcessor,
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database, Store } from '@subsquid/typeorm-store'
@@ -11,15 +13,16 @@ import { CHAIN, getArchiveUrl, getNodeUrl, isProd } from './environment'
 import * as n from './mappings/nfts'
 import * as u from './mappings/uniques'
 import * as a from './mappings/assets'
+import { fieldSelection } from './mappings/utils/types'
 
 const database = new Database()
-const processor = new SubstrateProcessor()
+const processor = new SubstrateProcessor<FieldSelection>()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 const _NFT_STARTING_BLOCK = 4_556_552
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 
-processor.setTypesBundle(CHAIN)
+// processor.setTypesBundle(CHAIN)
 processor.setBlockRange({ from: STARTING_BLOCK })
 
 const archive = getArchiveUrl()
@@ -27,10 +30,14 @@ const chain = getNodeUrl()
 
 processor.setDataSource({
   archive,
-  chain,
+  chain: {
+    url: chain,
+    rateLimit: 10
+  },
 })
 
-const dummy = async () => {}
+// disables RPC ingestion and drastically reduce no of RPC calls
+processor.useArchiveOnly(true)
 
 /**
  * Uniques nft pallet
@@ -96,6 +103,8 @@ processor.addEvent({ name: [NonFungible.changeIssuer], call: true, extrinsic: tr
 processor.addEvent({ name: [NonFungible.changeTeam], call: true, extrinsic: true }) // n.handleCollectionTeamChange)
 // processor.addEvent({   name: [NonFungible.thaw, dummy);
 processor.addEvent({ name: [NonFungible.transfer], call: true, extrinsic: true }) // n.handleTokenTransfer)
+
+processor.setFields(fieldSelection)
 
 /**
  * Assets nft pallet
