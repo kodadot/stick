@@ -21,10 +21,10 @@ import {
 } from '../types'
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
-  const event = new events.NftsCreatedEvent(ctx)
+  const event = events.created
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, creator, owner } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, creator, owner } = event.v9230.decode(ctx)
     return { id: classId.toString(), caller: addressOf(creator), owner: addressOf(owner) }
   }
   warn(Interaction.CREATE, 'USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -33,10 +33,10 @@ export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
 }
 
 export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
-  const event = new events.NftsForceCreatedEvent(ctx)
+  const event = events.forceCreated
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, owner } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, owner } = event.v9230.decode(ctx)
     return { id: classId.toString(), owner: addressOf(owner) }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -45,10 +45,10 @@ export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollecti
 }
 
 export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
-  const event = new events.NftsIssuedEvent(ctx)
+  const event = events.issued
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId, owner } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, owner } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), owner: addressOf(owner), sn: instanceId.toString() }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -57,10 +57,10 @@ export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
 }
 
 export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
-  const event = new events.NftsTransferredEvent(ctx)
+  const event = events.transferred
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId, from, to } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, from, to } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -69,10 +69,10 @@ export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
 }
 
 export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
-  const event = new events.NftsBurnedEvent(ctx)
+  const event = events.burned
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId, owner } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, owner } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), owner: addressOf(owner), sn: instanceId.toString() }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -81,10 +81,10 @@ export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
 }
 
 export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent {
-  const event = new events.NftsDestroyedEvent(ctx)
+  const event = events.destroyed
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId } = event.v9230.decode(ctx)
     return { id: classId.toString() }
   }
 
@@ -94,10 +94,10 @@ export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent 
 }
 
 export function getListTokenEvent(ctx: Context): ListTokenEvent {
-  const event = new events.NftsItemPriceSetEvent(ctx)
+  const event = events.itemPriceSet
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId, price } = event.v9420.decode(ctx)
+  if (event.v9270.is(ctx)) {
+    const { collection: classId, item: instanceId, price } = event.v9270.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString(), price }
   }
 
@@ -107,10 +107,10 @@ export function getListTokenEvent(ctx: Context): ListTokenEvent {
 }
 
 export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
-  const event = new events.NftsItemPriceRemovedEvent(ctx)
+  const event = events.itemPriceRemoved
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId } = event.v9420.decode(ctx)
+  if (event.v9270.is(ctx)) {
+    const { collection: classId, item: instanceId } = event.v9270.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString(), price: 0n }
   }
 
@@ -128,10 +128,10 @@ export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
 }
 
 export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
-  const event = new events.NftsItemBoughtEvent(ctx)
+  const event = events.itemBought
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId, price, seller, buyer } = event.v9420.decode(ctx)
+  if (event.v9270.is(ctx)) {
+    const { collection: classId, item: instanceId, price, seller, buyer } = event.v9270.decode(ctx)
     return {
       collectionId: classId.toString(),
       caller: addressOf(buyer),
@@ -152,9 +152,9 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
 }
 
 export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
-  const event = new events.NftsCollectionMaxSupplySetEvent(ctx)
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, maxSupply: max } = event.v9420.decode(ctx)
+  const event = events.collectionMaxSupplySet
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, maxSupply: max } = event.v9230.decode(ctx)
     return { id: classId.toString(), max }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -163,10 +163,10 @@ export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
 }
 
 export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
-  const event = new events.NftsOwnerChangedEvent(ctx)
+  const event = events.ownerChanged
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, newOwner } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, newOwner } = event.v9230.decode(ctx)
     return { id: classId.toString(), owner: addressOf(newOwner) }
   }
 
@@ -176,10 +176,10 @@ export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwn
 }
 
 export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.NftsCollectionMetadataClearedEvent(ctx)
+  const event = events.collectionMetadataCleared
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId } = event.v9230.decode(ctx)
     return { collectionId: classId.toString() }
   }
 
@@ -189,10 +189,10 @@ export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.NftsCollectionMetadataSetEvent(ctx)
+  const event = events.collectionMetadataSet
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, data } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, data } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), metadata: data.toString() }
   }
 
@@ -202,10 +202,10 @@ export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.NftsCollectionMetadataSetEvent(ctx)
+  const event = events.collectionMetadataSet
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, data } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, data } = event.v9230.decode(ctx)
     return { collectionId: classId.toString() }
   }
 
@@ -215,10 +215,10 @@ export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.NftsCollectionMetadataSetEvent(ctx)
+  const event = events.collectionMetadataSet
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, data } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, data } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), metadata: data.toString() }
   }
 
@@ -228,10 +228,10 @@ export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getCreateMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.NftsItemMetadataSetEvent(ctx)
+  const event = events.metadataSet
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId, data } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, data } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
   }
 
@@ -241,10 +241,10 @@ export function getCreateMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getClearMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.NftsItemMetadataClearedEvent(ctx)
+  const event = events.metadataCleared
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, item: instanceId } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString() }
   }
 
@@ -269,9 +269,9 @@ export function getMetadataEvent(ctx: Context): SetMetadata {
 }
 
 function getSetAttributeEvent(ctx: Context): SetAttribute {
-  const event = new events.NftsAttributeSetEvent(ctx)
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, maybeItem: instanceId, key, value } = event.v9420.decode(ctx)
+  const event = events.attributeSet
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, maybeItem: instanceId, key, value } = event.v9230.decode(ctx)
     return {
       collectionId: classId.toString(),
       sn: instanceId?.toString(),
@@ -291,10 +291,10 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
 }
 
 function getClearAttributeEvent(ctx: Context): SetAttribute {
-  const event = new events.NftsAttributeClearedEvent(ctx)
+  const event = events.attributeCleared
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, maybeItem: instanceId, key } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, maybeItem: instanceId, key } = event.v9230.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
   }
 
@@ -315,10 +315,10 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 }
 
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
-  const event = new events.NftsTeamChangedEvent(ctx)
+  const event = events.teamChanged
 
-  if (event.v9420.is(ctx)) {
-    const { collection: classId, issuer, admin, freezer } = event.v9420.decode(ctx)
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, issuer, admin, freezer } = event.v9230.decode(ctx)
     return {
       id: classId.toString(),
       issuer: issuer ? addressOf(issuer) : '',
