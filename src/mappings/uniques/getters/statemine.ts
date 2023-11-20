@@ -22,7 +22,7 @@ import { Unique as Event } from '../../../processable'
 
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
-  const event = new events.Created
+  const event = events.Created
   if (event.isV1) {
     const [classId, creator, owner] = event.asV1
     return { id: idOf(classId, U), caller: addressOf(creator), owner: addressOf(owner) }
@@ -41,7 +41,7 @@ export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
 }
 
 export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
-  const event = new events.ForceCreated
+  const event = events.ForceCreated
   if (event.isV1) {
     const [classId, owner] = event.asV1
     return { id: idOf(classId, U), owner: addressOf(owner) }
@@ -60,7 +60,7 @@ export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollecti
 }
 
 export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
-  const event = new events.Issued
+  const event = events.Issued
   if (event.isV1) {
     const [classId, instanceId, owner] = event.asV1
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
@@ -79,7 +79,7 @@ export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
 }
 
 export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
-  const event = new events.Transferred
+  const event = events.Transferred
   if (event.isV1) {
     const [classId, instanceId, from, to] = event.asV1
     return { collectionId: idOf(classId, U), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
@@ -98,7 +98,7 @@ export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
 }
 
 export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
-  const event = new events.Burned
+  const event = events.Burned
   if (event.isV1) {
     const [classId, instanceId, owner] = event.asV1
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
@@ -117,7 +117,7 @@ export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
 }
 
 export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent {
-  const event = new events.Destroyed
+  const event = events.Destroyed
   if (event.isV1) {
     const classId = event.asV1
     return { id: idOf(classId, U) }
@@ -137,7 +137,7 @@ export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent 
 }
 
 export function getListTokenEvent(ctx: Context): ListTokenEvent {
-  const event = new events.ItemPriceSet
+  const event = events.ItemPriceSet
 
   if (event.isV9270) {
     const { collection: classId, item: instanceId, price } = event.asV9270
@@ -150,7 +150,7 @@ export function getListTokenEvent(ctx: Context): ListTokenEvent {
 }
 
 export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
-  const event = new events.ItemPriceRemoved
+  const event = events.ItemPriceRemoved
 
   if (event.isV9270) {
     const { collection: classId, item: instanceId } = event.asV9270
@@ -171,7 +171,7 @@ export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
 }
 
 export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
-  const event = new events.ItemBought
+  const event = events.ItemBought
 
   if (event.isV9270) {
     const { collection: classId, item: instanceId, price, seller, buyer } = event.asV9270
@@ -195,7 +195,7 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
 }
 
 export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
-  const event = new events.CollectionMaxSupplySet
+  const event = events.CollectionMaxSupplySet
   if (event.isV9230) {
     const { collection: classId, maxSupply: max } = event.asV9230
     return { id: idOf(classId, U), max }
@@ -206,7 +206,7 @@ export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
 }
 
 export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
-  const event = new events.OwnerChanged
+  const event = events.OwnerChanged
   if (event.isV1) {
     const [classId, newOwner] = event.asV1
     return { id: idOf(classId, U), owner: addressOf(newOwner) }
@@ -226,7 +226,7 @@ export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwn
 }
 
 export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.CollectionMetadataCleared
+  const event = events.CollectionMetadataCleared
   if (event.isV9230) {
     const { collection: classId } = event.asV9230
     return { collectionId: idOf(classId, U) }
@@ -237,7 +237,7 @@ export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.CollectionMetadataSet
+  const event = events.CollectionMetadataSet
   if (event.isV9230) {
     const { collection: classId, data, isFrozen } = event.asV9230
     return { collectionId: idOf(classId, U), metadata: data.toString() }
@@ -249,7 +249,7 @@ export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.ClassMetadataCleared
+  const event = events.ClassMetadataCleared
   if (event.isV1) {
     const classId = event.asV1
     return { collectionId: idOf(classId, U) }
@@ -265,7 +265,7 @@ export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.ClassMetadataSet
+  const event = events.ClassMetadataSet
   if (event.isV1) {
     const [classId, data, isFrozen] = event.asV1
     return { collectionId: idOf(classId, U), metadata: data.toString() }
@@ -281,7 +281,7 @@ export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getCreateMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.MetadataSet
+  const event = events.MetadataSet
   if (event.isV1) {
     const [classId, instanceId, data, isFrozen] = event.asV1
     return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
@@ -301,7 +301,7 @@ export function getCreateMetadataEvent(ctx: Context): SetMetadata {
 }
 
 export function getClearMetadataEvent(ctx: Context): SetMetadata {
-  const event = new events.MetadataCleared
+  const event = events.MetadataCleared
   if (event.isV1) {
     const [classId, instanceId] = event.asV1
     return { collectionId: idOf(classId, U), sn: instanceId.toString() }
@@ -340,7 +340,7 @@ export function getMetadataEvent(ctx: Context): SetMetadata {
 }
 
 function getSetAttributeEvent(ctx: Context): SetAttribute {
-  const event = new events.AttributeSet
+  const event = events.AttributeSet
   if (event.isV1) {
     const [classId, instanceId, key, value] = event.asV1
     return {
@@ -375,7 +375,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
 }
 
 function getClearAttributeEvent(ctx: Context): SetAttribute {
-  const event = new events.AttributeCleared
+  const event = events.AttributeCleared
 
   if (event.isV1) {
     const [classId, instanceId, key] = event.asV1
@@ -407,7 +407,7 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 }
 
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
-  const event = new events.TeamChanged
+  const event = events.TeamChanged
   if (event.isV1) {
     const [classId, issuer, admin, freezer] = event.asV1
     return { id: idOf(classId, U), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
