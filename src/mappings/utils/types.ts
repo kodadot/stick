@@ -23,25 +23,20 @@ export type BaseCall = {
 // In case of fire consult this repo:
 // https://github.com/subsquid-labs/squid-substrate-template/tree/main
 
-// DEV NOTE: This is a workaround for the following issue:
-// export const fieldSelection = {
-//   block: {
-//     hash: true,
-    
-//     timestamp: true
-//   },
-//   extrinsic: {},
-//   call: {
-//       name: true,
-//       args: true
-//   },
-//   event: {
-//       name: true,
-//       args: true
-//   }
-// } as const
-
-export const fieldSelection = { ...DEFAULT_FIELDS, block: { hash: true, timestamp: true } } as const
+export const fieldSelection = {
+  block: {
+    timestamp: true
+  },
+  extrinsic: {},
+  call: {
+      name: true,
+      args: true
+  },
+  event: {
+      name: true,
+      args: true
+  }
+} as const
 
 export type SelectedFields = typeof fieldSelection
 
