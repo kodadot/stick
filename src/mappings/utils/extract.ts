@@ -1,3 +1,4 @@
+import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
 import { addressOf, onlyValue } from './helper'
 import { BaseCall, CallWith, Context, UnwrapFunc } from './types'
 
@@ -10,10 +11,10 @@ import { BaseCall, CallWith, Context, UnwrapFunc } from './types'
 // }
 
 function toBaseEvent(ctx: Context): BaseCall {
-  const address = onlyValue(ctx.event.extrinsic?.signature?.address)
+  const address = onlyValue(ctx.extrinsic?.signature?.address as ArchiveCallWithOptionalValue)
   const caller = addressOf(address)
   const blockNumber = ctx.block.height.toString()
-  const timestamp = new Date(ctx.block.timestamp)
+  const timestamp = ctx.block.timestamp ? new Date(ctx.block.timestamp) : new Date()
 
   return { caller, blockNumber, timestamp }
 }
