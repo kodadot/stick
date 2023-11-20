@@ -1,8 +1,8 @@
 default := 'squid'
 types := 'typegen'
 
-process: build
-	node -r dotenv/config lib/processor.js
+process:
+	@npx sqd process
 
 serve:
 	@npx squid-graphql-server
@@ -44,7 +44,10 @@ reset: migrate
 
 quickstart: migrate process
 
-quick: build reset process
+quick: wipe bug process
+
+wipe:
+  clear
 
 prod TAG:
 	gh pr create --base release-{{TAG}}
