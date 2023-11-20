@@ -9,6 +9,7 @@ import { NonFungible, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
 import { SelectedFields, fieldSelection } from './mappings/utils/types'
+import { mainFrame } from './mappings'
 
 const database = new Database()
 const processor = new SubstrateProcessor<SelectedFields>()
@@ -117,5 +118,5 @@ logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
 const handler = async <T extends FieldSelection = SelectedFields>(ctx: DataHandlerContext<Store, T>) => {}
 
-processor.run(database, handler)
+processor.run(database, mainFrame)
 
