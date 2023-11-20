@@ -42,9 +42,13 @@ bug: down upd
 
 reset: migrate
 
+slow: 
+	sleep 1
+	just reset
+
 quickstart: migrate process
 
-quick: wipe bug reset process
+quick: wipe bug slow process
 
 wipe:
   clear
