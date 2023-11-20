@@ -1,12 +1,19 @@
-import type {Result, Option} from './support'
+import {sts, Result, Option, Bytes, BitSequence} from './support'
 
-export type PalletAttributes = PalletAttributes_UsedToClaim | PalletAttributes_TransferDisabled
+export const PalletAttributes: sts.Type<PalletAttributes> = sts.closedEnum(() => {
+    return  {
+        TransferDisabled: sts.unit(),
+        UsedToClaim: sts.number(),
+    }
+})
+
+export type PalletAttributes = PalletAttributes_TransferDisabled | PalletAttributes_UsedToClaim
+
+export interface PalletAttributes_TransferDisabled {
+    __kind: 'TransferDisabled'
+}
 
 export interface PalletAttributes_UsedToClaim {
     __kind: 'UsedToClaim'
     value: number
-}
-
-export interface PalletAttributes_TransferDisabled {
-    __kind: 'TransferDisabled'
 }
