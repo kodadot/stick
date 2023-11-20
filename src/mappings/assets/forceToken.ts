@@ -1,14 +1,14 @@
 import { create } from '@kodadot1/metasquid/entity'
-import { BlockHandlerContext } from '@subsquid/substrate-processor'
-import { AssetEntity } from '../../model'
-import { Store } from '../utils/types'
-import { pending, success } from '../utils/logger'
+import { Store } from '@subsquid/typeorm-store'
 import { isProd } from '../../environment'
+import { AssetEntity } from '../../model'
+import { pending, success } from '../utils/logger'
+import { BatchContext } from '../utils/types'
 
 const OPERATION = 'ASSET_REGISTER' as any
 
-export async function forceCreateSystemAsset(context: BlockHandlerContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.block.height}`);
+export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
   const systemAsset = isProd
   ? {
     name: 'Kusama',
@@ -26,8 +26,8 @@ export async function forceCreateSystemAsset(context: BlockHandlerContext<Store>
   await context.store.save<AssetEntity>(asset);
 }
 
-export async function forceCreateUsdtAsset(context: BlockHandlerContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.block.height}`);
+export async function forceCreateUsdtAsset(context: BatchContext): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
   const asset = create<AssetEntity>(AssetEntity, '1984', {
     name: 'Tether USD',
     symbol: 'USDt',
@@ -37,8 +37,8 @@ export async function forceCreateUsdtAsset(context: BlockHandlerContext<Store>):
   await context.store.save<AssetEntity>(asset);
 }
 
-export async function forceCreateRmrkAsset(context: BlockHandlerContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.block.height}`);
+export async function forceCreateRmrkAsset(context: BatchContext): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
   const asset = create<AssetEntity>(AssetEntity, '8', {
     name: 'RMRK.app',
     symbol: 'RMRK',
