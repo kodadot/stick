@@ -5,7 +5,7 @@ import {
   Event as _Event,
   Call as _Call,
   Extrinsic as _Extrinsic, 
-  SubstrateBatchProcessor as SubstrateProcessor,
+  type SubstrateBatchProcessor as SubstrateProcessor,
 } from '@subsquid/substrate-processor'
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
@@ -25,9 +25,9 @@ export type BaseCall = {
 
 export const fieldSelection = { ...DEFAULT_FIELDS, block: { hash: true, height: true, timestamp: true } } as const
 
-export type FieldSelection = typeof fieldSelection
+export type SelectedFields = typeof fieldSelection
 
-type Fields = SubstrateBatchProcessorFields<typeof SubstrateProcessor<FieldSelection>>
+type Fields = SubstrateBatchProcessorFields<SubstrateProcessor<SelectedFields>>
 export type Block = BlockHeader<Fields>
 export type Event = _Event<Fields>
 export type Call = _Call<Fields>
@@ -78,7 +78,8 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
 }
 
 export type Store = EntityManager
-export type Context<S = Store> = DataHandlerContext<S, Fields>
+export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
+export type Context = any
 
 export type Optional<T> = T | null
 
