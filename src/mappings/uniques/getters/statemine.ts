@@ -164,10 +164,10 @@ export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
 
 export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
   if (ctx.event.name === Event.setPrice) {
-    return getListToken
+    return getListTokenEvent(ctx)
   }
 
-  return getUnListToken
+  return getUnListTokenEvent(ctx)
 }
 
 export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
