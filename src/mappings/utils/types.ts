@@ -1,11 +1,12 @@
 import {
- BlockHeader, DEFAULT_FIELDS,
+  BlockHeader,
   DataHandlerContext,
+  FieldSelection,
   SubstrateBatchProcessorFields,
-  Event as _Event,
   Call as _Call,
-  Extrinsic as _Extrinsic, 
-  type SubstrateBatchProcessor as SubstrateProcessor,
+  Event as _Event,
+  Extrinsic as _Extrinsic,
+  type SubstrateBatchProcessor as SubstrateProcessor
 } from '@subsquid/substrate-processor'
 import { nanoid } from 'nanoid'
 import { EntityManager } from 'typeorm'
@@ -23,7 +24,7 @@ export type BaseCall = {
 // In case of fire consult this repo:
 // https://github.com/subsquid-labs/squid-substrate-template/tree/main
 
-export const fieldSelection = {
+export const fieldSelection: FieldSelection = {
   block: {
     timestamp: true
   },
@@ -34,7 +35,7 @@ export const fieldSelection = {
   },
   event: {
       name: true,
-      args: true
+      args: true,
   }
 } as const
 
