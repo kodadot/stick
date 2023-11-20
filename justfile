@@ -44,7 +44,7 @@ reset: migrate
 
 quickstart: migrate process
 
-quick: wipe bug process
+quick: wipe bug reset process
 
 wipe:
   clear
