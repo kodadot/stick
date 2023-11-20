@@ -1,22 +1,17 @@
 import {
-  DEFAULT_FIELDS,
   DataHandlerContext,
   FieldSelection,
-  SubstrateBatchProcessorFields,
-  SubstrateBatchProcessor as SubstrateProcessor,
+  SubstrateBatchProcessor as SubstrateProcessor
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database, Store } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
 import { NonFungible, Unique } from './processable'
 
-import { CHAIN, getArchiveUrl, getNodeUrl, isProd } from './environment'
-import * as n from './mappings/nfts'
-import * as u from './mappings/uniques'
-import * as a from './mappings/assets'
-import { fieldSelection } from './mappings/utils/types'
+import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
+import { SelectedFields, fieldSelection } from './mappings/utils/types'
 
 const database = new Database()
-const processor = new SubstrateProcessor<FieldSelection>()
+const processor = new SubstrateProcessor<SelectedFields>()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 const _NFT_STARTING_BLOCK = 4_556_552
@@ -120,6 +115,7 @@ logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
 // handler: (ctx: DataHandlerContext<Store, {}>) => Promise<void>
 
-const handler = async <T extends FieldSelection>(ctx: DataHandlerContext<Store, T>) => {}
+const handler = async <T extends FieldSelection = SelectedFields>(ctx: DataHandlerContext<Store, T>) => {}
 
 processor.run(database, handler)
+
