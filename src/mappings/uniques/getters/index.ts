@@ -1,4 +1,4 @@
-import { isProd } from '../../../environment'
+import { CHAIN } from '../../../environment'
 import { Context } from '../../utils/types'
 import {
   BurnTokenEvent,
@@ -17,7 +17,7 @@ import {
 } from '../types'
 
 // eslint-disable-next-line unicorn/prefer-module
-const proc = isProd ? require('./statemine') : require('./statemint')
+const proc = require(`./${CHAIN}`)
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   return proc.getCreateCollectionEvent(ctx)
