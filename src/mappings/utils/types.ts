@@ -1,16 +1,16 @@
 import {
-  BlockHeader,
   DataHandlerContext,
-  FieldSelection,
   SubstrateBatchProcessorFields,
+  Block as _Block,
   Call as _Call,
   Event as _Event,
   Extrinsic as _Extrinsic,
-  type SubstrateBatchProcessor as SubstrateProcessor
+  type SubstrateBatchProcessor as SubstrateProcessor,
+  BlockHeader
 } from '@subsquid/substrate-processor'
 import { nanoid } from 'nanoid'
-import { EntityManager } from 'typeorm'
 // impsort { Interaction } from '../../model/generated/_interaction';
+import { Store as SquidStore } from '@subsquid/typeorm-store'
 import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
@@ -24,14 +24,17 @@ export type BaseCall = {
 // In case of fire consult this repo:
 // https://github.com/subsquid-labs/squid-substrate-template/tree/main
 
-export const fieldSelection: FieldSelection = {
+export const fieldSelection = {
   block: {
     timestamp: true
   },
-  extrinsic: {},
+  extrinsic: {
+    signature: true,
+  },
   call: {
       name: true,
-      args: true
+      args: true,
+      origin: true
   },
   event: {
       name: true,
@@ -42,7 +45,7 @@ export const fieldSelection: FieldSelection = {
 export type SelectedFields = typeof fieldSelection
 
 type Fields = SubstrateBatchProcessorFields<SubstrateProcessor<SelectedFields>>
-export type Block = BlockHeader<Fields>
+export type Block = _Block<Fields>
 export type Event = _Event<Fields>
 export type Call = _Call<Fields>
 export type Extrinsic = _Extrinsic<Fields>
@@ -91,9 +94,15 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
   )
 }
 
-export type Store = EntityManager
+export type Store =  SquidStore // EntityManager
 export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
-export type Context = any
+export type Context<S = Store>  = {
+  store: S
+  block: Pick<BlockHeader<Fields>, 'height' | 'timestamp' | 'hash'>
+  event: Pick<Event, 'name' | 'args'>
+  extrinsic: Pick<Extrinsic, 'signature'>
+  call: Pick<Call, 'name' | 'origin'>
+}
 
 export type Optional<T> = T | null
 
