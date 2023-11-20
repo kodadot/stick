@@ -1,7 +1,7 @@
 default := 'squid'
 types := 'typegen'
 
-process:
+process: build
 	node --require=dotenv/config lib/processor.js
 
 serve:
