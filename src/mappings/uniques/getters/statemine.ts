@@ -1,5 +1,5 @@
 import { Interaction } from '../../../model'
-import * as events from '../../../types/statemine/events'
+import * as events from '../../../types/kusama/events'
 import { addressOf, idOf, UNIQUE_PREFIX as U } from '../../utils/helper'
 import { warn } from '../../utils/logger'
 import { Context } from '../../utils/types'

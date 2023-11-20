@@ -1,6 +1,6 @@
 import { Interaction } from '../../../model'
 import { NonFungible as Event } from '../../../processable'
-import * as events from '../../../types/statemine/events'
+import * as events from '../../../types/kusama/events'
 import { addressOf } from '../../utils/helper'
 import { warn } from '../../utils/logger'
 import { Context } from '../../utils/types'
