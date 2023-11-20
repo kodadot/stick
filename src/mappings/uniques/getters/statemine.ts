@@ -23,16 +23,16 @@ import { Unique as Event } from '../../../processable'
 
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = events.created
-  if (event.isV1) {
-    const [classId, creator, owner] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, creator, owner] = event.v1.decode(ctx)
     return { id: idOf(classId, U), caller: addressOf(creator), owner: addressOf(owner) }
   }
-  if (event.isV700) {
-    const { class: classId, creator, owner } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, creator, owner } = event.v700.decode(ctx)
     return { id: idOf(classId, U), caller: addressOf(creator), owner: addressOf(owner) }
   }
-  if (event.isV9230) {
-    const { collection: classId, creator, owner } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, creator, owner } = event.v9230.decode(ctx)
     return { id: idOf(classId, U), caller: addressOf(creator), owner: addressOf(owner) }
   }
   warn(Interaction.CREATE, 'USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -42,16 +42,16 @@ export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
 
 export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
   const event = events.forceCreated
-  if (event.isV1) {
-    const [classId, owner] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, owner] = event.v1.decode(ctx)
     return { id: idOf(classId, U), owner: addressOf(owner) }
   }
-  if (event.isV700) {
-    const { class: classId, owner } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, owner } = event.v700.decode(ctx)
     return { id: idOf(classId, U), owner: addressOf(owner) }
   }
-  if (event.isV9230) {
-    const { collection: classId, owner } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, owner } = event.v9230.decode(ctx)
     return { id: idOf(classId, U), owner: addressOf(owner) }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -61,16 +61,16 @@ export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollecti
 
 export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
   const event = events.issued
-  if (event.isV1) {
-    const [classId, instanceId, owner] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId, owner] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
   }
-  if (event.isV700) {
-    const { class: classId, instance: instanceId, owner } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, instance: instanceId, owner } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
   }
-  if (event.isV9230) {
-    const { collection: classId, item: instanceId, owner } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, owner } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -80,16 +80,16 @@ export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
 
 export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
   const event = events.transferred
-  if (event.isV1) {
-    const [classId, instanceId, from, to] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId, from, to] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
   }
-  if (event.isV700) {
-    const { class: classId, instance: instanceId, from, to } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, instance: instanceId, from, to } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
   }
-  if (event.isV9230) {
-    const { collection: classId, item: instanceId, from, to } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, from, to } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -99,16 +99,16 @@ export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
 
 export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
   const event = events.burned
-  if (event.isV1) {
-    const [classId, instanceId, owner] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId, owner] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
   }
-  if (event.isV700) {
-    const { class: classId, instance: instanceId, owner } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, instance: instanceId, owner } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
   }
-  if (event.isV9230) {
-    const { collection: classId, item: instanceId, owner } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, owner } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -118,16 +118,16 @@ export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
 
 export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent {
   const event = events.destroyed
-  if (event.isV1) {
-    const classId = event.asV1
+  if (event.v1.is(ctx)) {
+    const classId = event.v1.decode(ctx)
     return { id: idOf(classId, U) }
   }
-  if (event.isV700) {
-    const { class: classId } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId } = event.v700.decode(ctx)
     return { id: idOf(classId, U) }
   }
-  if (event.isV9230) {
-    const { collection: classId } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId } = event.v9230.decode(ctx)
     return { id: idOf(classId, U) }
   }
 
@@ -139,8 +139,8 @@ export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent 
 export function getListTokenEvent(ctx: Context): ListTokenEvent {
   const event = events.itemPriceSet
 
-  if (event.isV9270) {
-    const { collection: classId, item: instanceId, price } = event.asV9270
+  if (event.v9270.is(ctx)) {
+    const { collection: classId, item: instanceId, price } = event.v9270.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString(), price }
   }
 
@@ -152,8 +152,8 @@ export function getListTokenEvent(ctx: Context): ListTokenEvent {
 export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
   const event = events.itemPriceRemoved
 
-  if (event.isV9270) {
-    const { collection: classId, item: instanceId } = event.asV9270
+  if (event.v9270.is(ctx)) {
+    const { collection: classId, item: instanceId } = event.v9270.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString(), price: 0n }
   }
 
@@ -173,8 +173,8 @@ export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
 export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
   const event = events.itemBought
 
-  if (event.isV9270) {
-    const { collection: classId, item: instanceId, price, seller, buyer } = event.asV9270
+  if (event.v9270.is(ctx)) {
+    const { collection: classId, item: instanceId, price, seller, buyer } = event.v9270.decode(ctx)
     return {
       collectionId: idOf(classId, U),
       caller: addressOf(buyer),
@@ -196,8 +196,8 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
 
 export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
   const event = events.collectionMaxSupplySet
-  if (event.isV9230) {
-    const { collection: classId, maxSupply: max } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, maxSupply: max } = event.v9230.decode(ctx)
     return { id: idOf(classId, U), max }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -207,16 +207,16 @@ export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
 
 export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
   const event = events.ownerChanged
-  if (event.isV1) {
-    const [classId, newOwner] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, newOwner] = event.v1.decode(ctx)
     return { id: idOf(classId, U), owner: addressOf(newOwner) }
   }
-  if (event.isV700) {
-    const { class: classId, newOwner } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, newOwner } = event.v700.decode(ctx)
     return { id: idOf(classId, U), owner: addressOf(newOwner) }
   }
-  if (event.isV9230) {
-    const { collection: classId, newOwner } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, newOwner } = event.v9230.decode(ctx)
     return { id: idOf(classId, U), owner: addressOf(newOwner) }
   }
 
@@ -227,8 +227,8 @@ export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwn
 
 export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = events.collectionMetadataCleared
-  if (event.isV9230) {
-    const { collection: classId } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U) }
   }
   ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
@@ -238,8 +238,8 @@ export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
 
 export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = events.collectionMetadataSet
-  if (event.isV9230) {
-    const { collection: classId, data, isFrozen } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, data, isFrozen } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), metadata: data.toString() }
   }
 
@@ -250,12 +250,12 @@ export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
 
 export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
   const event = events.classMetadataCleared
-  if (event.isV1) {
-    const classId = event.asV1
+  if (event.v1.is(ctx)) {
+    const classId = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U) }
   }
-  if (event.isV700) {
-    const { class: classId } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U) }
   }
 
@@ -266,12 +266,12 @@ export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
 
 export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
   const event = events.classMetadataSet
-  if (event.isV1) {
-    const [classId, data, isFrozen] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, data, isFrozen] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), metadata: data.toString() }
   }
-  if (event.isV700) {
-    const { class: classId, data, isFrozen } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, data, isFrozen } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), metadata: data.toString() }
   }
 
@@ -282,16 +282,16 @@ export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
 
 export function getCreateMetadataEvent(ctx: Context): SetMetadata {
   const event = events.metadataSet
-  if (event.isV1) {
-    const [classId, instanceId, data, isFrozen] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId, data, isFrozen] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
   }
-  if (event.isV700) {
-    const { class: classId, instance: instanceId, data, isFrozen } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, instance: instanceId, data, isFrozen } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
   }
-  if (event.isV9230) {
-    const { collection: classId, item: instanceId, data, isFrozen } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId, data, isFrozen } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
   }
 
@@ -302,16 +302,16 @@ export function getCreateMetadataEvent(ctx: Context): SetMetadata {
 
 export function getClearMetadataEvent(ctx: Context): SetMetadata {
   const event = events.metadataCleared
-  if (event.isV1) {
-    const [classId, instanceId] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString() }
   }
-  if (event.isV700) {
-    const { class: classId, instance: instanceId } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, instance: instanceId } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString() }
   }
-  if (event.isV9230) {
-    const { collection: classId, item: instanceId } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, item: instanceId } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId.toString() }
   }
 
@@ -323,17 +323,17 @@ export function getClearMetadataEvent(ctx: Context): SetMetadata {
 export function getMetadataEvent(ctx: Context): SetMetadata {
   switch (ctx.event.name) {
     case Event.clearClassMetadata:
-      return getClearClassMetadata
+      return getClearClassMetadataEvent(ctx)
     case Event.setClassMetadata:
-      return getCreateClassMetadata
+      return getCreateClassMetadataEvent(ctx)
     case Event.setCollectionMetadata:
-      return getCreateCollectionMetadata
+      return getCreateCollectionMetadataEvent(ctx)
     case Event.clearCollectionMetadata:
-      return getClearCollectionMetadata
+      return getClearCollectionMetadataEvent(ctx)
     case Event.setMetadata:
-      return getCreateMetadata
+      return getCreateMetadataEvent(ctx)
     case Event.clearMetadata:
-      return getClearMetadata
+      return getClearMetadataEvent(ctx)
     default:
       throw new Error('Unsupported event')
   }
@@ -341,8 +341,8 @@ export function getMetadataEvent(ctx: Context): SetMetadata {
 
 function getSetAttributeEvent(ctx: Context): SetAttribute {
   const event = events.attributeSet
-  if (event.isV1) {
-    const [classId, instanceId, key, value] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId, key, value] = event.v1.decode(ctx)
     return {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
@@ -350,8 +350,8 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
       value: value.toString(),
     }
   }
-  if (event.isV700) {
-    const { class: classId, maybeInstance: instanceId, key, value } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, maybeInstance: instanceId, key, value } = event.v700.decode(ctx)
     return {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
@@ -359,8 +359,8 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
       value: value.toString(),
     }
   }
-  if (event.isV9230) {
-    const { collection: classId, maybeItem: instanceId, key, value } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, maybeItem: instanceId, key, value } = event.v9230.decode(ctx)
     return {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
@@ -377,16 +377,16 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
 function getClearAttributeEvent(ctx: Context): SetAttribute {
   const event = events.attributeCleared
 
-  if (event.isV1) {
-    const [classId, instanceId, key] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, instanceId, key] = event.v1.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
   }
-  if (event.isV700) {
-    const { class: classId, maybeInstance: instanceId, key } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, maybeInstance: instanceId, key } = event.v700.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
   }
-  if (event.isV9230) {
-    const { collection: classId, maybeItem: instanceId, key } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, maybeItem: instanceId, key } = event.v9230.decode(ctx)
     return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
   }
 
@@ -398,9 +398,9 @@ function getClearAttributeEvent(ctx: Context): SetAttribute {
 export function getAttributeEvent(ctx: Context): SetAttribute {
   switch (ctx.event.name) {
     case Event.setAttribute:
-      return getSetAttribute
+      return getSetAttributeEvent(ctx)
     case Event.clearAttribute:
-      return getClearAttribute
+      return getClearAttributeEvent(ctx)
     default:
       throw new Error('Unsupported event')
   }
@@ -408,16 +408,16 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
   const event = events.teamChanged
-  if (event.isV1) {
-    const [classId, issuer, admin, freezer] = event.asV1
+  if (event.v1.is(ctx)) {
+    const [classId, issuer, admin, freezer] = event.v1.decode(ctx)
     return { id: idOf(classId, U), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
   }
-  if (event.isV700) {
-    const { class: classId, issuer, admin, freezer } = event.asV700
+  if (event.v700.is(ctx)) {
+    const { class: classId, issuer, admin, freezer } = event.v700.decode(ctx)
     return { id: idOf(classId, U), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
   }
-  if (event.isV9230) {
-    const { collection: classId, issuer, admin, freezer } = event.asV9230
+  if (event.v9230.is(ctx)) {
+    const { collection: classId, issuer, admin, freezer } = event.v9230.decode(ctx)
     return { id: idOf(classId, U), issuer: addressOf(issuer), admin: addressOf(admin), freezer: addressOf(freezer) }
   }
 
