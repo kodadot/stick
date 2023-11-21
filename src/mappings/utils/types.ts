@@ -11,6 +11,7 @@ import {
 import { nanoid } from 'nanoid'
 // impsort { Interaction } from '../../model/generated/_interaction';
 import { Store as SquidStore } from '@subsquid/typeorm-store'
+import { EntityManager } from 'typeorm'
 import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
@@ -94,7 +95,8 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
   )
 }
 
-export type Store =  SquidStore // EntityManager
+export type ManagedStore = typeof SquidStore & { em: () => EntityManager }
+export type Store =  SquidStore // & { em: () => EntityManager }
 export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
 export type Context<S = Store>  = {
   store: S
