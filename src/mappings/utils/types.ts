@@ -12,6 +12,7 @@ import { nanoid } from 'nanoid'
 // impsort { Interaction } from '../../model/generated/_interaction';
 import { Store as SquidStore } from '@subsquid/typeorm-store'
 import { EntityManager } from 'typeorm'
+import { Logger } from '@subsquid/logger'
 import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
@@ -104,6 +105,7 @@ export type Context<S = Store>  = {
   event: Pick<Event, 'name' | 'args'>
   extrinsic: Pick<Extrinsic, 'signature'>
   call: Pick<Call, 'name' | 'origin'>
+  // log: Logger
 }
 
 export type Optional<T> = T | null
