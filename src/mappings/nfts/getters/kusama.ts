@@ -1,9 +1,7 @@
-import { Interaction } from '../../../model'
 import { NonFungible as Event } from '../../../processable'
-import { uniques as events } from '../../../types/kusama/events'
+import { nfts as events } from '../../../types/kusama/events'
 import { addressOf } from '../../utils/helper'
-import { warn } from '../../utils/logger'
-import { Context } from '../../utils/types'
+import { Event as Context } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
@@ -23,104 +21,104 @@ import {
 export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   const event = events.created
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, creator, owner } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, creator, owner } = event.v9420.decode(ctx)
     return { id: classId.toString(), caller: addressOf(creator), owner: addressOf(owner) }
   }
-  warn(Interaction.CREATE, 'USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, creator, owner } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, creator, owner } = event.v9420.decode(ctx)
   return { id: classId.toString(), caller: addressOf(creator), owner: addressOf(owner) }
 }
 
 export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
   const event = events.forceCreated
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, owner } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, owner } = event.v9420.decode(ctx)
     return { id: classId.toString(), owner: addressOf(owner) }
   }
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, owner } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, owner } = event.v9420.decode(ctx)
   return { id: classId.toString(), owner: addressOf(owner) }
 }
 
 export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
   const event = events.issued
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, item: instanceId, owner } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId, owner } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), owner: addressOf(owner), sn: instanceId.toString() }
   }
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, owner } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId, owner } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), owner: addressOf(owner), sn: instanceId.toString() }
 }
 
 export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
   const event = events.transferred
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, item: instanceId, from, to } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId, from, to } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
   }
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, from, to } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId, from, to } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
 }
 
 export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
   const event = events.burned
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, item: instanceId, owner } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId, owner } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), owner: addressOf(owner), sn: instanceId.toString() }
   }
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, owner } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId, owner } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), owner: addressOf(owner), sn: instanceId.toString() }
 }
 
 export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent {
   const event = events.destroyed
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId } = event.v9420.decode(ctx)
     return { id: classId.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId } = event.v9420.decode(ctx)
   return { id: classId.toString() }
 }
 
 export function getListTokenEvent(ctx: Context): ListTokenEvent {
   const event = events.itemPriceSet
 
-  if (event.v9270.is(ctx)) {
-    const { collection: classId, item: instanceId, price } = event.v9270.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId, price } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString(), price }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, price } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId, price } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), sn: instanceId.toString(), price }
 }
 
 export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
   const event = events.itemPriceRemoved
 
-  if (event.v9270.is(ctx)) {
-    const { collection: classId, item: instanceId } = event.v9270.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString(), price: 0n }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, price } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), sn: instanceId.toString(), price: 0n }
 }
 
 export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
-  if (ctx.event.name === Event.setPrice) {
+  if (ctx.name === Event.setPrice) {
     return getListTokenEvent(ctx)
   }
 
@@ -130,8 +128,8 @@ export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
 export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
   const event = events.itemBought
 
-  if (event.v9270.is(ctx)) {
-    const { collection: classId, item: instanceId, price, seller, buyer } = event.v9270.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId, price, seller, buyer } = event.v9420.decode(ctx)
     return {
       collectionId: classId.toString(),
       caller: addressOf(buyer),
@@ -140,8 +138,8 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
       currentOwner: addressOf(seller),
     }
   }
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, price, seller, buyer } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId, price, seller, buyer } = event.v9420.decode(ctx)
   return {
     collectionId: classId.toString(),
     caller: addressOf(buyer),
@@ -153,108 +151,108 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
 
 export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
   const event = events.collectionMaxSupplySet
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, maxSupply: max } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, maxSupply: max } = event.v9420.decode(ctx)
     return { id: classId.toString(), max }
   }
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, mamaxSupply: max } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, maxSupply: max } = event.v9420.decode(ctx)
   return { id: classId.toString(), max }
 }
 
 export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
   const event = events.ownerChanged
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, newOwner } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, newOwner } = event.v9420.decode(ctx)
     return { id: classId.toString(), owner: addressOf(newOwner) }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, newOwner } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, newOwner } = event.v9420.decode(ctx)
   return { id: classId.toString(), owner: addressOf(newOwner) }
 }
 
 export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = events.collectionMetadataCleared
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId } = event.v9420.decode(ctx)
     return { collectionId: classId.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId } = event.v9420.decode(ctx)
   return { collectionId: classId.toString() }
 }
 
 export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
   const event = events.collectionMetadataSet
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, data } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, data } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), metadata: data.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { class: classId, data, isFrozen } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, data } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), metadata: data.toString() }
 }
 
 export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
   const event = events.collectionMetadataSet
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, data } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, data } = event.v9420.decode(ctx)
     return { collectionId: classId.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { class: classId } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId } = event.v9420.decode(ctx)
   return { collectionId: classId.toString() }
 }
 
 export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
   const event = events.collectionMetadataSet
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, data } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, data } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), metadata: data.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { class: classId, data, isFrozen } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, data } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), metadata: data.toString() }
 }
 
 export function getCreateMetadataEvent(ctx: Context): SetMetadata {
-  const event = events.metadataSet
+  const event = events.itemMetadataSet
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, item: instanceId, data } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId, data } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId, data, isFrozen } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId, data } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
 }
 
 export function getClearMetadataEvent(ctx: Context): SetMetadata {
-  const event = events.metadataCleared
+  const event = events.itemMetadataCleared
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, item: instanceId } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, item: instanceId } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, item: instanceId } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, item: instanceId } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), sn: instanceId.toString() }
 }
 
 export function getMetadataEvent(ctx: Context): SetMetadata {
-  switch (ctx.event.name) {
+  switch (ctx.name) {
     case Event.setCollectionMetadata:
       return getCreateCollectionMetadataEvent(ctx)
     case Event.clearCollectionMetadata:
@@ -270,8 +268,8 @@ export function getMetadataEvent(ctx: Context): SetMetadata {
 
 function getSetAttributeEvent(ctx: Context): SetAttribute {
   const event = events.attributeSet
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, maybeItem: instanceId, key, value } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, maybeItem: instanceId, key, value } = event.v9420.decode(ctx)
     return {
       collectionId: classId.toString(),
       sn: instanceId?.toString(),
@@ -280,8 +278,8 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
     }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, maybeItem: instanceId, key, value } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, maybeItem: instanceId, key, value } = event.v9420.decode(ctx)
   return {
     collectionId: classId.toString(),
     sn: instanceId?.toString(),
@@ -293,18 +291,18 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
 function getClearAttributeEvent(ctx: Context): SetAttribute {
   const event = events.attributeCleared
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, maybeItem: instanceId, key } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, maybeItem: instanceId, key } = event.v9420.decode(ctx)
     return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, maybeItem: instanceId, key } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, maybeItem: instanceId, key } = event.v9420.decode(ctx)
   return { collectionId: classId.toString(), sn: instanceId?.toString(), trait: key.toString() }
 }
 
 export function getAttributeEvent(ctx: Context): SetAttribute {
-  switch (ctx.event.name) {
+  switch (ctx.name) {
     case Event.setAttribute:
       return getSetAttributeEvent(ctx)
     case Event.clearAttribute:
@@ -317,8 +315,8 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
   const event = events.teamChanged
 
-  if (event.v9230.is(ctx)) {
-    const { collection: classId, issuer, admin, freezer } = event.v9230.decode(ctx)
+  if (event.v9420.is(ctx)) {
+    const { collection: classId, issuer, admin, freezer } = event.v9420.decode(ctx)
     return {
       id: classId.toString(),
       issuer: issuer ? addressOf(issuer) : '',
@@ -327,8 +325,8 @@ export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
     }
   }
 
-  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
-  const { collection: classId, issuer, admin, freezer } = ctx._chain.decodeEvent(ctx.event)
+  
+  const { collection: classId, issuer, admin, freezer } = event.v9420.decode(ctx)
   return {
     id: classId.toString(),
     issuer: issuer ? addressOf(issuer) : '',
