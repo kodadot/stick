@@ -16,7 +16,7 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
   const start = Date.now()
   const logId = id.split('/').slice(-1).at(0)
   logger.info(`▶️ [META] ${logId}`)
-  const metadata = await fetchMetadata<TokenMetadata>(id)
+  const metadata = await fetchMetadata<TokenMetadata & Metadata>(id)
   if (isEmpty(metadata)) {
     return undefined
   }
@@ -29,6 +29,7 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
     attributes: metadata.attributes?.map(attributeFrom) || [],
     name: metadata.name || '',
     type: metadata.type || '',
+    banner: metadata.banner || '',
   }
 
   const final = create<Metadata>(Metadata, id, partial)

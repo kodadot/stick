@@ -757,6 +757,21 @@ export class NftsNextCollectionIdIncrementedEvent {
         assert(this.isV9420)
         return this._chain.decodeEvent(this.event)
     }
+
+    /**
+     * Event gets emitted when the `NextCollectionId` gets incremented.
+     */
+    get isV1000000(): boolean {
+        return this._chain.getEventHash('Nfts.NextCollectionIdIncremented') === 'cd3fe8f02b8e066babd9b85bf60f6760d52be27f9e088f03bf00392c80d5fc5d'
+    }
+
+    /**
+     * Event gets emitted when the `NextCollectionId` gets incremented.
+     */
+    get asV1000000(): {nextId: (number | undefined)} {
+        assert(this.isV1000000)
+        return this._chain.decodeEvent(this.event)
+    }
 }
 
 export class NftsOwnerChangedEvent {

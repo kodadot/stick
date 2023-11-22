@@ -77,6 +77,7 @@ type MetadataEntity @entity {
   attributes: [Attribute!]
   animationUrl: String
   type: String
+  banner: String
 }
 
 type Attribute @jsonField {
