@@ -1,4 +1,5 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
+import { decodeHex } from '@subsquid/substrate-processor'
 import { CollectionEntity, NFTEntity } from '../../model'
 import { unwrap } from '../utils/extract'
 import { Context, isNFT } from '../utils/types'
@@ -18,11 +19,16 @@ export async function handleAttributeSet(context: Context): Promise<void> {
   }
 
   if ('royalty' in final && event.trait === 'royalty') {
-    final.royalty ??= Number.parseFloat(event.value as string)
+    final.royalty = final.royalty ?? Number.parseFloat(event.value as string)
   }
 
   if ('recipient' in final && event.trait === 'recipient') {
-    final.recipient ??= addressOf(event.value as string)
+    try {
+      final.recipient = final.recipient ?? addressOf(event.value as string)
+    } catch (error) {
+      console.log(error)
+      final.recipient = final.recipient ?? (event.value as string)
+    }
   }
 
   if (event.value === null) {
