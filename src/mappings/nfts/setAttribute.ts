@@ -1,5 +1,4 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
-import { decodeHex } from '@subsquid/substrate-processor'
 import { CollectionEntity, NFTEntity } from '../../model'
 import { unwrap } from '../utils/extract'
 import { Context, isNFT } from '../utils/types'
