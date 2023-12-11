@@ -346,7 +346,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
       trait: key.toString(),
-      value: value.toString(),
+      value,
     }
   }
   if (event.isV700) {
@@ -355,7 +355,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
       trait: key.toString(),
-      value: value.toString(),
+      value,
     }
   }
   if (event.isV9230) {
@@ -364,7 +364,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
       trait: key.toString(),
-      value: value.toString(),
+      value,
     }
   }
 
