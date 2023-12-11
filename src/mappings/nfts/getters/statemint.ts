@@ -276,7 +276,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
       collectionId: classId.toString(),
       sn: instanceId?.toString(),
       trait: key.toString(),
-      value: value.toString(),
+      value,
     }
   }
 
@@ -286,7 +286,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
     collectionId: classId.toString(),
     sn: instanceId?.toString(),
     trait: key.toString(),
-    value: value.toString(),
+    value,
   }
 }
 
