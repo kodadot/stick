@@ -28,4 +28,7 @@ export class MetadataEntity {
 
     @Column_("text", {nullable: true})
     type!: string | undefined | null
+
+    @Column_("text", {nullable: true})
+    banner!: string | undefined | null
 }
