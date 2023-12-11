@@ -20,6 +20,8 @@ type CollectionEntity @entity {
   nftCount: Int! @index
   nfts: [NFTEntity!] @derivedFrom(field: "collection")
   ownerCount: Int!
+  recipient: String
+  royalty: Float
   supply: Int! @index
   updatedAt: DateTime! @index
   version: Int!

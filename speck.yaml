@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: speck
-version: 7
+version: 9
 description: 'SubSquid indexer for Uniques and Assets on Statemint'
 build: 
 deploy:
