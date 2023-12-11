@@ -16,7 +16,7 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
   const start = Date.now()
   const logId = id.split('/').slice(-1).at(0)
   logger.info(`▶️ [META] ${logId}`)
-  const metadata = await fetchMetadata<TokenMetadata & Metadata>(id)
+  const metadata = await fetchMetadata<TokenMetadata & { banner?: string }>(id)
   if (isEmpty(metadata)) {
     return undefined
   }
