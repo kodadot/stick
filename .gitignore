@@ -9,3 +9,6 @@
 /.idea
 /suite
 /.vscode
+
+# Local env files
+.env
