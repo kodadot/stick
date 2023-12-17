@@ -20,9 +20,9 @@ export async function handleAttributeSet(context: Context): Promise<void> {
   //   final.royalty = final.royalty ?? Number.parseFloat(event.value as string)
   // }
 
-  if ('recipient' in final && event.trait === 'recipient') {
-    final.recipient = final.recipient ?? event.value as string
-  }
+  // if ('recipient' in final && event.trait === 'recipient') {
+  //   final.recipient = final.recipient ?? event.value as string
+  // }
 
   if (event.value === null) {
     final.attributes = final.attributes?.filter((attr) => attr.trait !== event.trait)
