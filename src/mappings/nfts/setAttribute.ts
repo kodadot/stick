@@ -16,9 +16,9 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     final.attributes = []
   }
 
-  if ('royalty' in final && event.trait === 'royalty') {
-    final.royalty = final.royalty ?? Number.parseFloat(event.value as string)
-  }
+  // if ('royalty' in final && event.trait === 'royalty') {
+  //   final.royalty = final.royalty ?? Number.parseFloat(event.value as string)
+  // }
 
   if ('recipient' in final && event.trait === 'recipient') {
     final.recipient = final.recipient ?? event.value as string
@@ -30,10 +30,11 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     const attribute = final.attributes?.find((attr) => attr.trait === event.trait)
     if (attribute) {
       attribute.value = String(event.value)
-    } else if (event.trait !== 'royalty' && event.trait !== 'recipient') {
-      const newAttribute = attributeFrom({ trait_type: event.trait, value: String(event.value) })
-      final.attributes?.push(newAttribute)
-    }
+    } 
+    // else if (event.trait !== 'royalty' && event.trait !== 'recipient') {
+    //   const newAttribute = attributeFrom({ trait_type: event.trait, value: String(event.value) })
+    //   final.attributes?.push(newAttribute)
+    // }
   }
 
   await context.store.save(final)
