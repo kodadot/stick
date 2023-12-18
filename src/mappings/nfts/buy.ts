@@ -4,7 +4,7 @@ import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { calculateCollectionFloor, calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { getBuyTokenEvent } from './getters'
 
 const OPERATION = Action.BUY
@@ -31,22 +31,21 @@ export async function handleTokenBuy(context: Context): Promise<void> {
       collection.highestSale = originalPrice
     }
   }
+
+  const { floor } = await calculateCollectionFloor(context.store, collection.id, id)
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,
     collection.id,
     entity.currentOwner,
     originalOwner
   )
+  collection.floor = floor
   collection.ownerCount = ownerCount
   collection.distribution = distribution
+  collection.updatedAt = event.timestamp
 
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
-
-  const collectionFloor = collection.nfts
-    ?.map((nft) => nft.price || BigInt(0))
-    ?.reduce((m, e) => (e < m ? e : m))
-  collection.floor = collectionFloor
   await context.store.save(collection)
   const meta = String(event.price || '')
   await createEvent(entity, OPERATION, event, meta, context.store, event.currentOwner)
