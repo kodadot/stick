@@ -42,6 +42,11 @@ export async function handleTokenBuy(context: Context): Promise<void> {
 
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
+
+  const collectionFloor = collection.nfts
+    ?.map((nft) => nft.price || BigInt(0))
+    ?.reduce((m, e) => (e < m ? e : m))
+  collection.floor = collectionFloor
   await context.store.save(collection)
   const meta = String(event.price || '')
   await createEvent(entity, OPERATION, event, meta, context.store, event.currentOwner)
