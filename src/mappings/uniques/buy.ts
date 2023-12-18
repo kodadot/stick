@@ -15,7 +15,7 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await getOrFail(context.store, NE, id)
+  const entity = await getOrFail<NE>(context.store, NE, id)
   const collection = await getOrFail<CE>(context.store, CE, event.collectionId)
 
   const originalPrice = event.price
@@ -33,13 +33,12 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   }
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,
-    entity.collection.id,
+    collection.id,
     entity.currentOwner,
     originalOwner
   )
-  entity.collection.ownerCount = ownerCount
-  entity.collection.distribution = distribution
-
+  collection.ownerCount = ownerCount
+  collection.distribution = distribution
 
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
