@@ -1,5 +1,5 @@
-import { getWith } from '@kodadot1/metasquid/entity'
-import { NFTEntity as NE } from '../../model'
+import { getOrFail } from '@kodadot1/metasquid/entity'
+import { CollectionEntity as CE, NFTEntity as NE } from '../../model'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
@@ -15,18 +15,20 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await getWith(context.store, NE, id, { collection: true })
+  const entity = await getOrFail(context.store, NE, id)
+  const collection = await getOrFail<CE>(context.store, CE, event.collectionId)
 
-  const originalPrice = entity.price
+  const originalPrice = event.price
   const originalOwner = entity.currentOwner ?? undefined
 
   entity.price = BigInt(0)
   entity.currentOwner = event.caller
   entity.updatedAt = event.timestamp
+
   if (originalPrice) {
-    entity.collection.volume += originalPrice
-    if (originalPrice > entity.collection.highestSale) {
-      entity.collection.highestSale = originalPrice
+    collection.volume += originalPrice
+    if (originalPrice > collection.highestSale) {
+      collection.highestSale = originalPrice
     }
   }
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
@@ -41,6 +43,7 @@ export async function handleTokenBuy(context: Context): Promise<void> {
 
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
+  await context.store.save(collection)
   const meta = String(event.price || '')
   await createEvent(entity, OPERATION, event, meta, context.store, event.currentOwner)
 }
