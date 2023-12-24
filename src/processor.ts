@@ -1,7 +1,7 @@
 import { SubstrateProcessor } from '@subsquid/substrate-processor'
 import { FullTypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { NonFungible, Unique } from './processable'
+import { NonFungible, NewNonFungible, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl, isProd } from './environment'
 import * as n from './mappings/nfts'
@@ -92,6 +92,13 @@ processor.addEventHandler(NonFungible.changeIssuer, n.handleCollectionOwnerChang
 processor.addEventHandler(NonFungible.changeTeam, n.handleCollectionTeamChange)
 // processor.addEventHandler(NonFungible.thaw, dummy);
 processor.addEventHandler(NonFungible.transfer, n.handleTokenTransfer)
+
+/**
+ * Swap Features
+ */
+processor.addEventHandler(NewNonFungible.createSwap, n.handleCreateSwap)
+processor.addEventHandler(NewNonFungible.cancelSwap, n.handleCancelSwap)
+processor.addEventHandler(NewNonFungible.claimSwap, n.handleClaimSwap)
 
 /**
  * Assets nft pallet

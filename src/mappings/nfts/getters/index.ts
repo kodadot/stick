@@ -110,3 +110,15 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
   return proc.getChangeTeamEvent(ctx);
 }
+
+export function getSwapCreatedEvent(ctx: Context) {
+  return proc.getSwapCreatedEvent(ctx);
+}
+
+export function getSwapCancelledEvent(ctx: Context) {
+  return proc.getSwapCancelledEvent(ctx);
+}
+
+export function getSwapClaimedEvent(ctx: Context) {
+  return proc.getSwapClaimedEvent(ctx);
+}

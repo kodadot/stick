@@ -336,3 +336,103 @@ export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
     freezer: freezer ? addressOf(freezer) : '',
   }
 }
+
+export function getSwapCreatedEvent(ctx: Context) {
+  const event = new events.NftsSwapCreatedEvent(ctx)
+
+  if (event.isV9420) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.asV9420
+
+    return {
+      offeredCollection: offeredCollection.toString(),
+      offeredItem: offeredItem.toString(),
+      desiredCollection: desiredCollection.toString(),
+      desiredItem: desiredItem?.toString(),
+      price,
+      deadline
+    }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = ctx._chain.decodeEvent(ctx.event)
+  return {
+    offeredCollection: offeredCollection.toString(),
+    offeredItem: offeredItem.toString(),
+    desiredCollection: desiredCollection.toString(),
+    desiredItem: desiredItem?.toString(),
+    price,
+    deadline,
+  }
+}
+
+export function getSwapCancelledEvent(ctx: Context) {
+  const event = new events.NftsSwapCancelledEvent(ctx)
+
+  if (event.isV9420) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.asV9420
+
+    return {
+      offeredCollection: offeredCollection.toString(),
+      offeredItem: offeredItem.toString(),
+      desiredCollection: desiredCollection.toString(),
+      desiredItem: desiredItem?.toString(),
+      price,
+      deadline,
+    }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = ctx._chain.decodeEvent(
+    ctx.event
+  )
+  return {
+    offeredCollection: offeredCollection.toString(),
+    offeredItem: offeredItem.toString(),
+    desiredCollection: desiredCollection.toString(),
+    desiredItem: desiredItem?.toString(),
+    price,
+    deadline,
+  }
+}
+
+export function getSwapClaimedEvent(ctx: Context) {
+  const event = new events.NftsSwapClaimedEvent(ctx)
+
+  if (event.isV9420) {
+    const { sentCollection, sentItem, sentItemOwner, receivedCollection, receivedItem, receivedItemOwner, price, deadline } = event.asV9420
+
+    return {
+      sentCollection: sentCollection.toString(),
+      sentItem: sentItem.toString(),
+      sentItemOwner: sentItemOwner ? addressOf(sentItemOwner) : '',
+      receivedCollection: receivedCollection.toString(),
+      receivedItem: receivedItem.toString(),
+      receivedItemOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+      price,
+      deadline,
+    }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const {
+    sentCollection,
+    sentItem,
+    sentItemOwner,
+    receivedCollection,
+    receivedItem,
+    receivedItemOwner,
+    price,
+    deadline,
+  } = ctx._chain.decodeEvent(ctx.event)
+
+  return {
+    sentCollection: sentCollection.toString(),
+    sentItem: sentItem.toString(),
+    sentItemOwner: sentItemOwner ? addressOf(sentItemOwner) : '',
+    receivedCollection: receivedCollection.toString(),
+    receivedItem: receivedItem.toString(),
+    receivedItemOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+    price,
+    deadline,
+  }
+}
