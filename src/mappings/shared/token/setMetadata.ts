@@ -45,7 +45,11 @@ export async function setMetadataOnCollectionHandler(context: Context, collectio
   const tokenApi = new TokenAPI(context.store)
   const firstNft = nfts.splice(0, 1)[0]
 
-  const token = await findOrCreateToken(context, collection, firstNft, tokenApi, collectionMedia)
+  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, collectionMedia))
+  const token = await (existingToken
+    ? tokenApi.addNftToToken(firstNft, existingToken)
+    : tokenApi.create(collection, firstNft))
+
   if (!token) {
     // debug return early
     debug(OPERATION, { 'return early': 'failed to find/create tokenEntity' })
@@ -53,15 +57,4 @@ export async function setMetadataOnCollectionHandler(context: Context, collectio
   }
 
   return Promise.all(nfts.map((nft) => tokenApi.addNftToToken(nft, token)))
-}
-
-async function findOrCreateToken(
-  context: Context,
-  collection: CE,
-  nft: NE,
-  tokenApi: TokenAPI,
-  collectionMedia: string
-): Promise<TE | undefined> {
-  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, collectionMedia))
-  return await (existingToken ? tokenApi.addNftToToken(nft, existingToken) : tokenApi.create(collection, nft))
 }
