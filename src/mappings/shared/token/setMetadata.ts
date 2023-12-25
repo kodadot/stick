@@ -1,4 +1,4 @@
-import { getOptional, getWith } from '@kodadot1/metasquid/entity'
+import { getOptional, getWith, findWhere } from '@kodadot1/metasquid/entity'
 import { Context } from '../../utils/types'
 import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
 import { debug, warn } from '../../utils/logger'
@@ -25,4 +25,43 @@ export async function setMetadataHandler(context: Context, collection: CE, nft: 
 
   const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, nftMedia))
   return await (existingToken ? tokenAPI.addNftToToken(nft, existingToken) : tokenAPI.create(collection, nft))
+}
+
+export async function setMetadataOnCollectionHandler(context: Context, collection: CE): Promise<TE[] | undefined> {
+  debug(OPERATION, { handleMetadataSet: `Handle set metadata for collection ${collection.id}` })
+
+  const collectionMedia = mediaOf(collection)
+
+  if (!collectionMedia) {
+    debug(OPERATION, { 'return early': 'missing collectionMedia' })
+    return
+  }
+
+  const nfts = await findWhere(context.store, NE, { collection: { id: collection.id }, token: undefined })
+  if (nfts.length === 0) {
+    return
+  }
+
+  const tokenApi = new TokenAPI(context.store)
+  const firstNft = nfts.splice(0, 1)[0]
+
+  const token = await findOrCreateToken(context, collection, firstNft, tokenApi, collectionMedia)
+  if (!token) {
+    // debug return early
+    debug(OPERATION, { 'return early': 'failed to find/create tokenEntity' })
+    return undefined
+  }
+
+  return Promise.all(nfts.map((nft) => tokenApi.addNftToToken(nft, token)))
+}
+
+async function findOrCreateToken(
+  context: Context,
+  collection: CE,
+  nft: NE,
+  tokenApi: TokenAPI,
+  collectionMedia: string
+): Promise<TE | undefined> {
+  const existingToken = await getOptional<TE>(context.store, TE, generateTokenId(collection.id, collectionMedia))
+  return await (existingToken ? tokenApi.addNftToToken(nft, existingToken) : tokenApi.create(collection, nft))
 }

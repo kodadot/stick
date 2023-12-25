@@ -6,7 +6,7 @@ import { CollectionEntity, NFTEntity } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
 import { updateItemMetadataByCollection } from '../utils/cache'
-import { setMetadataHandler } from '../shared/token'
+import { setMetadataHandler, setMetadataOnCollectionHandler } from '../shared/token'
 import { tokenIdOf } from './types'
 import { getMetadataEvent } from './getters'
 
@@ -56,6 +56,9 @@ export async function handleMetadataSet(context: Context): Promise<void> {
       if (final instanceof NFTEntity && newNftMedia !== previousNftMedia) {
         await setMetadataHandler(context, collection, final)
       }
+    } else {
+      // event is on collection
+      await setMetadataOnCollectionHandler(context, final as CollectionEntity)
     }
 
     await context.store.save(final)

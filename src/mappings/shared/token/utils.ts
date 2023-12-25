@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { NFTEntity as NE } from '../../../model'
+import { NFTEntity as NE, CollectionEntity as CE } from '../../../model'
 import { warn } from '../../utils/logger'
 import { CHAIN } from '../../../environment'
 
@@ -9,15 +9,16 @@ export function generateTokenId(collectionId: string, nftMedia: string): string 
   return `${collectionId}-${md5(nftMedia)}`
 }
 
-export const mediaOf = (nft: NE): string | undefined => {
-  const nftMedia = nft.image ?? nft.media
+export const mediaOf = (entity: NE | CE): string | undefined => {
+  const entityMedia = entity.image ?? entity.media
 
-  if (!nftMedia || nftMedia === '') {
-    warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
+  if (!entityMedia || entityMedia === '') {
+    const entityName = entity instanceof NE ? 'NFT' : 'COLLECTION'
+    warn(OPERATION, `MISSING ${entityName} MEDIA ${entity.id}`)
     return undefined
   }
 
-  return nftMedia
+  return entityMedia
 }
 
 export const collectionsToKeepNameAsIs: Record<string, string[]> = {
