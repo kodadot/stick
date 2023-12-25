@@ -9,7 +9,7 @@ export class TokenAPI {
   constructor(private store: Store) {}
 
   async create(collection: CE, nft: NE): Promise<TE | undefined> {
-    const nftMedia = mediaOf(nft)
+    const nftMedia = mediaOf(nft) ?? mediaOf(collection)
     if (!nftMedia) {
       return
     }
@@ -23,10 +23,10 @@ export class TokenAPI {
       count: 1,
       supply: 1,
       hash: md5(tokenId),
-      image: nft.image,
-      media: nft.media,
-      metadata: nft.metadata,
-      meta: nft.meta,
+      image: nft.image ?? collection.image,
+      media: nft.media ?? collection.media,
+      metadata: nft.metadata ?? collection.metadata,
+      meta: nft.meta ?? collection.meta,
       blockNumber: nft.blockNumber,
       updatedAt: nft.updatedAt,
       id: tokenId,
