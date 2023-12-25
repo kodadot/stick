@@ -59,15 +59,24 @@ export class TokenAPI {
     }
   }
 
-  async addNftToToken(nft: NE, token: TE): Promise<TE> {
-    debug(OPERATION, { updateToken: `Add NFT ${nft.id} to TOKEN ${token.id} for ` })
-    token.count += 1
-    token.supply += 1
-    token.updatedAt = nft.updatedAt
-    nft.token = token
+  async addNftToToken(nft: NE | NE[], token: TE): Promise<TE> {
+    let nftsToUpdate = Array.isArray(nft) ? nft : [nft]
+    debug(OPERATION, { updateToken: `Adding ${nftsToUpdate.length} NFT(s) to TOKEN ${token.id}` })
+
+    const updatedCount = token.count + nftsToUpdate.length
+    const updatedSupply = token.supply + nftsToUpdate.length
+    token.count = updatedCount
+    token.supply = updatedSupply
+    token.updatedAt = new Date()
     await this.store.save(token)
-    await this.store.save(nft)
-  
+
+    // Batch update NFT entities
+    const nftUpdates = nftsToUpdate.map((nft) => ({
+      ...nft,
+      token,
+    }))
+    await this.store.save(NE, nftUpdates)
+
     return token
   }
 }

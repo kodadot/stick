@@ -27,7 +27,7 @@ export async function setMetadataOnNftHandler(context: Context, collection: CE, 
   return await (existingToken ? tokenAPI.addNftToToken(nft, existingToken) : tokenAPI.create(collection, nft))
 }
 
-export async function setMetadataOnCollectionHandler(context: Context, collection: CE): Promise<TE[] | undefined> {
+export async function setMetadataOnCollectionHandler(context: Context, collection: CE): Promise<TE | undefined> {
   debug(OPERATION, { handleMetadataSet: `Handle set metadata for collection ${collection.id}` })
 
   const collectionMedia = mediaOf(collection)
@@ -56,5 +56,5 @@ export async function setMetadataOnCollectionHandler(context: Context, collectio
     return undefined
   }
 
-  return Promise.all(nfts.map((nft) => tokenApi.addNftToToken(nft, token)))
+  return tokenApi.addNftToToken(nfts, token)
 }
