@@ -5,7 +5,7 @@ import { debug, warn } from '../../utils/logger'
 import { OPERATION, generateTokenId, mediaOf } from './utils'
 import { TokenAPI } from './tokenAPI'
 
-export async function setMetadataHandler(context: Context, collection: CE, nft: NE): Promise<TE | undefined> {
+export async function setMetadataOnNftHandler(context: Context, collection: CE, nft: NE): Promise<TE | undefined> {
   debug(OPERATION, { handleMetadataSet: `Handle set metadata for NFT ${nft.id}` })
   const nftMedia = mediaOf(nft) ?? mediaOf(collection)
   if (!nftMedia) {

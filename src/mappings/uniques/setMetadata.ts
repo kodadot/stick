@@ -6,7 +6,7 @@ import { CollectionEntity, NFTEntity } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { debug, warn } from '../utils/logger'
 import { updateItemMetadataByCollection } from '../utils/cache'
-import { setMetadataHandler, setMetadataOnCollectionHandler } from '../shared/token'
+import { setMetadataOnNftHandler, setMetadataOnCollectionHandler } from '../shared/token'
 import { tokenIdOf } from './types'
 import { getMetadataEvent } from './getters'
 
@@ -53,7 +53,7 @@ export async function handleMetadataSet(context: Context): Promise<void> {
         return
       }
 
-      await setMetadataHandler(context, collection, final as NFTEntity)
+      await setMetadataOnNftHandler(context, collection, final as NFTEntity)
     } else {
       // event is on collection
       await setMetadataOnCollectionHandler(context, final as CollectionEntity)
