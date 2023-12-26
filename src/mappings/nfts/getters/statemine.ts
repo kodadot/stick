@@ -336,3 +336,26 @@ export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
     freezer: freezer ? addressOf(freezer) : '',
   }
 }
+
+export function getTipSentEvent(ctx: Context) {
+  const event = new events.NftsTipSentEvent(ctx)
+
+  if (event.isV9420) {
+    const { collection, item, receiver, amount } = event.asV9420
+    return {
+      collection: collection.toString(),
+      item: item.toString(),
+      receiver: receiver ? addressOf(receiver) : '',
+      amount
+    }
+  }
+
+  ctx.log.warn('USING UNSAFE GETTER! PLS UPDATE TYPES!')
+  const { collection, item, receiver, amount } = ctx._chain.decodeEvent(ctx.event)
+  return {
+    collection: collection.toString(),
+    item: item.toString(),
+    receiver: receiver ? addressOf(receiver) : '',
+    amount,
+  }
+}

@@ -110,3 +110,7 @@ export function getAttributeEvent(ctx: Context): SetAttribute {
 export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
   return proc.getChangeTeamEvent(ctx);
 }
+
+export function getTipSentEvent(ctx: Context) {
+  return proc.getTipSentEvent(ctx);
+}
