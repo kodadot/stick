@@ -1,38 +1,56 @@
-import { create as createEntity } from '@kodadot1/metasquid/entity'
+import { create as createEntity, get, getWith } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { Store } from '../../utils/types'
 import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
 import { debug } from '../../utils/logger'
 import { OPERATION, generateTokenId, mediaOf, tokenName } from './utils'
+import { writeToLogFile } from './setMetadata'
 
 export class TokenAPI {
   constructor(private store: Store) {}
 
-  async create(collection: CE, nft: NE): Promise<TE | undefined> {
-    const nftMedia = mediaOf(nft) ?? mediaOf(collection)
+  async create(collection: CE, nft: NE, eventOn: 'NFT' | 'COLLECTION' = 'NFT'): Promise<TE | undefined> {
+    const nftMedia = mediaOf(eventOn === 'NFT' ? nft : collection)
     if (!nftMedia) {
       return
     }
     const tokenId = generateTokenId(collection.id, nftMedia)
     debug(OPERATION, { createToken: `Create TOKEN ${tokenId} for NFT ${nft.id}` })
 
+
+    const sourceEntity = eventOn === 'NFT' ? nft : collection
+
     const token = createEntity(TE, tokenId, {
       createdAt: nft.createdAt,
       collection,
-      name: tokenName(nft.name, collection.id),
+      name: tokenName(sourceEntity.name, collection.id),
       count: 1,
       supply: 1,
       hash: md5(tokenId),
-      image: nft.image ?? collection.image,
-      media: nft.media ?? collection.media,
-      metadata: nft.metadata ?? collection.metadata,
-      meta: nft.meta ?? collection.meta,
-      blockNumber: nft.blockNumber,
-      updatedAt: nft.updatedAt,
+      image: sourceEntity.image,
+      media: sourceEntity.media,
+      metadata: sourceEntity.metadata,
+      meta: sourceEntity.meta,
+      blockNumber: sourceEntity.blockNumber,
+      updatedAt: sourceEntity.updatedAt,
       id: tokenId,
     })
 
     await this.store.save(token)
+    // await this.store.update(TE, token.id, { meta: newMeta })
+    const existingToken = await getWith(this.store, TE, tokenId, { meta: true })
+
+    // log here
+    if (collection.id === 'u-8') {
+      writeToLogFile({
+        timestamp: new Date().toISOString(),
+        operation: 'Create Token - After Saving to DB',
+        tokenId: existingToken.id,
+        image: existingToken.image,
+        metaImage: existingToken.meta?.image,
+      })
+    }
+
     await this.store.update(NE, nft.id, { token })
 
     return token
@@ -61,21 +79,47 @@ export class TokenAPI {
 
   async addNftToToken(nft: NE | NE[], token: TE): Promise<TE> {
     let nftsToUpdate = Array.isArray(nft) ? nft : [nft]
+    if (nftsToUpdate.length === 0) {
+      return token
+    }
+    // log token id and number of nfts to update
+    if (token.id.startsWith('u-8')) {
+      writeToLogFile({
+        timestamp: new Date().toISOString(),
+        operation: 'Add NFT to Token',
+        tokenId: token.id,
+        nftsToUpdate: nftsToUpdate.length,
+      })
+    }
     debug(OPERATION, { updateToken: `Adding ${nftsToUpdate.length} NFT(s) to TOKEN ${token.id}` })
 
+    // Update token count and supply
     const updatedCount = token.count + nftsToUpdate.length
     const updatedSupply = token.supply + nftsToUpdate.length
-    token.count = updatedCount
-    token.supply = updatedSupply
-    token.updatedAt = new Date()
-    await this.store.save(token)
 
     // Batch update NFT entities
-    const nftUpdates = nftsToUpdate.map((nft) => ({
-      ...nft,
-      token,
-    }))
+    const nftUpdates = nftsToUpdate.map((nft) => ({ ...nft, token }))
     await this.store.save(NE, nftUpdates)
+
+    // Save token changes
+    await this.store.update(TE, token.id, {
+      count: updatedCount,
+      supply: updatedSupply,
+      updatedAt: new Date().toISOString(),
+    })
+
+    // get first nft by id
+    const firstNft = await getWith(this.store, NE, nftsToUpdate[0].id, { collection: true, token: true })
+
+    // log nft.token.id
+    if (firstNft.collection.id === 'u-8') {
+      writeToLogFile({
+        timestamp: new Date().toISOString(),
+        operation: 'Add NFT to Token',
+        tokenId: token.id,
+        nftTokenId: firstNft.token?.id,
+      })
+    }
 
     return token
   }

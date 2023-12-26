@@ -1,0 +1,70 @@
+{
+  "tokenId": "u-8-4727fe4ccae341fe9dd31cf877c431e2",
+  "collectionId": "u-8",
+  "collectionMedia": "ipfs://ipfs/bafybeif467fjdvhnxqymiprhya2f6s4qjgywpalg35te3ipmx7bcckdb7e",
+  "timestamp": "2023-12-26T13:44:55.124Z",
+  "operation": "Before Token Creation/Addition",
+  "existingToken": "No",
+  "action": "Create Token",
+  "firstNftName": null
+}
+{
+  "timestamp": "2023-12-26T13:44:55.128Z",
+  "operation": "Create Token - After Saving to DB",
+  "tokenId": "u-8-4727fe4ccae341fe9dd31cf877c431e2",
+  "image": "ipfs://ipfs/bafybeif467fjdvhnxqymiprhya2f6s4qjgywpalg35te3ipmx7bcckdb7e",
+  "metaImage": "ipfs://ipfs/bafybeif467fjdvhnxqymiprhya2f6s4qjgywpalg35te3ipmx7bcckdb7e"
+}
+{
+  "timestamp": "2023-12-26T13:44:55.128Z",
+  "operation": "After Token Creation/Addition",
+  "tokenId": "u-8-4727fe4ccae341fe9dd31cf877c431e2",
+  "remainingNftsCount": 199
+}
+{
+  "timestamp": "2023-12-26T13:44:55.128Z",
+  "operation": "Add NFT to Token",
+  "tokenId": "u-8-4727fe4ccae341fe9dd31cf877c431e2",
+  "nftsToUpdate": 199
+}
+{
+  "timestamp": "2023-12-26T13:44:55.226Z",
+  "operation": "Add NFT to Token",
+  "tokenId": "u-8-4727fe4ccae341fe9dd31cf877c431e2",
+  "nftTokenId": "u-8-4727fe4ccae341fe9dd31cf877c431e2"
+}
+{
+  "tokenId": "u-8-026196b23815428a88e3e4b8c4897273",
+  "collectionId": "u-8",
+  "collectionMedia": "ipfs://ipfs/bafybeieacobvvgo53y6nllhd2bxc2zwkq4ucqllr4pkqarkvibejembijm",
+  "timestamp": "2023-12-26T13:44:55.272Z",
+  "operation": "Before Token Creation/Addition",
+  "existingToken": "No",
+  "action": "Create Token",
+  "firstNftName": "Copenhagen Premium Waifus"
+}
+{
+  "timestamp": "2023-12-26T13:44:55.275Z",
+  "operation": "Create Token - After Saving to DB",
+  "tokenId": "u-8-026196b23815428a88e3e4b8c4897273",
+  "image": "ipfs://ipfs/bafybeieacobvvgo53y6nllhd2bxc2zwkq4ucqllr4pkqarkvibejembijm",
+  "metaImage": "ipfs://ipfs/bafybeieacobvvgo53y6nllhd2bxc2zwkq4ucqllr4pkqarkvibejembijm"
+}
+{
+  "timestamp": "2023-12-26T13:44:55.275Z",
+  "operation": "After Token Creation/Addition",
+  "tokenId": "u-8-026196b23815428a88e3e4b8c4897273",
+  "remainingNftsCount": 199
+}
+{
+  "timestamp": "2023-12-26T13:44:55.276Z",
+  "operation": "Add NFT to Token",
+  "tokenId": "u-8-026196b23815428a88e3e4b8c4897273",
+  "nftsToUpdate": 199
+}
+{
+  "timestamp": "2023-12-26T13:44:55.390Z",
+  "operation": "Add NFT to Token",
+  "tokenId": "u-8-026196b23815428a88e3e4b8c4897273",
+  "nftTokenId": "u-8-026196b23815428a88e3e4b8c4897273"
+}

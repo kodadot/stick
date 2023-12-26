@@ -63,7 +63,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
     final.media = metadata?.animationUrl
   }
 
-  await mintHandler(context, collection, final)
+  // await mintHandler(context, collection, final)
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
