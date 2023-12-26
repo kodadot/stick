@@ -134,7 +134,7 @@ enum Interaction {
   UNLIST
   LOCK
   CHANGEISSUER
-  PAYTIPS
+  PAY_ROYALTY
 }
 
 type AssetEntity @entity {

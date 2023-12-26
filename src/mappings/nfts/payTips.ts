@@ -6,7 +6,7 @@ import { pending, debug } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getTipSentEvent } from './getters'
 
-const OPERATION = Action.PAYTIPS
+const OPERATION = Action.PAY_ROYALTY
 
 export async function handleTipSend(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
