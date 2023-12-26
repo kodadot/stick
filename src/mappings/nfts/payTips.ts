@@ -8,7 +8,7 @@ import { getTipSentEvent } from './getters'
 
 const OPERATION = Action.PAYTIPS
 
-export async function handleAttributeSet(context: Context): Promise<void> {
+export async function handleTipSend(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getTipSentEvent)
   debug(OPERATION, event, true)
