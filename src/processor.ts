@@ -114,9 +114,7 @@ processor.setFields(fieldSelection)
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
-// handler: (ctx: DataHandlerContext<Store, {}>) => Promise<void>
-
-const handler = async <T extends FieldSelection = SelectedFields>(ctx: DataHandlerContext<Store, T>) => {}
+// const handler = async <T extends FieldSelection = SelectedFields>(ctx: DataHandlerContext<Store, T>) => {}
 
 processor.run(database, mainFrame)
 
