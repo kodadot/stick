@@ -1,4 +1,4 @@
-import {  getWith } from '@kodadot1/metasquid/entity'
+import { getWith } from '@kodadot1/metasquid/entity'
 import { NFTEntity as NE } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
@@ -36,6 +36,7 @@ export async function handleTokenBurn(context: Context): Promise<void> {
 
   success(OPERATION, `${id} by ${event.caller}`)
   await context.store.save(entity)
+  await context.store.save(entity.collection)
   const meta = entity.metadata ?? ''
   await createEvent(entity, OPERATION, event, meta, context.store)
 }

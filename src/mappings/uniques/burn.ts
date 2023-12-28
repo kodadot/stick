@@ -36,6 +36,7 @@ export async function handleTokenBurn(context: Context): Promise<void> {
 
   success(OPERATION, `${id} by ${event.caller}`)
   await context.store.save(entity)
+  await context.store.save(entity.collection)
   const meta = entity.metadata ?? ''
   await createEvent(entity, OPERATION, event, meta, context.store)
 }

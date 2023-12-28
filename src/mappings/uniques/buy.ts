@@ -17,12 +17,13 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 
-  const originalPrice = entity.price
+  const originalPrice = event.price
   const originalOwner = entity.currentOwner ?? undefined
 
   entity.price = BigInt(0)
   entity.currentOwner = event.caller
   entity.updatedAt = event.timestamp
+
   if (originalPrice) {
     entity.collection.volume += originalPrice
     if (originalPrice > entity.collection.highestSale) {
@@ -38,9 +39,9 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
 
-
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)
+  await context.store.save(entity.collection)
   const meta = String(event.price || '')
   await createEvent(entity, OPERATION, event, meta, context.store, event.currentOwner)
 }
