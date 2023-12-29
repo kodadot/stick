@@ -96,7 +96,7 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
   )
 }
 
-export type ManagedStore = typeof SquidStore & { em: () => EntityManager }
+export type ManagedStore = SquidStore & { em: () => EntityManager }
 export type Store =  SquidStore // & { em: () => EntityManager }
 export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
 export type Context<S = Store>  = {
