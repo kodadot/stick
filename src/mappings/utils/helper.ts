@@ -1,8 +1,10 @@
+import { emOf } from '@kodadot1/metasquid/entity'
+import { ArchiveCallWithOptionalValue, Store } from '@kodadot1/metasquid/types'
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
 import { isProd } from '../../environment'
-import { Context, SomethingWithOptionalMeta, ManagedStore as Store } from './types'
+import { Context, SomethingWithOptionalMeta } from './types'
+
 
 const codec = isProd ? 'kusama' : 'polkadot'
 
@@ -104,7 +106,7 @@ export async function calculateCollectionOwnerCountAndDistribution(
   WHERE collection_id = '${collectionId}'
   ${originalOwner ? `AND current_owner != '${originalOwner}'` : ''}
   `
-  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await store.em().query(query)
+  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await emOf(store).query(query)
 
   const adjustedResults = {
     ownerCount: result.owner_count - (result.adjustment ?? 0),
