@@ -1,3 +1,4 @@
+import { emOf } from '@kodadot1/metasquid/entity'
 import logger, { logError } from './logger'
 import { Store } from './types'
 
@@ -54,7 +55,7 @@ enum MetadataQuery {
 
 export async function updateItemMetadataByCollection(store: Store, collectionId: string): Promise<void> {
   try {
-    const rows = await store.query(MetadataQuery.polyfill, [collectionId])
+    const rows = await emOf(store).query(MetadataQuery.polyfill, [collectionId])
     logger.info(`[METADATA POLYFILL] ${rows.length} NFTs updated`)
   } catch (e) {
     logError(e, (err) => logger.error(`[METADATA POLYFILL] ${err.message}`))
