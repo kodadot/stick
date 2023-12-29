@@ -1,4 +1,4 @@
-import { create as createEntity } from '@kodadot1/metasquid/entity'
+import { create as createEntity, emOf } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { Store } from '../../utils/types'
 import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
@@ -33,7 +33,7 @@ export class TokenAPI {
     })
 
     await this.store.save(token)
-    await this.store.update(NE, nft.id, { token })
+    await emOf(this.store).update(NE, nft.id, { token })
 
     return token
   }
@@ -44,9 +44,9 @@ export class TokenAPI {
     }
     debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}` })
 
-    await this.store.update(NE, nft.id, { token: null })
+    await emOf(this.store).update(NE, nft.id, { token: null })
     const updatedCount = token.count - 1
-    await this.store.update(TE, token.id, {
+    await emOf(this.store).update(TE, token.id, {
       supply: token.supply - 1,
       count: updatedCount,
       updatedAt: nft.updatedAt,
@@ -55,7 +55,7 @@ export class TokenAPI {
     if (updatedCount === 0) {
       debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
 
-      await this.store.delete(TE, token.id)
+      await emOf(this.store).delete(TE, token.id)
     }
   }
 
