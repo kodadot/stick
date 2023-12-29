@@ -14,7 +14,7 @@
     "query-node:start": "squid-graphql-server --subscriptions --max-response-size 10000 --dumb-cache in-memory --dumb-cache-ttl 1000 --dumb-cache-size 100 --dumb-cache-max-age 1000"
   },
   "dependencies": {
-    "@kodadot1/metasquid": "^0.2.2-rc.0",
+    "@kodadot1/metasquid": "^0.3.0-rc.0",
     "@kodadot1/minipfs": "^0.4.2-rc.0",
     "@subsquid/archive-registry": "3.3.0",
     "@subsquid/graphql-server": "4.3.1",
