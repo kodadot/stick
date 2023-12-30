@@ -99,12 +99,17 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
 export type ManagedStore = SquidStore & { em: () => EntityManager }
 export type Store =  SquidStore // & { em: () => EntityManager }
 export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
+export type SelectedBlok = Pick<BlockHeader<Fields>, 'height' | 'timestamp' | 'hash'>
+export type SelectedEvent = Pick<Event, 'name' | 'args'>
+export type SelectedExtrinsic = Pick<Extrinsic, 'signature'>
+export type SelectedCall = Pick<Call, 'name' | 'origin'>
+
 export type Context<S = Store>  = {
   store: S
-  block: Pick<BlockHeader<Fields>, 'height' | 'timestamp' | 'hash'>
-  event: Pick<Event, 'name' | 'args'>
-  extrinsic: Pick<Extrinsic, 'signature'>
-  call: Pick<Call, 'name' | 'origin'>
+  block: SelectedBlok
+  event: SelectedEvent
+  extrinsic: SelectedExtrinsic
+  call: SelectedCall
   // log: Logger
 }
 
