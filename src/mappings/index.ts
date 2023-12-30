@@ -2,8 +2,70 @@ import { logger } from '@kodadot1/metasquid/logger'
 
 import { Store } from '@subsquid/typeorm-store'
 import { NFTEntity as NE } from '../model'
+import { Unique } from '../processable'
 import { debug } from './utils/logger'
-import { BatchContext, Context } from './utils/types'
+import { BatchContext, Context, SelectedEvent } from './utils/types'
+import * as u from './uniques'
+
+export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
+  switch (item.name) {
+    case Unique.forceCreateClass:
+      await u.handleForceCollectionCreate(ctx)
+      break
+    case Unique.clearClassMetadata:
+      await u.handleMetadataSet(ctx)
+      break
+    case Unique.setClassMetadata:
+      await u.handleMetadataSet(ctx)
+      break
+    case Unique.setCollectionMaxSupply:
+      await u.handleCollectionLock(ctx)
+      break
+    case Unique.clearCollectionMetadata:
+      await u.handleMetadataSet(ctx)
+      break
+    case Unique.setCollectionMetadata:
+      await u.handleMetadataSet(ctx)
+      break
+    case Unique.destroyCollection:
+      await u.handleCollectionDestroy(ctx)
+      break
+    case Unique.createItem:
+      await u.handleTokenCreate(ctx)
+      break
+    case Unique.sold:
+      await u.handleTokenBuy(ctx)
+      break
+    case Unique.clearPrice:
+      await u.handleTokenList(ctx)
+      break
+    case Unique.setPrice:
+      await u.handleTokenList(ctx)
+      break
+    case Unique.clearMetadata:
+      await u.handleMetadataSet(ctx)
+      break
+    case Unique.setMetadata:
+      await u.handleMetadataSet(ctx)
+      break
+    case Unique.changeIssuer:
+      await u.handleCollectionOwnerChange(ctx)
+      break
+    case Unique.changeTeam:
+      await u.handleCollectionTeamChange(ctx)
+      break
+    case Unique.transfer:
+      await u.handleTokenTransfer(ctx)
+      break
+    default:
+      throw new Error(`Unknown event ${item.name}`)
+  }
+  // return item
+}
+
+export async function nfts<T>(item: T, ctx: Context): Promise<void> {
+  // return item
+}
 
 
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
@@ -13,6 +75,9 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
   for (const block of ctx.blocks) {
     for (let event of block.events) {
       logger.debug(`Processing ${event.name}`)
+      const [pallet] = event.name.split('.')
+      const handler = pallet === 'Uniques' ? uniques : nfts
+      // event = await handler(event, ctx)
       const item = event
       if (item) {
         items.push(item)
