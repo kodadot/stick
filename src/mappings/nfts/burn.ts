@@ -4,7 +4,7 @@ import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { createEvent } from '../shared/event'
-import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { calculateCollectionFloor, calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { burnHandler } from '../shared/token'
 import { getBurnTokenEvent } from './getters'
 
@@ -18,6 +18,7 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 
+  const { floor } = await calculateCollectionFloor(context.store, entity.collection.id, id)
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,
     entity.collection.id,
@@ -27,10 +28,11 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   entity.burned = true
   entity.updatedAt = event.timestamp
 
-  entity.collection.updatedAt = event.timestamp
   entity.collection.supply -= 1
+  entity.collection.floor = floor
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
+  entity.collection.updatedAt = event.timestamp
 
   await burnHandler(context, entity)
 
