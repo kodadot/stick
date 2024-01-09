@@ -13,7 +13,7 @@ export const fetchMetadata = async <T>(metadata: string): Promise<T> => {
     }
     return await $obtain<T>(metadata, ['rmrk', 'infura_kodadot1'], true)
   } catch (e) {
-    logger.error(`[MINIPFS] ${e}}`)
+    logger.error(`[MINIPFS] ${e}`)
   }
 
   return ensure<T>({})

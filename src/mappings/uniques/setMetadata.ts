@@ -45,6 +45,8 @@ export async function handleMetadataSet(context: Context): Promise<void> {
     final.image = metadata?.image
     final.media = metadata?.animationUrl
 
+    await context.store.save(final)
+
     if (eventIsOnNFT) {
       const collection = await getOptional<CollectionEntity>(context.store, CollectionEntity, event.collectionId)
 
@@ -56,8 +58,6 @@ export async function handleMetadataSet(context: Context): Promise<void> {
       await setMetadataHandler(context, collection, final as NFTEntity)
     }
   }
-
-  await context.store.save(final)
 
   if (!event.sn && final.metadata) {
     await updateItemMetadataByCollection(context.store, event.collectionId)
