@@ -33,5 +33,6 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
 
   success(OPERATION, `${id} from ${event.caller} to ${event.to}`)
   await context.store.save(entity)
+  await context.store.save(entity.collection)
   await createEvent(entity, OPERATION, event, event.to, context.store, oldOwner)
 }
