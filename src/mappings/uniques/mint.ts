@@ -35,7 +35,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.currentOwner = event.owner
   final.blockNumber = BigInt(event.blockNumber)
   final.collection = collection
-  final.sn = event.sn
+  final.sn = BigInt(event.sn)
   final.metadata = event.metadata || collection.metadata
   final.price = BigInt(0)
   final.burned = false
