@@ -65,7 +65,7 @@ type NFTEntity @entity {
   price: BigInt @index
   recipient: String
   royalty: Float
-  sn: String! @index
+  sn: BigInt! @index
   updatedAt: DateTime! @index
   version: Int!
   token: TokenEntity
