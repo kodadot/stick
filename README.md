@@ -6,7 +6,7 @@ KodaDot's [Squid](https://docs.subsquid.io) based data processor for [KodaDot](h
 
 ## Prerequisites
 
-* node 16.x
+* node 18.x
 * docker
 * npm -- note that `yarn` package manager is not supported
 

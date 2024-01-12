@@ -4,7 +4,7 @@ import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { calculateCollectionFloor, calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { getBuyTokenEvent } from './getters'
 
 const OPERATION = Action.BUY
@@ -30,14 +30,18 @@ export async function handleTokenBuy(context: Context): Promise<void> {
       entity.collection.highestSale = originalPrice
     }
   }
+
+  const { floor } = await calculateCollectionFloor(context.store, entity.collection.id, id)
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,
     entity.collection.id,
     entity.currentOwner,
     originalOwner
   )
+  entity.collection.floor = floor
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
+  entity.collection.updatedAt = event.timestamp
 
   success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(entity)

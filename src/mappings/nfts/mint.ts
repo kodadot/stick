@@ -35,7 +35,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.currentOwner = event.owner
   final.blockNumber = BigInt(event.blockNumber)
   final.collection = collection
-  final.sn = event.sn
+  final.sn = BigInt(event.sn)
   final.metadata = event.metadata || collection.metadata
   final.price = BigInt(0)
   final.burned = false
@@ -70,9 +70,15 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
   await context.store.save(collection)
-  await createEvent(final, OPERATION, event, '', context.store)
+  
+  const destinationAddress = final.issuer !== final.currentOwner ? final.currentOwner : ''
 
-  if (final.issuer !== final.currentOwner) {
-    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer)
-  }
+  await createEvent(
+    final,
+    OPERATION,
+    event,
+    destinationAddress,
+    context.store,
+    final.issuer !== final.currentOwner ? final.issuer : undefined
+  )
 }

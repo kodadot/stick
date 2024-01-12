@@ -115,3 +115,21 @@ export async function calculateCollectionOwnerCountAndDistribution(
 
   return adjustedResults
 }
+
+export async function calculateCollectionFloor(
+  store: Store,
+  collectionId: string,
+  nftId: string
+): Promise<{ floor: bigint }> {
+  const query: string = `
+  SELECT MIN(NULLIF(nft_entity.price, 0)) as floor
+  FROM nft_entity
+  WHERE collection_id = '${collectionId}'
+  AND nft_entity.id <> '${nftId}'
+  `
+  const [result]: { floor: bigint; }[] = await store.query(query)
+
+  return {
+    floor: result.floor ?? BigInt(0)
+  }
+}
