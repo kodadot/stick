@@ -15,11 +15,11 @@ const database = new Database()
 const processor = new SubstrateProcessor<SelectedFields>()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
-const _NFT_STARTING_BLOCK = 4_556_552
+// const _NFT_STARTING_BLOCK = 4_556_552
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 
 // processor.setTypesBundle(CHAIN)
-processor.setBlockRange({ from: STARTING_BLOCK, to: _NFT_STARTING_BLOCK - 1000 })
+processor.setBlockRange({ from: STARTING_BLOCK })
 
 const archive = getArchiveUrl()
 const chain = getNodeUrl()
