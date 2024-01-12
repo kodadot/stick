@@ -19,85 +19,106 @@ import {
 // eslint-disable-next-line unicorn/prefer-module
 const proc = require(`./${CHAIN}`)
 
-export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
+export function getCreateCollectionEvent(_ctx: Context): CreateCollectionEvent {
+  const ctx = _ctx.event
   return proc.getCreateCollectionEvent(ctx)
 }
 
-export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
+export function getForceCreateCollectionEvent(_ctx: Context): ForceCreateCollectionEvent {
+  const ctx = _ctx.event
   return proc.getForceCreateCollectionEvent(ctx)
 }
 
-export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
+export function getCreateTokenEvent(_ctx: Context): CreateTokenEvent {
+  const ctx = _ctx.event
   return proc.getCreateTokenEvent(ctx)
 }
 
-export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
+export function getTransferTokenEvent(_ctx: Context): TransferTokenEvent {
+  const ctx = _ctx.event
   return proc.getTransferTokenEvent(ctx)
 }
 
-export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
+export function getBurnTokenEvent(_ctx: Context): BurnTokenEvent {
+  const ctx = _ctx.event
   return proc.getBurnTokenEvent(ctx)
 }
 
-export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent {
+export function getDestroyCollectionEvent(_ctx: Context): DestroyCollectionEvent {
+  const ctx = _ctx.event
   return proc.getDestroyCollectionEvent(ctx)
 }
-export function getListTokenEvent(ctx: Context): ListTokenEvent {
+export function getListTokenEvent(_ctx: Context): ListTokenEvent {
+  const ctx = _ctx.event
   return proc.getListTokenEvent(ctx)
 }
 
-export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
+export function getUnListTokenEvent(_ctx: Context): ListTokenEvent {
+  const ctx = _ctx.event
   return proc.getUnListTokenEvent(ctx)
 }
 
-export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
+export function getPriceTokenEvent(_ctx: Context): ListTokenEvent {
+  const ctx = _ctx.event
   return proc.getPriceTokenEvent(ctx)
 }
 
-export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
+export function getBuyTokenEvent(_ctx: Context): BuyTokenEvent {
+  const ctx = _ctx.event
   return proc.getBuyTokenEvent(ctx)
 }
 
-export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
+export function getLockCollectionEvent(_ctx: Context): LockCollectionEvent {
+  const ctx = _ctx.event
   return proc.getLockCollectionEvent(ctx)
 }
 
-export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
+export function getChangeCollectionOwnerEvent(_ctx: Context): ChangeCollectionOwnerEvent {
+  const ctx = _ctx.event
   return proc.getChangeCollectionOwnerEvent(ctx)
 }
 
-export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
+export function getClearCollectionMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getClearCollectionMetadataEvent(ctx)
 }
 
-export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
+export function getCreateCollectionMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getCreateCollectionMetadataEvent(ctx)
 }
 
-export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
+export function getClearClassMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getClearClassMetadataEvent(ctx)
 }
 
-export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
+export function getCreateClassMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getCreateClassMetadataEvent(ctx)
 }
 
-export function getCreateMetadataEvent(ctx: Context): SetMetadata {
+export function getCreateMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getCreateMetadataEvent(ctx)
 }
 
-export function getClearMetadataEvent(ctx: Context): SetMetadata {
+export function getClearMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getClearMetadataEvent(ctx)
 }
 
-export function getMetadataEvent(ctx: Context): SetMetadata {
+export function getMetadataEvent(_ctx: Context): SetMetadata {
+  const ctx = _ctx.event
   return proc.getMetadataEvent(ctx)
 }
 
-export function getAttributeEvent(ctx: Context): SetAttribute {
+export function getAttributeEvent(_ctx: Context): SetAttribute {
+  const ctx = _ctx.event
   return proc.getAttributeEvent(ctx)
 }
 
-export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
+export function getChangeTeamEvent(_ctx: Context): ChangeCollectionTeam {
+  const ctx = _ctx.event
   return proc.getChangeTeamEvent(ctx)
 }
