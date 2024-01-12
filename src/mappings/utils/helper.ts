@@ -127,7 +127,7 @@ export async function calculateCollectionFloor(
   WHERE collection_id = '${collectionId}'
   AND nft_entity.id <> '${nftId}'
   `
-  const [result]: { floor: bigint; }[] = await store.query(query)
+  const [result]: { floor: bigint; }[] = await emOf(store).query(query)
 
   return {
     floor: result.floor ?? BigInt(0)
