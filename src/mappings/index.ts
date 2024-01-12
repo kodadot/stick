@@ -2,10 +2,10 @@ import { logger } from '@kodadot1/metasquid/logger'
 
 import { Store } from '@subsquid/typeorm-store'
 import { NFTEntity as NE } from '../model'
-import { Unique } from '../processable'
-import { debug } from './utils/logger'
-import { BatchContext, Context, SelectedEvent } from './utils/types'
+import { NonFungible, Unique } from '../processable'
+import * as n from './nfts'
 import * as u from './uniques'
+import { BatchContext, Context, SelectedEvent } from './utils/types'
 
 export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
   switch (item.name) {
@@ -63,8 +63,63 @@ export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): P
   // return item
 }
 
-export async function nfts<T>(item: T, ctx: Context): Promise<void> {
-  // return item
+export async function nfts<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
+  switch (item.name) {
+    case NonFungible.createCollection:
+      await n.handleCollectionCreate(ctx)
+      break
+    case NonFungible.clearAttribute:
+      await n.handleAttributeSet(ctx)
+      break
+    case NonFungible.setAttribute:
+      await n.handleAttributeSet(ctx)
+      break
+    case NonFungible.burn:
+      await n.handleTokenBurn(ctx)
+      break
+    case NonFungible.forceCreateCollection:
+      await n.handleForceCollectionCreate(ctx)
+      break
+    case NonFungible.clearCollectionMetadata:
+      await n.handleMetadataSet(ctx)
+      break
+    case NonFungible.setCollectionMetadata:
+      await n.handleMetadataSet(ctx)
+      break
+    case NonFungible.setCollectionMaxSupply:
+      await n.handleCollectionLock(ctx)
+      break
+    case NonFungible.destroyCollection:
+      await n.handleCollectionDestroy(ctx)
+      break
+    case NonFungible.createItem:
+      await n.handleTokenCreate(ctx)
+      break
+    case NonFungible.sold:
+      await n.handleTokenBuy(ctx)
+      break
+    case NonFungible.clearPrice:
+      await n.handleTokenList(ctx)
+      break
+    case NonFungible.setPrice:
+      await n.handleTokenList(ctx)
+      break
+    case NonFungible.clearMetadata:
+      await n.handleMetadataSet(ctx)
+      break
+    case NonFungible.setMetadata:
+      await n.handleMetadataSet(ctx)
+      break
+    case NonFungible.changeIssuer:
+      await n.handleCollectionOwnerChange(ctx)
+      break
+    case NonFungible.changeTeam:
+      await n.handleCollectionTeamChange(ctx)
+      break
+    case NonFungible.transfer:
+      await n.handleTokenTransfer(ctx)
+      break
+  }
 }
 
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
@@ -78,7 +133,7 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
     for (let event of block.events) {
       logger.debug(`Processing ${event.name}`)
       const [pallet] = event.name.split('.')
-      const handler = pallet === 'Uniques' ? uniques : nfts
+      const handler =  pallet === 'Uniques' ? uniques : nfts
       await handler(event, {
         event,
         block: block.header,
