@@ -24,3 +24,9 @@ export function unwrap<T>(ctx: Context, unwrapFn: UnwrapFunc<T>): CallWith<T> {
   const unwrapped = unwrapFn(ctx)
   return { ...baseCall, ...unwrapped }
 }
+
+// export function ctxOf<T extends BatchContext<Store>>(
+//   block: SingleArrayType<Pick<T, 'blocks'>>
+// ): Context {
+
+// }
