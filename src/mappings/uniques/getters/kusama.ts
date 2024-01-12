@@ -2,7 +2,7 @@ import { Interaction } from '../../../model'
 import { uniques as events } from '../../../types/kusama/events'
 import { addressOf, idOf, UNIQUE_PREFIX as U } from '../../utils/helper'
 import { warn } from '../../utils/logger'
-import { Event as Context } from '../../utils/types'
+import { Event } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
@@ -18,10 +18,10 @@ import {
   SetMetadata,
   TransferTokenEvent,
 } from '../types'
-import { Unique as Event } from '../../../processable'
+import { Unique } from '../../../processable'
 
 
-export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
+export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
   const event = events.created
   if (event.v1.is(ctx)) {
     const [classId, creator, owner] = event.v1.decode(ctx)
@@ -40,7 +40,7 @@ export function getCreateCollectionEvent(ctx: Context): CreateCollectionEvent {
   return { id: idOf(classId, U), caller: addressOf(creator), owner: addressOf(owner) }
 }
 
-export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollectionEvent {
+export function getForceCreateCollectionEvent(ctx: Event): ForceCreateCollectionEvent {
   const event = events.forceCreated
   if (event.v1.is(ctx)) {
     const [classId, owner] = event.v1.decode(ctx)
@@ -59,7 +59,7 @@ export function getForceCreateCollectionEvent(ctx: Context): ForceCreateCollecti
   return { id: idOf(classId, U), owner: addressOf(owner) }
 }
 
-export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
+export function getCreateTokenEvent(ctx: Event): CreateTokenEvent {
   const event = events.issued
   if (event.v1.is(ctx)) {
     const [classId, instanceId, owner] = event.v1.decode(ctx)
@@ -78,7 +78,7 @@ export function getCreateTokenEvent(ctx: Context): CreateTokenEvent {
   return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
 }
 
-export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
+export function getTransferTokenEvent(ctx: Event): TransferTokenEvent {
   const event = events.transferred
   if (event.v1.is(ctx)) {
     const [classId, instanceId, from, to] = event.v1.decode(ctx)
@@ -97,7 +97,7 @@ export function getTransferTokenEvent(ctx: Context): TransferTokenEvent {
   return { collectionId: idOf(classId, U), caller: addressOf(from), sn: instanceId.toString(), to: addressOf(to) }
 }
 
-export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
+export function getBurnTokenEvent(ctx: Event): BurnTokenEvent {
   const event = events.burned
   if (event.v1.is(ctx)) {
     const [classId, instanceId, owner] = event.v1.decode(ctx)
@@ -116,7 +116,7 @@ export function getBurnTokenEvent(ctx: Context): BurnTokenEvent {
   return { collectionId: idOf(classId, U), owner: addressOf(owner), sn: instanceId.toString() }
 }
 
-export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent {
+export function getDestroyCollectionEvent(ctx: Event): DestroyCollectionEvent {
   const event = events.destroyed
   if (event.v1.is(ctx)) {
     const classId = event.v1.decode(ctx)
@@ -136,7 +136,7 @@ export function getDestroyCollectionEvent(ctx: Context): DestroyCollectionEvent 
   return { id: idOf(classId, U) }
 }
 
-export function getListTokenEvent(ctx: Context): ListTokenEvent {
+export function getListTokenEvent(ctx: Event): ListTokenEvent {
   const event = events.itemPriceSet
 
   if (event.v9270.is(ctx)) {
@@ -149,7 +149,7 @@ export function getListTokenEvent(ctx: Context): ListTokenEvent {
   return { collectionId: idOf(classId, U), sn: instanceId.toString(), price }
 }
 
-export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
+export function getUnListTokenEvent(ctx: Event): ListTokenEvent {
   const event = events.itemPriceRemoved
 
   if (event.v9270.is(ctx)) {
@@ -162,15 +162,15 @@ export function getUnListTokenEvent(ctx: Context): ListTokenEvent {
   return { collectionId: idOf(classId, U), sn: instanceId.toString(), price: 0n }
 }
 
-export function getPriceTokenEvent(ctx: Context): ListTokenEvent {
-  if (ctx.name === Event.setPrice) {
+export function getPriceTokenEvent(ctx: Event): ListTokenEvent {
+  if (ctx.name === Unique.setPrice) {
     return getListTokenEvent(ctx)
   }
 
   return getUnListTokenEvent(ctx)
 }
 
-export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
+export function getBuyTokenEvent(ctx: Event): BuyTokenEvent {
   const event = events.itemBought
 
   if (event.v9270.is(ctx)) {
@@ -194,7 +194,7 @@ export function getBuyTokenEvent(ctx: Context): BuyTokenEvent {
   }
 }
 
-export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
+export function getLockCollectionEvent(ctx: Event): LockCollectionEvent {
   const event = events.collectionMaxSupplySet
   if (event.v9230.is(ctx)) {
     const { collection: classId, maxSupply: max } = event.v9230.decode(ctx)
@@ -205,7 +205,7 @@ export function getLockCollectionEvent(ctx: Context): LockCollectionEvent {
   return { id: idOf(classId, U), max }
 }
 
-export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwnerEvent {
+export function getChangeCollectionOwnerEvent(ctx: Event): ChangeCollectionOwnerEvent {
   const event = events.ownerChanged
   if (event.v1.is(ctx)) {
     const [classId, newOwner] = event.v1.decode(ctx)
@@ -225,7 +225,7 @@ export function getChangeCollectionOwnerEvent(ctx: Context): ChangeCollectionOwn
   return { id: idOf(classId, U), owner: addressOf(newOwner) }
 }
 
-export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
+export function getClearCollectionMetadataEvent(ctx: Event): SetMetadata {
   const event = events.collectionMetadataCleared
   if (event.v9230.is(ctx)) {
     const { collection: classId } = event.v9230.decode(ctx)
@@ -236,7 +236,7 @@ export function getClearCollectionMetadataEvent(ctx: Context): SetMetadata {
   return { collectionId: idOf(classId, U) }
 }
 
-export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
+export function getCreateCollectionMetadataEvent(ctx: Event): SetMetadata {
   const event = events.collectionMetadataSet
   if (event.v9230.is(ctx)) {
     const { collection: classId, data, isFrozen } = event.v9230.decode(ctx)
@@ -248,7 +248,7 @@ export function getCreateCollectionMetadataEvent(ctx: Context): SetMetadata {
   return { collectionId: idOf(classId, U), metadata: data.toString() }
 }
 
-export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
+export function getClearClassMetadataEvent(ctx: Event): SetMetadata {
   const event = events.classMetadataCleared
   if (event.v1.is(ctx)) {
     const classId = event.v1.decode(ctx)
@@ -264,7 +264,7 @@ export function getClearClassMetadataEvent(ctx: Context): SetMetadata {
   return { collectionId: idOf(classId, U) }
 }
 
-export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
+export function getCreateClassMetadataEvent(ctx: Event): SetMetadata {
   const event = events.classMetadataSet
   if (event.v1.is(ctx)) {
     const [classId, data, isFrozen] = event.v1.decode(ctx)
@@ -280,7 +280,7 @@ export function getCreateClassMetadataEvent(ctx: Context): SetMetadata {
   return { collectionId: idOf(classId, U), metadata: data.toString() }
 }
 
-export function getCreateMetadataEvent(ctx: Context): SetMetadata {
+export function getCreateMetadataEvent(ctx: Event): SetMetadata {
   const event = events.metadataSet
   if (event.v1.is(ctx)) {
     const [classId, instanceId, data, isFrozen] = event.v1.decode(ctx)
@@ -300,7 +300,7 @@ export function getCreateMetadataEvent(ctx: Context): SetMetadata {
   return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
 }
 
-export function getClearMetadataEvent(ctx: Context): SetMetadata {
+export function getClearMetadataEvent(ctx: Event): SetMetadata {
   const event = events.metadataCleared
   if (event.v1.is(ctx)) {
     const [classId, instanceId] = event.v1.decode(ctx)
@@ -320,26 +320,26 @@ export function getClearMetadataEvent(ctx: Context): SetMetadata {
   return { collectionId: idOf(classId, U), sn: instanceId.toString() }
 }
 
-export function getMetadataEvent(ctx: Context): SetMetadata {
+export function getMetadataEvent(ctx: Event): SetMetadata {
   switch (ctx.name) {
-    case Event.clearClassMetadata:
+    case Unique.clearClassMetadata:
       return getClearClassMetadataEvent(ctx)
-    case Event.setClassMetadata:
+    case Unique.setClassMetadata:
       return getCreateClassMetadataEvent(ctx)
-    case Event.setCollectionMetadata:
+    case Unique.setCollectionMetadata:
       return getCreateCollectionMetadataEvent(ctx)
-    case Event.clearCollectionMetadata:
+    case Unique.clearCollectionMetadata:
       return getClearCollectionMetadataEvent(ctx)
-    case Event.setMetadata:
+    case Unique.setMetadata:
       return getCreateMetadataEvent(ctx)
-    case Event.clearMetadata:
+    case Unique.clearMetadata:
       return getClearMetadataEvent(ctx)
     default:
       throw new Error('Unsupported event')
   }
 }
 
-function getSetAttributeEvent(ctx: Context): SetAttribute {
+function getSetAttributeEvent(ctx: Event): SetAttribute {
   const event = events.attributeSet
   if (event.v1.is(ctx)) {
     const [classId, instanceId, key, value] = event.v1.decode(ctx)
@@ -374,7 +374,7 @@ function getSetAttributeEvent(ctx: Context): SetAttribute {
   return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString(), value: value.toString() }
 }
 
-function getClearAttributeEvent(ctx: Context): SetAttribute {
+function getClearAttributeEvent(ctx: Event): SetAttribute {
   const event = events.attributeCleared
 
   if (event.v1.is(ctx)) {
@@ -395,18 +395,18 @@ function getClearAttributeEvent(ctx: Context): SetAttribute {
   return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
 }
 
-export function getAttributeEvent(ctx: Context): SetAttribute {
+export function getAttributeEvent(ctx: Event): SetAttribute {
   switch (ctx.name) {
-    case Event.setAttribute:
+    case Unique.setAttribute:
       return getSetAttributeEvent(ctx)
-    case Event.clearAttribute:
+    case Unique.clearAttribute:
       return getClearAttributeEvent(ctx)
     default:
       throw new Error('Unsupported event')
   }
 }
 
-export function getChangeTeamEvent(ctx: Context): ChangeCollectionTeam {
+export function getChangeTeamEvent(ctx: Event): ChangeCollectionTeam {
   const event = events.teamChanged
   if (event.v1.is(ctx)) {
     const [classId, issuer, admin, freezer] = event.v1.decode(ctx)
