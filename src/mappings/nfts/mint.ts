@@ -70,9 +70,15 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
   await context.store.save(collection)
-  await createEvent(final, OPERATION, event, '', context.store)
+  
+  const destinationAddress = final.issuer !== final.currentOwner ? final.currentOwner : ''
 
-  if (final.issuer !== final.currentOwner) {
-    await createEvent(final, Action.SEND, event, final.currentOwner, context.store, final.issuer)
-  }
+  await createEvent(
+    final,
+    OPERATION,
+    event,
+    destinationAddress,
+    context.store,
+    final.issuer !== final.currentOwner ? final.issuer : undefined
+  )
 }
