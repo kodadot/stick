@@ -25,12 +25,20 @@ export function onlyValue(call: ArchiveCallWithOptionalValue): string {
   return call?.value
 }
 
+export function isHex(value: unknown): value is string {
+  return typeof value === 'string' && value.length % 2 === 0 && /^0x[\da-f]*$/i.test(value)
+}
+
 export function addressOf(address: Uint8Array | string): string {
-  const value = typeof address === 'string' ? decodeHex(address) : address
+  const value = isHex(address) ? decodeHex(address) : address
   if (!value) {
     return ''
   }
   return ss58.codec(codec).encode(value)
+}
+
+export function unHex<T>(value: T): T | string {
+  return isHex(value) ? decodeHex(value).toString() : value
 }
 
 export function camelCase(str: string): string {
