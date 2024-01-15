@@ -1,6 +1,6 @@
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/kusama/events'
-import { addressOf } from '../../utils/helper'
+import { addressOf, unHex } from '../../utils/helper'
 import { Event } from '../../utils/types'
 import {
   BurnTokenEvent,
@@ -191,12 +191,12 @@ export function getCreateCollectionMetadataEvent(ctx: Event): SetMetadata {
 
   if (event.v9420.is(ctx)) {
     const { collection: classId, data } = event.v9420.decode(ctx)
-    return { collectionId: classId.toString(), metadata: data.toString() }
+    return { collectionId: classId.toString(), metadata: unHex(data) }
   }
 
   
   const { collection: classId, data } = event.v9420.decode(ctx)
-  return { collectionId: classId.toString(), metadata: data.toString() }
+  return { collectionId: classId.toString(), metadata: unHex(data) }
 }
 
 export function getClearClassMetadataEvent(ctx: Event): SetMetadata {
@@ -217,12 +217,12 @@ export function getCreateClassMetadataEvent(ctx: Event): SetMetadata {
 
   if (event.v9420.is(ctx)) {
     const { collection: classId, data } = event.v9420.decode(ctx)
-    return { collectionId: classId.toString(), metadata: data.toString() }
+    return { collectionId: classId.toString(), metadata: unHex(data) }
   }
 
   
   const { collection: classId, data } = event.v9420.decode(ctx)
-  return { collectionId: classId.toString(), metadata: data.toString() }
+  return { collectionId: classId.toString(), metadata: unHex(data) }
 }
 
 export function getCreateMetadataEvent(ctx: Event): SetMetadata {
@@ -230,12 +230,12 @@ export function getCreateMetadataEvent(ctx: Event): SetMetadata {
 
   if (event.v9420.is(ctx)) {
     const { collection: classId, item: instanceId, data } = event.v9420.decode(ctx)
-    return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
+    return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: unHex(data) }
   }
 
   
   const { collection: classId, item: instanceId, data } = event.v9420.decode(ctx)
-  return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: data.toString() }
+  return { collectionId: classId.toString(), sn: instanceId.toString(), metadata: unHex(data) }
 }
 
 export function getClearMetadataEvent(ctx: Event): SetMetadata {

@@ -1,6 +1,6 @@
 import { Interaction } from '../../../model'
 import { uniques as events } from '../../../types/kusama/events'
-import { addressOf, idOf, UNIQUE_PREFIX as U } from '../../utils/helper'
+import { addressOf, idOf, UNIQUE_PREFIX as U, unHex } from '../../utils/helper'
 import { warn } from '../../utils/logger'
 import { Event } from '../../utils/types'
 import {
@@ -240,12 +240,12 @@ export function getCreateCollectionMetadataEvent(ctx: Event): SetMetadata {
   const event = events.collectionMetadataSet
   if (event.v9230.is(ctx)) {
     const { collection: classId, data, isFrozen } = event.v9230.decode(ctx)
-    return { collectionId: idOf(classId, U), metadata: data.toString() }
+    return { collectionId: idOf(classId, U), metadata: unHex(data) }
   }
 
   
   const { collection: classId, data, isFrozen } = event.v9230.decode(ctx)
-  return { collectionId: idOf(classId, U), metadata: data.toString() }
+  return { collectionId: idOf(classId, U), metadata: unHex(data) }
 }
 
 export function getClearClassMetadataEvent(ctx: Event): SetMetadata {
@@ -268,36 +268,36 @@ export function getCreateClassMetadataEvent(ctx: Event): SetMetadata {
   const event = events.classMetadataSet
   if (event.v1.is(ctx)) {
     const [classId, data, isFrozen] = event.v1.decode(ctx)
-    return { collectionId: idOf(classId, U), metadata: data.toString() }
+    return { collectionId: idOf(classId, U), metadata: unHex(data) }
   }
   if (event.v700.is(ctx)) {
     const { class: classId, data, isFrozen } = event.v700.decode(ctx)
-    return { collectionId: idOf(classId, U), metadata: data.toString() }
+    return { collectionId: idOf(classId, U), metadata: unHex(data) }
   }
 
   
   const { class: classId, data, isFrozen } = event.v700.decode(ctx)
-  return { collectionId: idOf(classId, U), metadata: data.toString() }
+  return { collectionId: idOf(classId, U), metadata: unHex(data) }
 }
 
 export function getCreateMetadataEvent(ctx: Event): SetMetadata {
   const event = events.metadataSet
   if (event.v1.is(ctx)) {
     const [classId, instanceId, data, isFrozen] = event.v1.decode(ctx)
-    return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
+    return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: unHex(data) }
   }
   if (event.v700.is(ctx)) {
     const { class: classId, instance: instanceId, data, isFrozen } = event.v700.decode(ctx)
-    return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
+    return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: unHex(data) }
   }
   if (event.v9230.is(ctx)) {
     const { collection: classId, item: instanceId, data, isFrozen } = event.v9230.decode(ctx)
-    return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
+    return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: unHex(data) }
   }
 
   
   const { collection: classId, item: instanceId, data, isFrozen } = event.v9230.decode(ctx)
-  return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: data.toString() }
+  return { collectionId: idOf(classId, U), sn: instanceId.toString(), metadata: unHex(data) }
 }
 
 export function getClearMetadataEvent(ctx: Event): SetMetadata {
