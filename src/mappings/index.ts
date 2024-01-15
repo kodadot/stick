@@ -9,6 +9,9 @@ import { BatchContext, Context, SelectedEvent } from './utils/types'
 
 export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
   switch (item.name) {
+    case Unique.createCollection:
+      await u.handleCollectionCreate(ctx)
+      break
     case Unique.forceCreateClass:
       await u.handleForceCollectionCreate(ctx)
       break
@@ -27,8 +30,15 @@ export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): P
     case Unique.setCollectionMetadata:
       await u.handleMetadataSet(ctx)
       break
+    case Unique.setAttribute:
+    case Unique.clearAttribute:
+      await u.handleAttributeSet(ctx)
+      break
     case Unique.destroyCollection:
       await u.handleCollectionDestroy(ctx)
+      break
+    case Unique.burn:
+      await u.handleTokenBurn(ctx)
       break
     case Unique.createItem:
       await u.handleTokenCreate(ctx)
