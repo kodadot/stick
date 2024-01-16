@@ -346,7 +346,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
     return {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
-      trait: key.toString(),
+      trait: unHex(key),
       value: unHex(value) ,
     }
   }
@@ -355,7 +355,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
     return {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
-      trait: key.toString(),
+      trait: unHex(key),
       value: unHex(value) ,
     }
   }
@@ -364,14 +364,14 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
     return {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
-      trait: key.toString(),
+      trait: unHex(key),
       value: unHex(value),
     }
   }
 
   
   const { collection: classId, maybeItem: instanceId, key, value } = event.v9230.decode(ctx)
-  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString(), value: unHex(value) }
+  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key), value: unHex(value) }
 }
 
 function getClearAttributeEvent(ctx: Event): SetAttribute {
@@ -379,20 +379,20 @@ function getClearAttributeEvent(ctx: Event): SetAttribute {
 
   if (event.v1.is(ctx)) {
     const [classId, instanceId, key] = event.v1.decode(ctx)
-    return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
+    return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key) }
   }
   if (event.v700.is(ctx)) {
     const { class: classId, maybeInstance: instanceId, key } = event.v700.decode(ctx)
-    return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
+    return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key) }
   }
   if (event.v9230.is(ctx)) {
     const { collection: classId, maybeItem: instanceId, key } = event.v9230.decode(ctx)
-    return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
+    return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key) }
   }
 
   
   const { collection: classId, maybeItem: instanceId, key } = event.v9230.decode(ctx)
-  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString() }
+  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key) }
 }
 
 export function getAttributeEvent(ctx: Event): SetAttribute {
