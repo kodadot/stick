@@ -86,7 +86,10 @@ update-deps:
 	npx npm-check-updates -ux
 
 exec:
-	docker exec -it stick-db-1 psql -U postgres -d squid
+	docker exec -it subsquid_db psql -U postgres -d squid
+
+dump NAME=default:
+	docker exec -t subsquid_db pg_dump -U postgres -d squid > {{NAME}}.sql
 
 check: codegen build
 
