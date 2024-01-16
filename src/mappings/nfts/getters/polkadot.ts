@@ -1,3 +1,4 @@
+import { logger } from '@kodadot1/metasquid/logger'
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/polkadot/events'
 import { addressOf, unHex } from '../../utils/helper'
@@ -17,6 +18,7 @@ import {
   SetMetadata,
   TransferTokenEvent,
 } from '../types'
+import { debug } from '../../utils/logger'
 
 export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
   const event = events.created
@@ -270,21 +272,23 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
   const event = events.attributeSet
   if (event.v9430.is(ctx)) {
     const { collection: classId, maybeItem: instanceId, key, value } = event.v9430.decode(ctx)
+    debug('setAttribute' as any, { classId, instanceId, key, value, human: { key: unHex(key), value: unHex(value) } })
     return {
       collectionId: classId.toString(),
       sn: instanceId?.toString(),
       trait: unHex(key),
-      value: unHex(value),
+      value,
     }
   }
 
   
   const { collection: classId, maybeItem: instanceId, key, value } = event.v9430.decode(ctx)
+  debug('setAttribute' as any, { classId, instanceId, key, value, human: { key: unHex(key), value: unHex(value) } })
   return {
     collectionId: classId.toString(),
     sn: instanceId?.toString(),
     trait: unHex(key),
-    value: unHex(value),
+    value,
   }
 }
 

@@ -347,7 +347,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
       trait: unHex(key),
-      value: unHex(value) ,
+      value,
     }
   }
   if (event.v700.is(ctx)) {
@@ -356,7 +356,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
       trait: unHex(key),
-      value: unHex(value) ,
+      value,
     }
   }
   if (event.v9230.is(ctx)) {
@@ -365,13 +365,13 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
       collectionId: idOf(classId, U),
       sn: instanceId?.toString(),
       trait: unHex(key),
-      value: unHex(value),
+      value,
     }
   }
 
   
   const { collection: classId, maybeItem: instanceId, key, value } = event.v9230.decode(ctx)
-  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key), value: unHex(value) }
+  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: unHex(key), value }
 }
 
 function getClearAttributeEvent(ctx: Event): SetAttribute {

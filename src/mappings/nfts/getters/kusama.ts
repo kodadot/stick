@@ -274,7 +274,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
       collectionId: classId.toString(),
       sn: instanceId?.toString(),
       trait: unHex(key),
-      value: unHex(value),
+      value,
     }
   }
 
@@ -284,7 +284,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
     collectionId: classId.toString(),
     sn: instanceId?.toString(),
     trait: unHex(key),
-    value: unHex(value),
+    value,
   }
 }
 
