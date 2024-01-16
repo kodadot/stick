@@ -68,7 +68,7 @@ export type SetMetadata = Omit<BaseTokenEvent, 'sn'> &
 export type SetAttribute = Omit<BaseTokenEvent, 'sn'> & {
   sn?: string
   trait: string
-  value?: string | Uint8Array
+  value?: string
 }
 
 export type ChangeCollectionTeam = WithId & {
