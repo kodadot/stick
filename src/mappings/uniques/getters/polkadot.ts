@@ -371,7 +371,7 @@ function getSetAttributeEvent(ctx: Event): SetAttribute {
 
   
   const { collection: classId, maybeItem: instanceId, key, value } = event.v9230.decode(ctx)
-  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString(), value: value.toString() }
+  return { collectionId: idOf(classId, U), sn: instanceId?.toString(), trait: key.toString(), value: unHex(value) }
 }
 
 function getClearAttributeEvent(ctx: Event): SetAttribute {
