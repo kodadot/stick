@@ -2,6 +2,19 @@
   "outDir": "src/types/kusama",
   "specVersions": "https://v2.archive.subsquid.io/metadata/asset-hub-kusama",
   "pallets": {
+    "Assets": {
+      "events": [
+        "Burned",
+        "Created",
+        "Destroyed",
+        "ForceCreated",
+        "MetadataCleared",
+        "MetadataSet"
+      ],
+      "calls": [],
+      "storage": [],
+      "constants": []
+    },
     "Uniques": {
       "events": [
         "AttributeCleared",
