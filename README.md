@@ -6,33 +6,35 @@ KodaDot's [Squid](https://docs.subsquid.io) based data processor for [KodaDot](h
 
 ## Prerequisites
 
-* node 18.x
-* docker
-* npm -- note that `yarn` package manager is not supported
+* Node 18.x
+* Docker
+* npm
+* [just](https://github.com/casey/just)
 
 ## Quickly running the sample
 
-Example commands below use [sqd](https://docs.subsquid.io/squid-cli/).
-Please [install](https://docs.subsquid.io/squid-cli/installation/) it before proceeding.
-
 ```bash
-# 1. Update Squid SDK and install dependencies
-npm run update
+# 1. Install dependencies
 npm ci
 
-# 2. Start target Postgres database and detach
-sqd up
+# 2. Build project
+just build
 
-# 3. Build the project and start the processor
-sqd process
+# 3. Start target Postgres database container
+just upd
 
-# 4. The command above will block the terminal
+# 4. Start the processor
+just process
+
+# 5. The command above will block the terminal
 #    being busy with fetching the chain data, 
 #    transforming and storing it in the target database.
 #
 #    To start the graphql server open a separate terminal
 #    and run
-sqd serve
+just serve
+
+# 6. Visit localhost:4350/graphql to see result
 ```
 
 ## Project structure
