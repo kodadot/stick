@@ -1,11 +1,12 @@
 import { logger } from '@kodadot1/metasquid/logger'
 
 import { Store } from '@subsquid/typeorm-store'
+import { STARTING_BLOCK } from '../environment'
 import { NFTEntity as NE } from '../model'
-import { NonFungible, Unique, Asset } from '../processable'
+import { Asset, NonFungible, Unique } from '../processable'
+import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
-import * as a from './assets'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
@@ -147,13 +148,24 @@ export async function assets<T extends SelectedEvent>(item: T, ctx: Context): Pr
   }
 }
 
+export async function forceAssets(ctx: BatchContext<Store>): Promise<void> {
+  logger.info('Forcing assets')
+  await a.forceCreateSystemAsset(ctx);
+  await a.forceCreateUsdtAsset(ctx);
+}
+
 const globalHandler: Record<string, HandlerFunction> = {
   Uniques: uniques,
   Nfts: nfts,
-  Assets: assets,
+  // Assets: assets,
 }
 
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
+  const start = ctx.blocks[0].header.height
+  if (STARTING_BLOCK === start) {
+    await forceAssets(ctx);
+  }
+  
   logger.info(
     `Processing ${ctx.blocks.length} blocks from ${ctx.blocks[0].header.height} to ${
       ctx.blocks[ctx.blocks.length - 1].header.height
