@@ -1,6 +1,12 @@
 import { lookupArchive } from '@subsquid/archive-registry'
 
-export const CHAIN = process.env.CHAIN || 'kusama'
+export type Chain = 'kusama' | 'rococo' | 'polkadot'
+
+export const CHAIN: Chain = process.env.CHAIN as Chain || 'kusama'
+
+const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
+// const _NFT_STARTING_BLOCK = 4_556_552
+export const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 
 // Asset Hub
 const ARCHIVE_URL = lookupArchive(`asset-hub-${CHAIN}`, { release: 'ArrowSquid' })

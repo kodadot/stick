@@ -2,6 +2,18 @@
   "outDir": "src/types/polkadot",
   "specVersions": "https://v2.archive.subsquid.io/metadata/asset-hub-polkadot",
   "pallets": {
+    "Assets": {
+      "events": [
+        "Created",
+        "Destroyed",
+        "ForceCreated",
+        "MetadataCleared",
+        "MetadataSet"
+      ],
+      "calls": [],
+      "storage": [],
+      "constants": []
+    },
     "Uniques": {
       "events": [
         "AttributeCleared",
