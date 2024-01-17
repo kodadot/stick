@@ -18,7 +18,8 @@ export async function handleAttributeSet(context: Context): Promise<void> {
   }
 
   if ('royalty' in final && event.trait === 'royalty') {
-    final.royalty = final.royalty ?? Number.parseFloat(event.value as string)
+    const value = unHex(event.value)
+    final.royalty = final.royalty ?? Number.parseFloat(value || '0')
   }
 
   if ('recipient' in final && event.trait === 'recipient') {
