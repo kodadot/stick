@@ -1,8 +1,9 @@
 import { assets as events } from '../../../types/kusama/events'
 import { addressOf, idOf } from '../../utils/helper'
 import { Event } from '../../utils/types'
+import { CreateAssetEvent, ForceCreateAssetEvent, SetMetadata } from '../types'
 
-export function getCreateAssetEvent(ctx: Event) {
+export function getCreateAssetEvent(ctx: Event): CreateAssetEvent {
   const event = events.created
 
   if (event.v1.is(ctx)) {
@@ -19,7 +20,7 @@ export function getCreateAssetEvent(ctx: Event) {
   return { id: idOf(classId), caller: addressOf(creator), owner: addressOf(owner) }
 }
 
-export function getForceCreateAssetEvent(ctx: Event) {
+export function getForceCreateAssetEvent(ctx: Event): ForceCreateAssetEvent {
   const event = events.forceCreated
   if (event.v1.is(ctx)) {
     const [classId, owner] = event.v1.decode(ctx)
@@ -34,15 +35,15 @@ export function getForceCreateAssetEvent(ctx: Event) {
   return { id: idOf(classId), owner: addressOf(owner) }
 }
 
-export function getCreateAssetMetadataEvent(ctx: Event) {
+export function getCreateAssetMetadataEvent(ctx: Event): SetMetadata {
   const event = events.metadataSet
 
   if (event.v1.is(ctx)) {
     const [assetId, name, symbol, decimals, isFrozen] = event.v1.decode(ctx)
-    return { assetId, name, symbol, decimals, isFrozen }
+    return { id: idOf(assetId), name, symbol, decimals, isFrozen }
   }
 
   
   const { assetId, name, symbol, decimals, isFrozen } = event.v700.decode(ctx)
-  return { assetId, name, symbol, decimals, isFrozen }
+  return { id: idOf(assetId), name, symbol, decimals, isFrozen }
 }
