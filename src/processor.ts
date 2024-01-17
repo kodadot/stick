@@ -5,7 +5,7 @@ import {
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { NonFungible, Unique } from './processable'
+import { Asset, NonFungible, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
 import { SelectedFields, Store, fieldSelection } from './mappings/utils/types'
@@ -103,7 +103,7 @@ processor.addEvent({ name: [NonFungible.transfer], call: true, extrinsic: true }
 processor.setFields(fieldSelection)
 
 /**
- * Assets nft pallet
+ * Assets pallet
  */
 // processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateSystemAsset);
 // processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateUsdtAsset);
@@ -111,6 +111,10 @@ processor.setFields(fieldSelection)
 // if (CHAIN === 'kusama') {
 //   processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateRmrkAsset);
 // }
+// processor.addEvent({ name: [Asset.create], call: true, extrinsic: true })
+// processor.addEvent({ name: [Asset.forceCreate], call: true, extrinsic: true })
+processor.addEvent({ name: [Asset.setMetadata], call: true, extrinsic: true })
+// processor.addEvent({ name: [Asset.clearMetadata], call: true, extrinsic: true })
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
