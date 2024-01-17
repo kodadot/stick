@@ -1,3 +1,4 @@
+import { contentFrom, type Content } from '@kodadot1/hyperdata'
 import { ensure } from '@kodadot1/metasquid'
 import { EntityWithId, TokenMetadata } from '@kodadot1/metasquid/types'
 import { $obtain } from '@kodadot1/minipfs'
@@ -6,12 +7,13 @@ import logger from './logger'
 // import { attributeFrom } from './types'
 export const BASE_URL = 'https://image.w.kodadot.xyz/'
 
-export const fetchMetadata = async <T>(metadata: string): Promise<T> => {
+export const fetchMetadata = async <T extends Content>(metadata: string): Promise<T> => {
   try {
     if (!metadata) {
       return ensure<T>({})
     }
-    return await $obtain<T>(metadata, ['rmrk', 'infura_kodadot1'], true)
+    const value = await $obtain<T>(metadata, ['rmrk', 'infura_kodadot1'], true)
+    return contentFrom(value as any) as T
   } catch (e) {
     logger.error(`[MINIPFS] ${e}`)
   }
@@ -19,7 +21,7 @@ export const fetchMetadata = async <T>(metadata: string): Promise<T> => {
   return ensure<T>({})
 }
 
-export const fetchAllMetadata = async <T extends TokenMetadata>(
+export const fetchAllMetadata = async <T extends Content>(
   metadata: string[]
 ): Promise<(Partial<MetadataEntity> & EntityWithId)[]> => {
   const res = await Promise.allSettled(metadata.map((meta) => fetchMetadata<T>(meta)))
@@ -31,12 +33,12 @@ export const fetchAllMetadata = async <T extends TokenMetadata>(
 
 export const makeCompatibleMetadata = (
   id: string,
-  metadata: TokenMetadata
+  metadata: Content
 ): Partial<MetadataEntity> & EntityWithId => ({
   id,
   description: metadata.description || '',
-  image: metadata.image || metadata.thumbnailUri || metadata.mediaUri,
-  animationUrl: metadata.animation_url || metadata.mediaUri,
+  image: metadata.image || metadata.thumbnail,
+  animationUrl: metadata.animationUrl,
   attributes: [], // metadata.attributes?.map(attributeFrom) || [],
   name: metadata.name,
   type: metadata.type || '',
