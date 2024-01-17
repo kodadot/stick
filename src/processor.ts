@@ -1,6 +1,4 @@
 import {
-  DataHandlerContext,
-  FieldSelection,
   SubstrateBatchProcessor as SubstrateProcessor
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
@@ -8,8 +6,8 @@ import logger from './mappings/utils/logger'
 import { Asset, NonFungible, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
-import { SelectedFields, Store, fieldSelection } from './mappings/utils/types'
 import { mainFrame } from './mappings'
+import { SelectedFields, fieldSelection } from './mappings/utils/types'
 
 const database = new Database()
 const processor = new SubstrateProcessor<SelectedFields>()
