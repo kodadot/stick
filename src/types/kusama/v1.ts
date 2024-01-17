@@ -54,6 +54,10 @@ export const ClassDetails: sts.Type<ClassDetails> = sts.struct(() => {
 
 export const InstanceId = sts.number()
 
+export const ClassId = sts.number()
+
+export const TAssetBalance = sts.bigint()
+
 export const AccountId = sts.bytes()
 
-export const ClassId = sts.number()
+export const AssetId = sts.number()
