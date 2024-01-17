@@ -1,6 +1,8 @@
 import { lookupArchive } from '@subsquid/archive-registry'
 
-export const CHAIN = process.env.CHAIN || 'kusama'
+export type Chain = 'kusama' | 'rococo' | 'polkadot'
+
+export const CHAIN: Chain = process.env.CHAIN as Chain || 'kusama'
 
 // Asset Hub
 const ARCHIVE_URL = lookupArchive(`asset-hub-${CHAIN}`, { release: 'ArrowSquid' })
