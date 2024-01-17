@@ -1,27 +1,43 @@
 import { create } from '@kodadot1/metasquid/entity'
 import { Store } from '@subsquid/typeorm-store'
-import { isProd } from '../../environment'
+import { CHAIN, Chain } from '../../environment'
 import { AssetEntity } from '../../model'
 import { pending, success } from '../utils/logger'
 import { BatchContext } from '../utils/types'
 
+
 const OPERATION = 'ASSET_REGISTER' as any
 
-export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
-  const systemAsset = isProd
-  ? {
+type Asset = {
+  name: string,
+  symbol: string,
+  decimals: number,
+}
+
+const systemAsset: Record<Chain, Asset> = 
+{
+  kusama: {
     name: 'Kusama',
     symbol: 'KSM',
     decimals: 12,
-  } 
-  : {
+  },
+  polkadot: {
     name: 'Polkadot',
     symbol: 'DOT',
     decimals: 10,
-  }
+  },
+  rococo: {
+    name: 'Rococo',
+    symbol: 'ROC',
+    decimals: 12,
+  },
+}
 
-  const asset = create<AssetEntity>(AssetEntity, '', systemAsset);
+export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
+  const selected = systemAsset[CHAIN];
+
+  const asset = create<AssetEntity>(AssetEntity, '', selected);
   success(OPERATION,`${asset.id} is ${asset.name || ''}`);
   await context.store.save<AssetEntity>(asset);
 }
