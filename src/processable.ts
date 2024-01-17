@@ -76,3 +76,11 @@ export enum NewNonFungible {
   createSwap = 'Nfts.SwapCreated',
   sendTip = 'Nfts.TipSent', // can be used for marking royaltyPaid
 }
+
+export enum Asset {
+  create = 'Assets.Created',
+  destroy = 'Assets.Destroyed',
+  forceCreate = 'Assets.ForceCreated',
+  clearMetadata = 'Assets.ClassMetadataCleared',
+  setMetadata = 'Assets.MetadataSet',
+}
