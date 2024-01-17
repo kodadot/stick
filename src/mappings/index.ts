@@ -2,10 +2,13 @@ import { logger } from '@kodadot1/metasquid/logger'
 
 import { Store } from '@subsquid/typeorm-store'
 import { NFTEntity as NE } from '../model'
-import { NonFungible, Unique } from '../processable'
+import { NonFungible, Unique, Asset } from '../processable'
 import * as n from './nfts'
 import * as u from './uniques'
+import * as a from './assets'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
+
+type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
 export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
   switch (item.name) {
@@ -129,7 +132,25 @@ export async function nfts<T extends SelectedEvent>(item: T, ctx: Context): Prom
     case NonFungible.transfer:
       await n.handleTokenTransfer(ctx)
       break
+    default:
+      throw new Error(`Unknown event ${item.name}`)
   }
+}
+
+export async function assets<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
+  switch (item.name) {
+    case Asset.setMetadata:
+      await a.handleAssetMetadataSet(ctx)
+      break
+    default:
+      throw new Error(`Unknown event ${item.name}`)
+  }
+}
+
+const globalHandler: Record<string, HandlerFunction> = {
+  Uniques: uniques,
+  Nfts: nfts,
+  Assets: assets,
 }
 
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
@@ -143,7 +164,10 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
     for (let event of block.events) {
       logger.debug(`Processing ${event.name}`)
       const [pallet] = event.name.split('.')
-      const handler =  pallet === 'Uniques' ? uniques : nfts
+      const handler =  globalHandler[pallet]
+      if (!handler) {
+        throw new Error(`Unknown pallet ${pallet}`)
+      }
       await handler(event, {
         event,
         block: block.header,
