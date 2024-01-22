@@ -17,6 +17,7 @@ import {
   SetAttribute,
   SetMetadata,
   TransferTokenEvent,
+  UpdateMintSettings,
 } from '../types'
 
 export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
@@ -336,11 +337,14 @@ export function getChangeTeamEvent(ctx: Event): ChangeCollectionTeam {
   }
 }
 
-export function getUpdateMintCall(ctx: Call) {
+export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
   const call = calls.updateMintSettings
 
   if (call.v9420.is(ctx)) {
     const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9420.decode(ctx)
     return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
   }
+
+  const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9420.decode(ctx)
+  return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
 }

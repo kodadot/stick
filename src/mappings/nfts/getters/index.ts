@@ -14,6 +14,7 @@ import {
   SetAttribute,
   SetMetadata,
   TransferTokenEvent,
+  UpdateMintSettings,
 } from '../types'
 
 // eslint-disable-next-line unicorn/prefer-module
@@ -134,7 +135,7 @@ export function getChangeTeamEvent(_ctx: Context): ChangeCollectionTeam {
  return proc.getChangeTeamEvent(ctx);
 }
 
-export function getUpdateMintCall(_ctx: Context): ChangeCollectionTeam {
+export function getUpdateMintCall(_ctx: Context): UpdateMintSettings {
   const ctx = _ctx.call 
  return proc.getUpdateMintCall(ctx);
 }
