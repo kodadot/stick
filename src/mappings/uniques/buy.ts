@@ -48,4 +48,10 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   await context.store.save(entity.collection)
   const meta = String(event.price || '')
   await createEvent(entity, OPERATION, event, meta, context.store, event.currentOwner)
+
+  if (entity.royalty && entity.recipient) {
+    const OPERATION_PAY_ROYALTY = Action.PAY_ROYALTY
+    success(OPERATION_PAY_ROYALTY, `pay ${entity.royalty} to ${entity.recipient} for item ${entity.id}`)
+    await createEvent(entity, OPERATION_PAY_ROYALTY, event, String(entity.royalty), context.store, entity.recipient)
+  }
 }
