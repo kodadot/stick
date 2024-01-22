@@ -26,6 +26,8 @@ type CollectionEntity @entity {
   updatedAt: DateTime! @index
   version: Int!
   volume: BigInt! @index
+  type: CollectionType
+  settings: CollectionSettings
 }
 
 type TokenEntity @entity {
@@ -88,6 +90,13 @@ type Attribute @jsonField {
   value: String!
 }
 
+type CollectionSettings @jsonField {
+  value: String
+  startBlock: BigInt
+  endBlock: BigInt
+  price: BigInt
+}
+
 interface EventType {
   id: ID!
   blockNumber: BigInt
@@ -134,6 +143,12 @@ enum Interaction {
   UNLIST
   LOCK
   CHANGEISSUER
+}
+
+enum CollectionType {
+  HolderOf
+  Issuer
+  Public
 }
 
 type AssetEntity @entity {
