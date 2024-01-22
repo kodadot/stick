@@ -133,3 +133,8 @@ export function getChangeTeamEvent(_ctx: Context): ChangeCollectionTeam {
   const ctx = _ctx.event 
  return proc.getChangeTeamEvent(ctx);
 }
+
+export function getUpdateMintCall(_ctx: Context): ChangeCollectionTeam {
+  const ctx = _ctx.call 
+ return proc.getUpdateMintCall(ctx);
+}

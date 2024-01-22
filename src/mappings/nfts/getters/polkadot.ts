@@ -1,8 +1,9 @@
 import { logger } from '@kodadot1/metasquid/logger'
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/polkadot/events'
+import { nfts as calls } from '../../../types/polkadot/calls'
 import { addressOf, unHex } from '../../utils/helper'
-import { Event } from '../../utils/types'
+import { Event, Call } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
@@ -336,5 +337,14 @@ export function getChangeTeamEvent(ctx: Event): ChangeCollectionTeam {
     issuer: issuer ? addressOf(issuer) : '',
     admin: admin ? addressOf(admin) : '',
     freezer: freezer ? addressOf(freezer) : '',
+  }
+}
+
+export function getUpdateMintCall(ctx: Call) {
+  const call = calls.updateMintSettings
+
+  if (call.v9430.is(ctx)) {
+    const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9430.decode(ctx)
+    return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
   }
 }

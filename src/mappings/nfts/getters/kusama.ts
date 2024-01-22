@@ -1,7 +1,8 @@
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/kusama/events'
-import { addressOf, unHex } from '../../utils/helper'
-import { Event } from '../../utils/types'
+import { nfts as calls } from '../../../types/kusama/calls'
+import { addressOf, onlyValue, unHex } from '../../utils/helper'
+import { Event, Call } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
@@ -332,5 +333,14 @@ export function getChangeTeamEvent(ctx: Event): ChangeCollectionTeam {
     issuer: issuer ? addressOf(issuer) : '',
     admin: admin ? addressOf(admin) : '',
     freezer: freezer ? addressOf(freezer) : '',
+  }
+}
+
+export function getUpdateMintCall(ctx: Call) {
+  const call = calls.updateMintSettings
+
+  if (call.v9420.is(ctx)) {
+    const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9420.decode(ctx)
+    return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
   }
 }
