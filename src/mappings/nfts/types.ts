@@ -1,5 +1,5 @@
 import { ArchiveCall, ArchiveCallWithOptionalValue, MetadataAttribute, Optional } from '@kodadot1/metasquid/types'
-import { Attribute } from '../../model'
+import { Attribute, CollectionSettings } from '../../model'
 import { createTokenId } from '../utils/types'
 
 export type WithId = {
@@ -95,6 +95,19 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
       display: String(attribute.display_type),
       trait: String(attribute.trait_type),
       value: String(attribute.value),
+    }
+  )
+}
+
+
+export function collectionSettingOf(settings: UpdateMintSettings): CollectionSettings {
+  return new CollectionSettings(
+    {},
+    {
+      value: String(settings.type.value ?? ''),
+      startBlock: settings.startBlock,
+      endBlock: settings.endBlock,
+      price: settings.price,
     }
   )
 }
