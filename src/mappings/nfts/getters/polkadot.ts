@@ -341,6 +341,28 @@ export function getChangeTeamEvent(ctx: Event): ChangeCollectionTeam {
   }
 }
 
+export function getTipSentEvent(ctx: Event) {
+  const event = events.tipSent
+
+  if (event.v9430.is(ctx)) {
+    const { collection, item, receiver, amount } = event.v9430.decode(ctx)
+    return {
+      collection: collection.toString(),
+      item: item.toString(),
+      receiver: receiver ? addressOf(receiver) : '',
+      amount,
+    }
+  }
+
+  const { collection, item, receiver, amount } = event.v9430.decode(ctx)
+  return {
+    collection: collection.toString(),
+    item: item.toString(),
+    receiver: receiver ? addressOf(receiver) : '',
+    amount,
+  }
+}
+
 export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
   const call = calls.updateMintSettings
 
