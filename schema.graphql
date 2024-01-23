@@ -159,3 +159,8 @@ type AssetEntity @entity {
   symbol: String
   decimals: Int
 }
+
+type CacheStatus @entity {
+  id: ID!
+  lastBlockTimestamp: DateTime!
+}
