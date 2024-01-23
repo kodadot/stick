@@ -40,6 +40,11 @@ export function getTransferTokenEvent(_ctx: Context): TransferTokenEvent {
  return proc.getTransferTokenEvent(ctx);
 }
 
+export function getTipSentEvent(_ctx: Context) {
+  const ctx = _ctx.event 
+ return proc.getTipSentEvent(ctx)
+}
+
 export function getBurnTokenEvent(_ctx: Context): BurnTokenEvent {
   const ctx = _ctx.event 
  return proc.getBurnTokenEvent(ctx);
