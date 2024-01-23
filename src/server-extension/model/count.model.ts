@@ -1,12 +1,12 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
 export class CountEntity {
   @Field(() => Number, { nullable: false, name: 'totalCount' })
-  total!: number;
+  total!: number
 
   constructor(totalCount: number) {
-    this.total = totalCount;
+    this.total = totalCount
   }
 }
 
@@ -14,10 +14,10 @@ export class CountEntity {
 @ObjectType()
 export class CountEntityQueryResult {
     @Field(() => Number, { nullable: false })
-    total_count!: number;
+    total_count!: number
 
 
     constructor(props: Partial<CountEntityQueryResult>) {
-        Object.assign(this, props);
+        Object.assign(this, props)
     }
 }

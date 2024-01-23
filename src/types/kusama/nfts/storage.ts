@@ -1,4 +1,4 @@
-import {sts, Block, Bytes, Option, Result, StorageType, RuntimeCtx} from '../support'
+import { sts, Block, Bytes, Option, Result, StorageType, RuntimeCtx } from '../support'
 import * as v9420 from '../v9420'
 
 export const collection =  {

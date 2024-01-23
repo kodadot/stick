@@ -1,54 +1,54 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
 export class SeriesEntity {
   @Field(() => String, { nullable: false })
-  id!: string;
+  id!: string
 
   @Field(() => String, { nullable: false })
-  issuer!: string;
+  issuer!: string
 
   @Field(() => Number, { nullable: false })
-  unique!: number;
+  unique!: number
 
   @Field(() => Number, { nullable: false, name: 'uniqueCollectors' })
-  unique_collectors!: number;
+  unique_collectors!: number
 
   @Field(() => Number, { nullable: false })
-  sold!: number;
+  sold!: number
 
   @Field(() => Number, { nullable: false })
-  total!: number;
+  total!: number
 
   @Field(() => BigInt, { nullable: true, defaultValue: 0n, name: 'averagePrice' })
-  average_price!: bigint;
+  average_price!: bigint
 
   @Field(() => BigInt, { nullable: true, defaultValue: 0n, name: 'floorPrice' })
-  floor_price!: bigint;
+  floor_price!: bigint
 
   @Field(() => BigInt, { nullable: true, defaultValue: 0n, name: 'highestSale' })
-  highest_sale!: bigint;
+  highest_sale!: bigint
 
   @Field(() => Number, { nullable: true, defaultValue: 0 })
-  buys!: number;
+  buys!: number
 
   // @Field(() => Number, { nullable: true, defaultValue: 0 })
   // rank!: number
 
   @Field(() => BigInt, { nullable: true, defaultValue: 0n })
-  volume!: bigint;
+  volume!: bigint
 
   @Field(() => String, { nullable: false })
-  name!: string;
+  name!: string
 
   @Field(() => String, { nullable: true })
-  metadata!: string;
+  metadata!: string
 
   @Field(() => String, { nullable: true })
-  image!: string;
+  image!: string
 
   constructor(props: Partial<SeriesEntity>) {
-    Object.assign(this, props);
+    Object.assign(this, props)
   }
 }
 

@@ -1,4 +1,4 @@
-import {sts, Result, Option, Bytes, BitSequence} from './support'
+import { sts, Result, Option, Bytes, BitSequence } from './support'
 
 export const PalletAttributes: sts.Type<PalletAttributes> = sts.closedEnum(() => {
     return  {

@@ -1,4 +1,4 @@
-import {sts, Block, Bytes, Option, Result, EventType, RuntimeCtx} from '../support'
+import { sts, Block, Bytes, Option, Result, EventType, RuntimeCtx } from '../support'
 import * as v1 from '../v1'
 import * as v700 from '../v700'
 import * as v900 from '../v900'

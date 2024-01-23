@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from 'type-graphql';
+import { Field, ObjectType, registerEnumType } from 'type-graphql'
 
 
 export enum OrderBy {
@@ -16,155 +16,155 @@ export enum OrderBy {
 registerEnumType(OrderBy, {
     name: "OrderBy",
     description: "Order by options for sorting results",
-});
+})
 
 
 @ObjectType()
 class Cheapest {
     @Field(() => String, { nullable: true })
-    id!: string;
+    id!: string
 
     @Field(() => BigInt, { nullable: true })
-    price!: bigint;
+    price!: bigint
 
     @Field(() => String, { nullable: true })
-    currentOwner!: string;
+    currentOwner!: string
 }
 
 @ObjectType()
 class Collection {
     @Field(() => String, { nullable: true })
-    id!: string;
+    id!: string
 
     @Field(() => String, { nullable: true })
-    name!: string;
+    name!: string
 }
 
 
 @ObjectType()
  class PartialMetadataEntity {
     @Field(() => String, { nullable: false })
-    id!: string;
+    id!: string
 
     @Field(() => String, { nullable: true })
-    description?: string;
+    description?: string
 
     @Field(() => String, { nullable: true })
-    image?: string;
+    image?: string
 
     @Field(() => String, { nullable: true })
-    animationUrl?: string;
+    animationUrl?: string
 }
 
 @ObjectType()
 export class TokenEntityModel {
     @Field(() => String, { nullable: false })
-    id!: string;
+    id!: string
 
     @Field(() => String, { nullable: false })
-    name!: string;
+    name!: string
 
     @Field(() => String, { nullable: true })
-    image!: string;
+    image!: string
 
     @Field(() => String, { nullable: true })
-    media!: string;
+    media!: string
 
     @Field(() => String, { nullable: true })
-    metadata?: string;
+    metadata?: string
 
     @Field(() => PartialMetadataEntity, { nullable: true })
-    meta?: PartialMetadataEntity;
+    meta?: PartialMetadataEntity
 
     @Field(() => Date, { nullable: false })
-    createdAt!: Date;
+    createdAt!: Date
 
     @Field(() => Date, { nullable: false })
-    updatedAt!: Date;
+    updatedAt!: Date
 
     @Field(() => BigInt, { nullable: false })
-    blockNumber!: bigint;
+    blockNumber!: bigint
 
     @Field(() => Number, { nullable: false })
-    count!: number;
+    count!: number
 
     @Field(() => Number, { nullable: false })
-    supply!: number;
+    supply!: number
 
     @Field(() => Cheapest)
-    cheapest!: Cheapest;
+    cheapest!: Cheapest
 
     @Field(() => Collection)
-    collection!: Collection;
+    collection!: Collection
 
 
     constructor(props: Partial<TokenEntityModel>) {
-        Object.assign(this, props);
+        Object.assign(this, props)
     }
 }
 
 @ObjectType()
 export class TokenEntityQueryResult {
     @Field(() => String, { nullable: false })
-    id!: string;
+    id!: string
 
     @Field(() => String, { nullable: false })
-    name!: string;
+    name!: string
 
     @Field(() => String, { nullable: true })
-    image!: string;
+    image!: string
 
     @Field(() => String, { nullable: true })
-    media!: string;
+    media!: string
 
     @Field(() => Date, { nullable: false })
-    created_at!: Date;
+    created_at!: Date
 
     @Field(() => Date, { nullable: false })
-    updated_at!: Date;
+    updated_at!: Date
 
     @Field(() => BigInt, { nullable: false })
-    block_number!: bigint;
+    block_number!: bigint
 
     @Field(() => Number, { nullable: false })
-    count!: number;
+    count!: number
 
     @Field(() => Number, { nullable: false })
-    supply!: number;
+    supply!: number
 
     @Field(() => String, { nullable: true })
-    cheapest_id!: string;
+    cheapest_id!: string
 
     @Field(() => String, { nullable: true })
-    cheapest_current_owner!: string;
+    cheapest_current_owner!: string
 
     @Field(() => BigInt, { nullable: true })
-    cheapest_price!: bigint;
+    cheapest_price!: bigint
 
     @Field(() => String, { nullable: false })
-    collection_id!: string;
+    collection_id!: string
 
     @Field(() => String, { nullable: false })
-    collection_name!: string;
+    collection_name!: string
 
 
     @Field(() => String, { nullable: false })
-    meta_id!: string;
+    meta_id!: string
 
     @Field(() => String, { nullable: true })
-    meta_description?: string;
+    meta_description?: string
 
     @Field(() => String, { nullable: true })
-    meta_image?: string;
+    meta_image?: string
 
     @Field(() => String, { nullable: true })
-    meta_animation_url?: string;
+    meta_animation_url?: string
 
 
 
 
     constructor(props: Partial<TokenEntityModel>) {
-        Object.assign(this, props);
+        Object.assign(this, props)
     }
 }
 

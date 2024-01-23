@@ -1,4 +1,4 @@
-import {sts, Result, Option, Bytes, BitSequence} from './support'
+import { sts, Result, Option, Bytes, BitSequence } from './support'
 
 export const BoundedVec = sts.bytes()
 

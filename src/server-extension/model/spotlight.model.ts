@@ -1,32 +1,32 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
 export class SpotlightEntity {
   @Field(() => String, { nullable: false })
-  id!: string;
+  id!: string
 
   @Field(() => Number, { nullable: false })
-  collections!: number;
+  collections!: number
 
   @Field(() => Number, { nullable: false })
-  unique!: number;
+  unique!: number
 
   @Field(() => BigInt, { nullable: true, defaultValue: 0n })
-  average!: bigint;
+  average!: bigint
 
   @Field(() => Number, { nullable: false })
-  sold!: number;
+  sold!: number
 
   @Field(() => Number, { nullable: false, name: 'uniqueCollectors' })
-  unique_collectors!: number;
+  unique_collectors!: number
 
   @Field(() => BigInt, { nullable: true, defaultValue: 0n })
-  volume!: bigint;
+  volume!: bigint
 
   @Field(() => Number, { nullable: false })
-  total!: number;
+  total!: number
 
   constructor(props: Partial<SpotlightEntity>) {
-    Object.assign(this, props);
+    Object.assign(this, props)
   }
 }

@@ -1,10 +1,10 @@
-import type {BitSequence, Bytes, QualifiedName, Runtime} from '@subsquid/substrate-runtime'
+import assert from 'node:assert'
+import type {  Bytes, QualifiedName, Runtime } from '@subsquid/substrate-runtime'
 import * as sts from '@subsquid/substrate-runtime/lib/sts'
-import {Option, Result} from '@subsquid/substrate-runtime/lib/sts'
-import assert from 'assert'
 
 
-export {sts, Bytes, BitSequence, Option, Result}
+
+
 
 
 export interface RuntimeCtx {
@@ -140,3 +140,7 @@ export class StorageType {
         return block._runtime.getStorageFallback(this.name)
     }
 }
+
+export { type Bytes, type BitSequence } from '@subsquid/substrate-runtime'
+export { Result, Option } from '@subsquid/substrate-runtime/lib/sts'
+export * as sts from '@subsquid/substrate-runtime/lib/sts'

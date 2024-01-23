@@ -1,4 +1,4 @@
-import {sts, Block, Bytes, Option, Result, EventType, RuntimeCtx} from '../support'
+import { sts, Block, Bytes, Option, Result, EventType, RuntimeCtx } from '../support'
 import * as v9430 from '../v9430'
 
 export const created =  {
