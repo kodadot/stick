@@ -1,5 +1,5 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
-import { CollectionEntity as CE } from '../../model'
+import { CollectionEntity as CE, CollectionType } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Context } from '../utils/types'
@@ -15,8 +15,7 @@ export async function handleCollectionMintUpdate(context: Context): Promise<void
 
   const entity = await get(context.store, CE, event.id)
 
-  // TODO: update mint settings
-  entity.type = event.type.__kind as any
+  entity.type = event.type.__kind as CollectionType
   entity.settings = collectionSettingOf(event)
 
   success(OPERATION, `${event.id} by ${event.caller}`)
