@@ -77,6 +77,10 @@ export enum NewNonFungible {
   sendTip = 'Nfts.TipSent', // can be used for marking royaltyPaid
 }
 
+export enum NonFungibleCall {
+  updateMintSettings = 'Nfts.update_mint_settings',
+}
+
 export enum Asset {
   create = 'Assets.Created',
   destroy = 'Assets.Destroyed',

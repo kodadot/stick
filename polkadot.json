@@ -91,7 +91,9 @@
         "TransferApproved",
         "Transferred"
       ],
-      "calls": [],
+      "calls": [
+        "update_mint_settings"
+      ],
       "storage": [
         "Collection",
         "ItemMetadataOf"
