@@ -1,7 +1,7 @@
 {
   "name": "@kodadot1/stick",
-  "version": "0.1.0",
-  "description": "GraphQL service for Uniques and Assets on Statemine",
+  "version": "0.2.0",
+  "description": "AssetHub block indexer and graphql server",
   "private": true,
   "engines": {
     "node": ">=16"

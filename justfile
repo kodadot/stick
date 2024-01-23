@@ -62,6 +62,9 @@ migrate:
 update-db:
 	npx squid-typeorm-migration generate
 
+revert-db:
+	npx squid-typeorm-migration revert         
+
 db: update-db migrate
 
 test:
