@@ -3,7 +3,7 @@ import { logger } from '@kodadot1/metasquid/logger'
 import { Store } from '@subsquid/typeorm-store'
 import { STARTING_BLOCK } from '../environment'
 import { NFTEntity as NE } from '../model'
-import { Asset, NonFungible, Unique } from '../processable'
+import { Asset, NonFungible, NonFungibleCall, Unique } from '../processable'
 import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
@@ -132,6 +132,9 @@ export async function nfts<T extends SelectedEvent>(item: T, ctx: Context): Prom
       break
     case NonFungible.transfer:
       await n.handleTokenTransfer(ctx)
+      break
+    case NonFungibleCall.updateMintSettings:
+      await n.handleCollectionMintUpdate(ctx)
       break
     default:
       throw new Error(`Unknown event ${item.name}`)

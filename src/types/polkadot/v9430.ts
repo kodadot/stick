@@ -46,6 +46,47 @@ export const Type_353: sts.Type<Type_353> = sts.struct(() => {
     }
 })
 
+export const MintSettings: sts.Type<MintSettings> = sts.struct(() => {
+    return  {
+        mintType: MintType,
+        price: sts.option(() => sts.bigint()),
+        startBlock: sts.option(() => sts.number()),
+        endBlock: sts.option(() => sts.number()),
+        defaultItemSettings: sts.bigint(),
+    }
+})
+
+export const MintType: sts.Type<MintType> = sts.closedEnum(() => {
+    return  {
+        HolderOf: sts.number(),
+        Issuer: sts.unit(),
+        Public: sts.unit(),
+    }
+})
+
+export type MintType = MintType_HolderOf | MintType_Issuer | MintType_Public
+
+export interface MintType_HolderOf {
+    __kind: 'HolderOf'
+    value: number
+}
+
+export interface MintType_Issuer {
+    __kind: 'Issuer'
+}
+
+export interface MintType_Public {
+    __kind: 'Public'
+}
+
+export interface MintSettings {
+    mintType: MintType
+    price?: (bigint | undefined)
+    startBlock?: (number | undefined)
+    endBlock?: (number | undefined)
+    defaultItemSettings: bigint
+}
+
 export const PalletAttributes: sts.Type<PalletAttributes> = sts.closedEnum(() => {
     return  {
         TransferDisabled: sts.unit(),
