@@ -158,8 +158,8 @@ export async function assets<T extends SelectedEvent>(item: T, ctx: Context): Pr
 
 export async function forceAssets(ctx: BatchContext<Store>): Promise<void> {
   logger.info('Forcing assets')
-  await a.forceCreateSystemAsset(ctx);
-  await a.forceCreateUsdtAsset(ctx);
+  await a.forceCreateSystemAsset(ctx)
+  await a.forceCreateUsdtAsset(ctx)
 }
 
 const globalHandler: Record<string, HandlerFunction> = {
@@ -171,7 +171,7 @@ const globalHandler: Record<string, HandlerFunction> = {
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
   const start = ctx.blocks[0].header.height
   if (STARTING_BLOCK === start) {
-    await forceAssets(ctx);
+    await forceAssets(ctx)
   }
   
   logger.info(

@@ -34,32 +34,32 @@ const systemAsset: Record<Chain, Asset> =
 }
 
 export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
-  const selected = systemAsset[CHAIN];
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
+  const selected = systemAsset[CHAIN]
 
-  const asset = create<AssetEntity>(AssetEntity, '', selected);
-  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
-  await context.store.save<AssetEntity>(asset);
+  const asset = create<AssetEntity>(AssetEntity, '', selected)
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`)
+  await context.store.save<AssetEntity>(asset)
 }
 
 export async function forceCreateUsdtAsset(context: BatchContext): Promise<void> {
-  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const asset = create<AssetEntity>(AssetEntity, '1984', {
     name: 'Tether USD',
     symbol: 'USDt',
     decimals: 6,
-  });
-  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
-  await context.store.save<AssetEntity>(asset);
+  })
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`)
+  await context.store.save<AssetEntity>(asset)
 }
 
 export async function forceCreateRmrkAsset(context: BatchContext): Promise<void> {
-  pending(OPERATION, `${context.blocks.at(0)?.header.height}`);
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const asset = create<AssetEntity>(AssetEntity, '8', {
     name: 'RMRK.app',
     symbol: 'RMRK',
     decimals: 10,
-  });
-  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
-  await context.store.save<AssetEntity>(asset);
+  })
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`)
+  await context.store.save<AssetEntity>(asset)
 }
