@@ -41,14 +41,23 @@ export function unHex<T>(value: T): T | string {
   return isHex(value) ? decodeHex(value).toString() : value
 }
 
+/**
+ * @deprecated Use the unjs/ufo package
+ */
 export function camelCase(str: string): string {
   return str.replace(/(_[a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''))
 }
 
+/**
+ * @deprecated unused.
+ */
 export function metadataOf({ metadata }: SomethingWithOptionalMeta): string {
   return metadata ?? ''
 }
 
+/**
+ * @deprecated use ?? operator.
+ */
 export function oneOf<T>(one: T, two: T): T {
   return one || two
 }
@@ -82,6 +91,9 @@ export function versionOf(context: Context): 1 | 2 {
   throw new Error(`Unknown pallet: ${context.event.name}`)
 }
 
+/**
+ * @deprecated Use the new {@link idOf} with prefix.
+ */
 export function prefixOf(context: Context): string {
   if (isUniquePallet(context)) {
     return UNIQUE_PREFIX

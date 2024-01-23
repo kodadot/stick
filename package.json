@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "rm -rf lib && tsc",
+    "test": "vitest run",
     "update": "npx npm-check-updates --filter /subsquid/ --upgrade && npm i -f",
     "db:migrate": "npx squid-typeorm-migration apply",
     "processor:start": "node lib/processor.js",
@@ -40,6 +41,7 @@
     "eslint": "^8.38.0",
     "eslint-config-unjs": "^0.1.0",
     "prettier": "^2.8.7",
-    "typescript": "~5.0.4"
+    "typescript": "~5.0.4",
+    "vitest": "^1.2.1"
   }
 }
