@@ -8,6 +8,8 @@ import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
+import { updateCache } from './utils/cache'
+import { logError } from './utils/logger'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
@@ -196,6 +198,10 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
       // const item = event
     }
   }
+
+  const lastDate = new Date(ctx.blocks[ctx.blocks.length - 1].header.timestamp || start)
+  await updateCache(lastDate, ctx.store)  
+
   // const { contracts, tokens } = uniqueEntitySets(items)
   // const collections = await finalizeCollections(contracts, ctx)
   // const finish = await whatToDoWithTokens({ tokens, collections, items }, ctx)
