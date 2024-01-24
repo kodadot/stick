@@ -40,14 +40,14 @@ describe('Helpers', () => {
 
   describe('unHex', () => {
     it('should return a value', () => {
-      const value = unHex('0x')
-      expect(value).toBe('')
+      const value = unHex('0x42525a20546f6b656e')
+      expect(value).toBe('BRZ Token')
     })
 
     test('should throw on invalid', () => {
       // expect.hasAssertions()
       try {
-        unHex('0x30658243d02e18551f0d447dad1065db75b01e570fd47eec86805dbea12a28e')
+        unHex('0x42525a20546f6b656')
       } catch (error) {
         expect(error.message).toMatch('The expression evaluated to a falsy value')
       }
