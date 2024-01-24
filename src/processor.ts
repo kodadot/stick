@@ -103,15 +103,9 @@ processor.setFields(fieldSelection)
 /**
  * Assets pallet
  */
-// processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateSystemAsset);
-// processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateUsdtAsset);
-
-// if (CHAIN === 'kusama') {
-//   processor.addPreHook({ range: { from: STARTING_BLOCK, to: STARTING_BLOCK } }, a.forceCreateRmrkAsset);
-// }
 // processor.addEvent({ name: [Asset.create], call: true, extrinsic: true })
 // processor.addEvent({ name: [Asset.forceCreate], call: true, extrinsic: true })
-processor.addEvent({ name: [Asset.setMetadata], call: true, extrinsic: true })
+// processor.addEvent({ name: [Asset.setMetadata], call: true, extrinsic: true })
 // processor.addEvent({ name: [Asset.clearMetadata], call: true, extrinsic: true })
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
