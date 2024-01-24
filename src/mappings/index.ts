@@ -165,7 +165,7 @@ export async function forceAssets(ctx: BatchContext<Store>): Promise<void> {
 const globalHandler: Record<string, HandlerFunction> = {
   Uniques: uniques,
   Nfts: nfts,
-  // Assets: assets,
+  Assets: assets,
 }
 
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {

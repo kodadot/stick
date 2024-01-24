@@ -107,7 +107,7 @@ processor.setFields(fieldSelection)
  */
 // processor.addEvent({ name: [Asset.create], call: true, extrinsic: true })
 // processor.addEvent({ name: [Asset.forceCreate], call: true, extrinsic: true })
-// processor.addEvent({ name: [Asset.setMetadata], call: true, extrinsic: true })
+processor.addEvent({ name: [Asset.setMetadata], call: true, extrinsic: true })
 // processor.addEvent({ name: [Asset.clearMetadata], call: true, extrinsic: true })
 
 logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
