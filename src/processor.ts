@@ -3,7 +3,7 @@ import {
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { Asset, NonFungible, Unique } from './processable'
+import { Asset, NonFungible, NonFungibleCall, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
 import { mainFrame } from './mappings'
@@ -97,6 +97,8 @@ processor.addEvent({ name: [NonFungible.changeIssuer], call: true, extrinsic: tr
 processor.addEvent({ name: [NonFungible.changeTeam], call: true, extrinsic: true }) // n.handleCollectionTeamChange)
 // processor.addEvent({   name: [NonFungible.thaw, dummy);
 processor.addEvent({ name: [NonFungible.transfer], call: true, extrinsic: true }) // n.handleTokenTransfer)
+
+processor.addCall({ name: [NonFungibleCall.updateMintSettings], extrinsic: true })
 
 processor.setFields(fieldSelection)
 
