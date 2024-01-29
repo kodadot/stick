@@ -91,6 +91,18 @@ sqd migration:generate
 sqd migration:apply
 ```
 
+## Architecture
+
+Architecture of this project is following:
+
+* `src/processable.ts` - definition of Events and Extrinsic to be processed by squid
+* `src/processor.ts` - processor definition
+* `src/mappings/index` - main function that is called by processor to process events and extrinsics
+* `src/mappings/<pallet>` - mapping functions for each event and extrinsic
+* `src/mappings/<pallet>/types.ts` - types for each event and extrinsic
+* `src/mappings/<pallet>/getters/<chain>.ts` - transformation functions for each event and extrinsic
+* `src/mappings/utils` - utility functions used by mappings
+
 ## Misc
 
 1. fast generate event handlers 
