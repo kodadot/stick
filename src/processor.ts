@@ -15,6 +15,7 @@ const processor = new SubstrateProcessor<SelectedFields>()
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 // const _NFT_STARTING_BLOCK = 4_556_552
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
+const ONLY_ARCHIVE = false
 
 // processor.setTypesBundle(CHAIN)
 processor.setBlockRange({ from: STARTING_BLOCK })
@@ -31,7 +32,7 @@ processor.setDataSource({
 })
 
 // disables RPC ingestion and drastically reduce no of RPC calls
-processor.useArchiveOnly(true)
+processor.useArchiveOnly(ONLY_ARCHIVE)
 
 /**
  * Uniques nft pallet
