@@ -33,6 +33,8 @@ const systemAsset: Record<Chain, Asset> =
   },
 }
 
+export const ALLOW_LIST = ['1984']
+
 export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
   pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const selected = systemAsset[CHAIN]

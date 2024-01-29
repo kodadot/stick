@@ -5,6 +5,7 @@ import { Context } from '../utils/types'
 // import { tokenIdOf } from './types'
 import { AssetEntity as AE } from '../../model'
 import { getCreateAssetMetadataEvent } from './getters'
+import { ALLOW_LIST } from './forceToken'
 
 const OPERATION = 'METADATA' as any
 
@@ -12,7 +13,7 @@ export async function handleAssetMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getCreateAssetMetadataEvent)
   debug(OPERATION, event)
 
-  if (event.id !== '1984') {
+  if (!ALLOW_LIST.includes(event.id)) {
     return
   }
 
