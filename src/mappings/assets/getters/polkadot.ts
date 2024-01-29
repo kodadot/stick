@@ -1,5 +1,5 @@
 import { assets as events } from '../../../types/polkadot/events'
-import { addressOf, idOf } from '../../utils/helper'
+import { addressOf, idOf, unHex } from '../../utils/helper'
 import { Event } from '../../utils/types'
 import { CreateAssetEvent, ForceCreateAssetEvent, SetMetadata } from '../types'
 
@@ -40,9 +40,9 @@ export function getCreateAssetMetadataEvent(ctx: Event): SetMetadata {
 
   if (event.v601.is(ctx)) {
     const [assetId, name, symbol, decimals, isFrozen] = event.v601.decode(ctx)
-    return { id: idOf(assetId), name, symbol, decimals, isFrozen }
+    return { id: idOf(assetId), name: unHex(name), symbol: unHex(symbol), decimals, isFrozen }
   }
 
   const { assetId, name, symbol, decimals, isFrozen } = event.v700.decode(ctx)
-  return { id: idOf(assetId), name, symbol, decimals, isFrozen }
+  return { id: idOf(assetId), name: unHex(name), symbol: unHex(symbol), decimals, isFrozen }
 }
