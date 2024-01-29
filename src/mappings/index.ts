@@ -199,8 +199,8 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
     }
   }
 
-  const lastDate = new Date(ctx.blocks[ctx.blocks.length - 1].header.timestamp || start)
-  await updateCache(lastDate, ctx.store)  
+  // const lastDate = new Date(ctx.blocks[ctx.blocks.length - 1].header.timestamp || start)
+  // await updateCache(lastDate, ctx.store)  
 
   // const { contracts, tokens } = uniqueEntitySets(items)
   // const collections = await finalizeCollections(contracts, ctx)
