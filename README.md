@@ -41,10 +41,13 @@ just upd
 # 4. Start the processor
 just process
 
-# 5. Open a separate terminal and launch the graphql server to query the processed data
+# 5. Update database with data objects
+just migrate
+
+# 6. Open a separate terminal and launch the graphql server to query the processed data
 just serve
 
-# 6. Visit localhost:4350/graphql to see result
+# 7. Visit localhost:4350/graphql to see result
 ```
 
 ## Dev flow
