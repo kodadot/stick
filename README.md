@@ -38,11 +38,11 @@ just build
 # 3. Start target Postgres database container
 just upd
 
-# 4. Start the processor
-just process
-
-# 5. Update database with data objects
+# 4. Update database with data objects
 just migrate
+
+# 5. Start the processor
+just process
 
 # 6. Open a separate terminal and launch the graphql server to query the processed data
 just serve
