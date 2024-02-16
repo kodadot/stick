@@ -64,6 +64,11 @@ enum MetadataQuery {
 
 const OPERATION = 'METADATA_CACHE' as any
 
+/**
+ * update metadata for item and collection
+ * @param store - subsquid store to handle the cache
+ * @param collectionId - the id of the collection
+**/
 export async function updateItemMetadataByCollection(store: Store, collectionId: string): Promise<void> {
   try {
     const rows = await emOf(store).query(MetadataQuery.polyfill, [collectionId])
@@ -77,7 +82,11 @@ function getPassedMinutes(timestamp: Date, lastBlockTimestamp: Date): number {
   return (timestamp.getTime() - lastBlockTimestamp.getTime()) / TO_MINUTES
 }
 
-
+/**
+ * Main entry point for updating the metadata cache
+ * @param timestamp - the timestamp of the block
+ * @param store - subsquid store to handle the cache
+**/
 export async function updateMetadataCache(timestamp: Date, store: Store): Promise<void> {
   const lastUpdate = await getOrCreate(store, CacheStatus, METADATA_STATUS_ID, { id: METADATA_STATUS_ID, lastBlockTimestamp: new Date(0) })
   const passedMins = getPassedMinutes(timestamp, lastUpdate.lastBlockTimestamp)
@@ -94,6 +103,11 @@ export async function updateMetadataCache(timestamp: Date, store: Store): Promis
   }
 }
 
+/**
+ * Main entry point for the cache update
+ * @param timestamp - the timestamp of the block
+ * @param store - subsquid store to handle the cache
+**/
 export async function updateCache(timestamp: Date, store: Store): Promise<void> {
   // const lastUpdate = await getOrCreate(store, CacheStatus, STATUS_ID, { id: STATUS_ID, lastBlockTimestamp: new Date(0) });
   // const passedMins = (timestamp.getTime() - lastUpdate.lastBlockTimestamp.getTime()) / TO_MINUTES;
@@ -101,7 +115,11 @@ export async function updateCache(timestamp: Date, store: Store): Promise<void> 
   await updateMetadataCache(timestamp, store)
 }
 
-
+/**
+ * update image and media for item and collection
+ * from the metadata table
+ * @param store - subsquid store to handle the cache
+**/
 async function updateMissingMetadata(store: Store) {
   try {
     const missing: EntityWithId[] = await emOf(store).query(MetadataQuery.missing)
