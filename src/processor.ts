@@ -17,9 +17,13 @@ const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 const ONLY_ARCHIVE = false
 
+// In case you need custom types
 // processor.setTypesBundle(CHAIN)
+
+// Set the starting block
 processor.setBlockRange({ from: STARTING_BLOCK })
 
+// Get this from the environment based on the chain from .env
 const archive = getArchiveUrl()
 const chain = getNodeUrl()
 
@@ -115,5 +119,6 @@ logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
 // const handler = async <T extends FieldSelection = SelectedFields>(ctx: DataHandlerContext<Store, T>) => {}
 
+// mainFrame function is called when the processor is ready to process the data
 processor.run(database, mainFrame)
 

@@ -1,3 +1,8 @@
+// LIST OF THE EVENTS / CALLS that we are processing
+// USAGE: [NameOfThePallet].[EventName] or [NameOfThePallet].[call_name]
+// Naming pattern is enforced by SubSquid
+
+// Uniques Pallet Events
 export enum Unique {
   clearAttribute = 'Uniques.AttributeCleared',
   setAttribute = 'Uniques.AttributeSet',
@@ -36,6 +41,7 @@ export enum Unique {
   // setAssetMetadata = 'AssetRegistry.MetadataSet',
 }
 
+// NFTs Pallet Events
 export enum NonFungible {
   burn = 'Nfts.Burned',
   changeIssuer = 'Nfts.OwnerChanged',
@@ -62,6 +68,7 @@ export enum NonFungible {
   transfer = 'Nfts.Transferred',
 }
 
+// NFTs Pallet new Events
 export enum NewNonFungible {
   // changeCollectionConfig = 'Nfts.CollectionConfigChanged', // should use extrisnic instead of event
   // lockCollection = 'Nfts.CollectionLocked',
@@ -77,10 +84,12 @@ export enum NewNonFungible {
   sendTip = 'Nfts.TipSent', // can be used for marking royaltyPaid
 }
 
+// NFTs Pallet Calls
 export enum NonFungibleCall {
   updateMintSettings = 'Nfts.update_mint_settings',
 }
 
+// Assets Pallet Events
 export enum Asset {
   create = 'Assets.Created',
   destroy = 'Assets.Destroyed',
