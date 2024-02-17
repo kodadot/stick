@@ -94,6 +94,25 @@ sqd migration:generate
 sqd migration:apply
 ```
 
+### Testing
+
+> Unit test early, unit test often
+
+> [!NOTE]
+> Any code imported from @kodadot [packages has unit test written in the separated repository](https://github.com/kodadot/packages)
+
+This indexer contains unit tests for utility/parsing functions we wrote
+
+Tests are located in the `tests/` directory.
+To run the tests use:
+
+```bash
+npm run test
+```
+
+> [!WARNING]
+> Currently it is not possible to unit test the whole indexer workflow as a dry run. If you encounter some problem please head over to the telegram group **HydraDevs**
+
 ## Architecture
 
 Architecture of this project is following:
