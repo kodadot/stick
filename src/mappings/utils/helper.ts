@@ -94,11 +94,22 @@ export function str<T extends object | number>(value: Optional<T>): string {
   return value?.toString() || ''
 }
 
+/**
+ * Prefix the value with the prefix
+ * @param value - id
+ * @param prefix - prefix
+**/
 export function idOf<T extends object | number>(value: Optional<T>, prefix: string = ''): string {
   const val = str(value)
   return prefix && val ? `${prefix}-${val}` : val
 }
 
+/**
+ * Return the version of the pallet
+ * @param context - the context for the event
+ * @returns 1 if unique, 2 if nfts
+ * @throws if the pallet is unknown
+**/
 export function versionOf(context: Context): 1 | 2 {
   if (isUniquePallet(context)) {
     return 1
@@ -122,6 +133,13 @@ export function prefixOf(context: Context): string {
   return EMPTY
 }
 
+/**
+ * Calculate the owner count and distribution for a collection
+ * @param store - subsquid store to handle database operations
+ * @param collectionId - the id of the collection
+ * @param newOwner - the new owner of the nft
+ * @param originalOwner - the original owner of the nft
+**/
 export async function calculateCollectionOwnerCountAndDistribution(
   store: Store,
   collectionId: string,
@@ -156,6 +174,12 @@ export async function calculateCollectionOwnerCountAndDistribution(
   return adjustedResults
 }
 
+/**
+ * Calculate the floor price for a collection
+ * @param store - subsquid store to handle database operations
+ * @param collectionId - the id of the collection
+ * @param nftId - the id of the nft
+**/
 export async function calculateCollectionFloor(
   store: Store,
   collectionId: string,
