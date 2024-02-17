@@ -9,6 +9,12 @@ import { getBuyTokenEvent } from './getters'
 
 const OPERATION = Action.BUY
 
+/**
+ * Handle the token buy event (Nfts.ItemBought)
+ * Changes the owner of the token, updates the collection volume, highest sale, floor, owner count and distribution
+ * Logs Action.BUY event
+ * @param context - the context for the event
+**/
 export async function handleTokenBuy(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getBuyTokenEvent)

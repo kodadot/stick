@@ -35,6 +35,10 @@ const systemAsset: Record<Chain, Asset> =
 
 export const ALLOW_LIST = ['1984']
 
+/**
+ * Forcefully create the system asset
+ * @param context - BatchContext
+ */
 export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
   pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const selected = systemAsset[CHAIN]
@@ -44,6 +48,10 @@ export async function forceCreateSystemAsset(context: BatchContext<Store>): Prom
   await context.store.save<AssetEntity>(asset)
 }
 
+/**
+ * Forcefully create the USDT asset
+ * @param context - BatchContext
+ */
 export async function forceCreateUsdtAsset(context: BatchContext): Promise<void> {
   pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const asset = create<AssetEntity>(AssetEntity, '1984', {
@@ -55,6 +63,10 @@ export async function forceCreateUsdtAsset(context: BatchContext): Promise<void>
   await context.store.save<AssetEntity>(asset)
 }
 
+/**
+ * Forcefully create the RMRK asset
+ * @param context - BatchContext
+ */
 export async function forceCreateRmrkAsset(context: BatchContext): Promise<void> {
   pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const asset = create<AssetEntity>(AssetEntity, '8', {

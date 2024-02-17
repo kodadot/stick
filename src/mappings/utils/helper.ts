@@ -13,6 +13,10 @@ export const EMPTY = '' as const
 
 type Optional<T> = T | undefined
 
+/**
+ * Check if an object is empty
+ * @param obj - the object to check
+**/
 export function isEmpty(obj: Record<string, unknown>): boolean {
   // eslint-disable-next-line guard-for-in, @typescript-eslint/naming-convention, no-unreachable-loop
   for (const _ in obj) {
@@ -21,14 +25,26 @@ export function isEmpty(obj: Record<string, unknown>): boolean {
   return true
 }
 
+/**
+ * Export the value from the archive object { __kind, value }
+ * @param call - the call to extract the value from
+**/
 export function onlyValue(call: ArchiveCallWithOptionalValue): string {
   return call?.value
 }
 
+/**
+ * Check if a value is a hex string
+ * @param value - the value to check
+**/
 export function isHex(value: unknown): value is string {
   return typeof value === 'string' && value.length % 2 === 0 && /^0x[\da-f]*$/i.test(value)
 }
 
+/**
+ * Decode an ss58 address from the value
+ * @param address - the address to decode
+**/
 export function addressOf(address: Uint8Array | string): string {
   const value = isHex(address) ? decodeHex(address) : address
   if (!value) {
@@ -37,27 +53,31 @@ export function addressOf(address: Uint8Array | string): string {
   return ss58.codec(codec).encode(value)
 }
 
+/**
+ * Decode a hex value
+ * @param value - the value to decode
+**/
 export function unHex<T>(value: T): T | string {
   return isHex(value) ? decodeHex(value).toString() : value
 }
 
 /**
  * @deprecated Use the unjs/ufo package
- */
+ **/
 export function camelCase(str: string): string {
   return str.replace(/(_[a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''))
 }
 
 /**
  * @deprecated unused.
- */
+ **/
 export function metadataOf({ metadata }: SomethingWithOptionalMeta): string {
   return metadata ?? ''
 }
 
 /**
  * @deprecated use ?? operator.
- */
+ **/
 export function oneOf<T>(one: T, two: T): T {
   return one || two
 }
@@ -74,11 +94,22 @@ export function str<T extends object | number>(value: Optional<T>): string {
   return value?.toString() || ''
 }
 
+/**
+ * Prefix the value with the prefix
+ * @param value - id
+ * @param prefix - prefix
+**/
 export function idOf<T extends object | number>(value: Optional<T>, prefix: string = ''): string {
   const val = str(value)
   return prefix && val ? `${prefix}-${val}` : val
 }
 
+/**
+ * Return the version of the pallet
+ * @param context - the context for the event
+ * @returns 1 if unique, 2 if nfts
+ * @throws if the pallet is unknown
+**/
 export function versionOf(context: Context): 1 | 2 {
   if (isUniquePallet(context)) {
     return 1
@@ -102,6 +133,13 @@ export function prefixOf(context: Context): string {
   return EMPTY
 }
 
+/**
+ * Calculate the owner count and distribution for a collection
+ * @param store - subsquid store to handle database operations
+ * @param collectionId - the id of the collection
+ * @param newOwner - the new owner of the nft
+ * @param originalOwner - the original owner of the nft
+**/
 export async function calculateCollectionOwnerCountAndDistribution(
   store: Store,
   collectionId: string,
@@ -136,6 +174,12 @@ export async function calculateCollectionOwnerCountAndDistribution(
   return adjustedResults
 }
 
+/**
+ * Calculate the floor price for a collection
+ * @param store - subsquid store to handle database operations
+ * @param collectionId - the id of the collection
+ * @param nftId - the id of the nft
+**/
 export async function calculateCollectionFloor(
   store: Store,
   collectionId: string,

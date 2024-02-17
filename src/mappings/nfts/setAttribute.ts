@@ -6,6 +6,12 @@ import { addressOf, unHex } from '../utils/helper'
 import { getAttributeEvent } from './getters'
 import { attributeFrom, tokenIdOf } from './types'
 
+/**
+ * Handle the attribute set event (Nfts.AttributeSet, Nfts.AttributeCleared)
+ * Sets the attribute of the collection or NFT
+ * Logs NONE event
+ * @param context - the context for the event
+ **/
 export async function handleAttributeSet(context: Context): Promise<void> {
   const event = unwrap(context, getAttributeEvent)
 

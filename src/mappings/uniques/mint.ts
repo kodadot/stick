@@ -13,6 +13,12 @@ import { getCreateTokenEvent } from './getters'
 
 const OPERATION = Action.MINT
 
+/**
+ * Handle the token create event (Uniques.Issued)
+ * Creates a new token
+ * Logs Action.MINT event
+ * @param context - the context for the event
+ **/
 export async function handleTokenCreate(context: Context): Promise<void> {
   pending(OPERATION, context.block.height.toString())
   const event = unwrap(context, getCreateTokenEvent)

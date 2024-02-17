@@ -8,6 +8,12 @@ import { collectionSettingOf } from './types'
 
 const OPERATION = 'UPDATE' as any
 
+/**
+ * Handle the collection mint update call (Nfts.update_mint_settings)
+ * Updates the mint settings of the collection
+ * Logs Action.UPDATE event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionMintUpdate(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getUpdateMintCall)

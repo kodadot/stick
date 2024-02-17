@@ -7,6 +7,12 @@ import { getChangeCollectionOwnerEvent } from './getters'
 
 const OPERATION = Action.CHANGEISSUER
 
+/**
+ * Handle the collection owner change event (Nfts.OwnerChanged)
+ * Changes the owner of the collection
+ * Logs Action.CHANGEISSUER event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionOwnerChange(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getChangeCollectionOwnerEvent)

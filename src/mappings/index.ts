@@ -13,6 +13,11 @@ import { logError } from './utils/logger'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
+/**
+ * Main entry point for processing non-fungibles on unique pallet
+ * @param item - the event to process
+ * @param ctx - the context for the event
+**/
 export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
   switch (item.name) {
     case Unique.createCollection:
@@ -79,6 +84,11 @@ export async function uniques<T extends SelectedEvent>(item: T, ctx: Context): P
   // return item
 }
 
+/**
+ * Main entry point for processing non-fungible tokens
+ * @param item - the event to process
+ * @param ctx - the context for the event
+**/
 export async function nfts<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
   switch (item.name) {
     case NonFungible.createCollection:
@@ -146,6 +156,11 @@ export async function nfts<T extends SelectedEvent>(item: T, ctx: Context): Prom
   }
 }
 
+/**
+ * Main entry point for processing assets
+ * @param item - the event to process
+ * @param ctx - the context for the event
+**/
 export async function assets<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
   switch (item.name) {
     case Asset.setMetadata:
@@ -156,18 +171,29 @@ export async function assets<T extends SelectedEvent>(item: T, ctx: Context): Pr
   }
 }
 
+/**
+ * Force create system and USDT assets
+ * Only call this once, at the start of the processing
+**/
 export async function forceAssets(ctx: BatchContext<Store>): Promise<void> {
   logger.info('Forcing assets')
   await a.forceCreateSystemAsset(ctx)
   await a.forceCreateUsdtAsset(ctx)
 }
 
+/**
+ * Smart pattern matching to determine which handler to use
+ * currently supports Uniques, Nfts, and Assets
+**/
 const globalHandler: Record<string, HandlerFunction> = {
   Uniques: uniques,
   Nfts: nfts,
   Assets: assets,
 }
 
+/**
+ * mainFrame is the main entry point for processing a batch of blocks
+**/
 export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
   const start = ctx.blocks[0].header.height
   if (STARTING_BLOCK === start) {

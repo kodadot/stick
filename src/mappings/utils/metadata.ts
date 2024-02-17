@@ -7,6 +7,10 @@ import logger from './logger'
 // import { attributeFrom } from './types'
 export const BASE_URL = 'https://image.w.kodadot.xyz/'
 
+/**
+ * Fetch the metadata from the IPFS
+ * @param metadata - the metadata to fetch
+**/
 export const fetchMetadata = async <T extends Content>(metadata: string): Promise<T> => {
   try {
     if (!metadata) {
@@ -21,6 +25,10 @@ export const fetchMetadata = async <T extends Content>(metadata: string): Promis
   return ensure<T>({})
 }
 
+/**
+ * Fetch the list of metadata from the IPFS
+ * @param metadata - the metadata to fetch
+**/
 export const fetchAllMetadata = async <T extends Content>(
   metadata: string[]
 ): Promise<(Partial<MetadataEntity> & EntityWithId)[]> => {
@@ -31,6 +39,11 @@ export const fetchAllMetadata = async <T extends Content>(
   return fulfilled.map(({ value, id }) => makeCompatibleMetadata(id, value))
 }
 
+/**
+ * Format the metadata to be compatible with the cache model
+ * @param id - the id of the metadata (CID)
+ * @param metadata - the metadata to fetch
+**/
 export const makeCompatibleMetadata = (
   id: string,
   metadata: Content

@@ -12,6 +12,11 @@ import { getMetadataEvent } from './getters'
 
 const OPERATION = 'METADATA' as any
 
+/**
+ * Handle the metadata set event (Uniques.CollectionMetadataSet, Uniques.ItemMetadataSet, Uniques.ItemMetadataCleared, Uniques.CollectionMetadataCleared, Uniques.ClassMetadataSet, Uniques.ClassMetadataCleared, Uniques.MetadataSet)
+ * Sets the metadata of the collection or nft
+ * @param context - the context for the event
+ **/
 export async function handleMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getMetadataEvent)
   debug(OPERATION, event)
