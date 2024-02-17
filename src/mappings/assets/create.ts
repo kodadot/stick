@@ -7,6 +7,11 @@ import { getCreateAssetEvent } from './getters'
 
 const OPERATION = Action.CREATE
 
+/**
+ * Handle the collection create event (Assets.Created)
+ * Logs Action.CREATE event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionCreate(context: Context): Promise<void> {
   pending(OPERATION, `[ASSET++]: ${context.block.height}`)
   const event = unwrap(context, getCreateAssetEvent)

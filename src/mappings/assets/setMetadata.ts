@@ -9,6 +9,11 @@ import { ALLOW_LIST } from './forceToken'
 
 const OPERATION = 'METADATA' as any
 
+/**
+ * Handle the asset metadata set event (Assets.MetadataSet)
+ * Logs Action.METADATA event
+ * @param context - the context for the event
+ **/
 export async function handleAssetMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getCreateAssetMetadataEvent)
   debug(OPERATION, event)
