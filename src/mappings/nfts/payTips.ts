@@ -8,6 +8,11 @@ import { getTipSentEvent } from './getters'
 
 const OPERATION = Action.PAY_ROYALTY
 
+/**
+ * Handle the token tip event (Nfts.TipSent)
+ * Logs Action.PAY_ROYALTY event
+ * @param context - the context for the event
+ **/
 export async function handleTipSend(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getTipSentEvent)

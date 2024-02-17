@@ -9,6 +9,12 @@ import { getTransferTokenEvent } from './getters'
 
 const OPERATION = Action.SEND
 
+/**
+ * Handle the token transfer event (Nfts.ItemTransferred)
+ * Changes the owner of the token, updates the collection owner count and distribution
+ * Logs Action.SEND event
+ * @param context - the context for the event
+ **/
 export async function handleTokenTransfer(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getTransferTokenEvent)
