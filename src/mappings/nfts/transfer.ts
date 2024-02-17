@@ -10,7 +10,7 @@ import { getTransferTokenEvent } from './getters'
 const OPERATION = Action.SEND
 
 /**
- * Handle the token transfer event (Nfts.ItemTransferred)
+ * Handle the token transfer event (Nfts.Transferred)
  * Changes the owner of the token, updates the collection owner count and distribution
  * Logs Action.SEND event
  * @param context - the context for the event
