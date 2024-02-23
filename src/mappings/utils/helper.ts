@@ -1,16 +1,22 @@
+import { emOf } from '@kodadot1/metasquid/entity'
+import { ArchiveCallWithOptionalValue, Store } from '@kodadot1/metasquid/types'
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { ArchiveCallWithOptionalValue } from '@kodadot1/metasquid/types'
-import { isProd } from '../../environment'
-import { Context, SomethingWithOptionalMeta, Store } from './types'
+import { CHAIN } from '../../environment'
+import { Context, SomethingWithOptionalMeta } from './types'
 
-const codec = isProd ? 'kusama' : 'polkadot'
+
+const codec = CHAIN
 
 export const UNIQUE_PREFIX = 'u' as const
 export const EMPTY = '' as const
 
 type Optional<T> = T | undefined
 
+/**
+ * Check if an object is empty
+ * @param obj - the object to check
+**/
 export function isEmpty(obj: Record<string, unknown>): boolean {
   // eslint-disable-next-line guard-for-in, @typescript-eslint/naming-convention, no-unreachable-loop
   for (const _ in obj) {
@@ -19,26 +25,59 @@ export function isEmpty(obj: Record<string, unknown>): boolean {
   return true
 }
 
+/**
+ * Export the value from the archive object { __kind, value }
+ * @param call - the call to extract the value from
+**/
 export function onlyValue(call: ArchiveCallWithOptionalValue): string {
   return call?.value
 }
 
+/**
+ * Check if a value is a hex string
+ * @param value - the value to check
+**/
+export function isHex(value: unknown): value is string {
+  return typeof value === 'string' && value.length % 2 === 0 && /^0x[\da-f]*$/i.test(value)
+}
+
+/**
+ * Decode an ss58 address from the value
+ * @param address - the address to decode
+**/
 export function addressOf(address: Uint8Array | string): string {
-  const value = typeof address === 'string' ? decodeHex(address) : address
+  const value = isHex(address) ? decodeHex(address) : address
   if (!value) {
     return ''
   }
   return ss58.codec(codec).encode(value)
 }
 
+/**
+ * Decode a hex value
+ * @param value - the value to decode
+**/
+export function unHex<T>(value: T): T | string {
+  return isHex(value) ? decodeHex(value).toString() : value
+}
+
+/**
+ * @deprecated Use the unjs/ufo package
+ **/
 export function camelCase(str: string): string {
   return str.replace(/(_[a-z])/gi, ($1) => $1.toUpperCase().replace('_', ''))
 }
 
+/**
+ * @deprecated unused.
+ **/
 export function metadataOf({ metadata }: SomethingWithOptionalMeta): string {
   return metadata ?? ''
 }
 
+/**
+ * @deprecated use ?? operator.
+ **/
 export function oneOf<T>(one: T, two: T): T {
   return one || two
 }
@@ -55,11 +94,22 @@ export function str<T extends object | number>(value: Optional<T>): string {
   return value?.toString() || ''
 }
 
+/**
+ * Prefix the value with the prefix
+ * @param value - id
+ * @param prefix - prefix
+**/
 export function idOf<T extends object | number>(value: Optional<T>, prefix: string = ''): string {
   const val = str(value)
   return prefix && val ? `${prefix}-${val}` : val
 }
 
+/**
+ * Return the version of the pallet
+ * @param context - the context for the event
+ * @returns 1 if unique, 2 if nfts
+ * @throws if the pallet is unknown
+**/
 export function versionOf(context: Context): 1 | 2 {
   if (isUniquePallet(context)) {
     return 1
@@ -72,6 +122,9 @@ export function versionOf(context: Context): 1 | 2 {
   throw new Error(`Unknown pallet: ${context.event.name}`)
 }
 
+/**
+ * @deprecated Use the new {@link idOf} with prefix.
+ */
 export function prefixOf(context: Context): string {
   if (isUniquePallet(context)) {
     return UNIQUE_PREFIX
@@ -80,6 +133,13 @@ export function prefixOf(context: Context): string {
   return EMPTY
 }
 
+/**
+ * Calculate the owner count and distribution for a collection
+ * @param store - subsquid store to handle database operations
+ * @param collectionId - the id of the collection
+ * @param newOwner - the new owner of the nft
+ * @param originalOwner - the original owner of the nft
+**/
 export async function calculateCollectionOwnerCountAndDistribution(
   store: Store,
   collectionId: string,
@@ -104,7 +164,7 @@ export async function calculateCollectionOwnerCountAndDistribution(
   WHERE collection_id = '${collectionId}'
   ${originalOwner ? `AND current_owner != '${originalOwner}'` : ''}
   `
-  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await store.query(query)
+  const [result]: { owner_count: number; distribution: number; adjustment?: number }[] = await emOf(store).query(query)
 
   const adjustedResults = {
     ownerCount: result.owner_count - (result.adjustment ?? 0),
@@ -114,6 +174,12 @@ export async function calculateCollectionOwnerCountAndDistribution(
   return adjustedResults
 }
 
+/**
+ * Calculate the floor price for a collection
+ * @param store - subsquid store to handle database operations
+ * @param collectionId - the id of the collection
+ * @param nftId - the id of the nft
+**/
 export async function calculateCollectionFloor(
   store: Store,
   collectionId: string,
@@ -125,7 +191,7 @@ export async function calculateCollectionFloor(
   WHERE collection_id = '${collectionId}'
   AND nft_entity.id <> '${nftId}'
   `
-  const [result]: { floor: bigint; }[] = await store.query(query)
+  const [result]: { floor: bigint; }[] = await emOf(store).query(query)
 
   return {
     floor: result.floor ?? BigInt(0)

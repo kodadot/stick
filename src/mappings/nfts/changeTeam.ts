@@ -7,6 +7,12 @@ import { getChangeTeamEvent } from './getters'
 
 const OPERATION = Action.CHANGEISSUER
 
+/**
+ * Handle the collection team change event (Nfts.TeamChanged)
+ * Changes the team of the collection
+ * Logs Action.CHANGEISSUER event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionTeamChange(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getChangeTeamEvent)

@@ -10,6 +10,12 @@ import { getCreateCollectionEvent } from './getters'
 
 const OPERATION = Action.CREATE
 
+/**
+ * Handle the collection create event (Nfts.Created)
+ * Creates a new collection entity
+ * Logs Action.CREATE event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionCreate(context: Context): Promise<void> {
   pending(OPERATION, `[COLECTTION++]: ${context.block.height}`)
   const event = unwrap(context, getCreateCollectionEvent)

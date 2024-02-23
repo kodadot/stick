@@ -2,7 +2,7 @@ default := 'squid'
 types := 'typegen'
 
 process: build
-	node -r dotenv/config lib/processor.js
+	node --require=dotenv/config lib/processor.js
 
 serve:
 	@npx squid-graphql-server
@@ -42,9 +42,16 @@ bug: down upd
 
 reset: migrate
 
+slow: 
+	sleep 1
+	just reset
+
 quickstart: migrate process
 
-quick: build reset process
+quick: wipe bug slow process
+
+wipe:
+  clear
 
 prod TAG:
 	gh pr create --base release-{{TAG}}
@@ -54,6 +61,9 @@ migrate:
 
 update-db:
 	npx squid-typeorm-migration generate
+
+revert-db:
+	npx squid-typeorm-migration revert         
 
 db: update-db migrate
 
@@ -79,7 +89,10 @@ update-deps:
 	npx npm-check-updates -ux
 
 exec:
-	docker exec -it stick-db-1 psql -U postgres -d squid
+	docker exec -it subsquid_db psql -U postgres -d squid
+
+dump NAME=default:
+	docker exec -t subsquid_db pg_dump -U postgres -d squid > {{NAME}}.sql
 
 check: codegen build
 

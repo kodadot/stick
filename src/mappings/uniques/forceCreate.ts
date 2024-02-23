@@ -10,6 +10,12 @@ import { getForceCreateCollectionEvent } from './getters'
 
 const OPERATION = Action.CREATE
 
+/**
+ * Handle the collection force create event (Uniques.ForceCreated)
+ * Creates a new collection entity
+ * Logs Action.CREATE event
+ * @param context - the context for the event
+ **/
 export async function handleForceCollectionCreate(context: Context): Promise<void> {
   pending(OPERATION, `[FORCE]: ${context.block.height}`)
   const event = unwrap(context, getForceCreateCollectionEvent)
