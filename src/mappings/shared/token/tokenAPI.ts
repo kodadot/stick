@@ -3,17 +3,16 @@ import md5 from 'md5'
 import { Store } from '../../utils/types'
 import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
 import { debug } from '../../utils/logger'
-import { OPERATION, generateTokenId, mediaOf, tokenName } from './utils'
+import { OPERATION, generateTokenId, tokenName } from './utils'
 
 export class TokenAPI {
   constructor(private store: Store) {}
 
   async create(collection: CE, nft: NE): Promise<TE | undefined> {
-    const nftMedia = mediaOf(nft)
-    if (!nftMedia) {
+    const tokenId = generateTokenId(collection.id, nft)
+    if (!tokenId) {
       return
     }
-    const tokenId = generateTokenId(collection.id, nftMedia)
     debug(OPERATION, { createToken: `Create TOKEN ${tokenId} for NFT ${nft.id}` })
 
     const token = createEntity(TE, tokenId, {
@@ -67,7 +66,6 @@ export class TokenAPI {
     nft.token = token
     await this.store.save(token)
     await this.store.save(nft)
-  
     return token
   }
 }
