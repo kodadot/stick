@@ -12,8 +12,7 @@ export function generateTokenId(collectionId: string, nft: NE): string | undefin
   }
   const image = nft.image ?? ''
   const media = nft.media ?? ''
-  const mediaHash = md5(image + media)
-  return `${collectionId}-${mediaHash}`
+  return `${collectionId}-${md5(image)}:${md5(media)}`
 }
 
 export const collectionsToKeepNameAsIs: Record<string, string[]> = {
