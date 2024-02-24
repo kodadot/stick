@@ -1,49 +1,79 @@
 import { create } from '@kodadot1/metasquid/entity'
-import { BlockHandlerContext } from '@subsquid/substrate-processor'
+import { Store } from '@subsquid/typeorm-store'
+import { CHAIN, Chain } from '../../environment'
 import { AssetEntity } from '../../model'
-import { Store } from '../utils/types'
 import { pending, success } from '../utils/logger'
-import { isProd } from '../../environment'
+import { BatchContext } from '../utils/types'
+
 
 const OPERATION = 'ASSET_REGISTER' as any
 
-export async function forceCreateSystemAsset(context: BlockHandlerContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.block.height}`);
-  const systemAsset = isProd
-  ? {
+type Asset = {
+  name: string,
+  symbol: string,
+  decimals: number,
+}
+
+const systemAsset: Record<Chain, Asset> = 
+{
+  kusama: {
     name: 'Kusama',
     symbol: 'KSM',
     decimals: 12,
-  } 
-  : {
+  },
+  polkadot: {
     name: 'Polkadot',
     symbol: 'DOT',
     decimals: 10,
-  }
-
-  const asset = create<AssetEntity>(AssetEntity, '', systemAsset);
-  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
-  await context.store.save<AssetEntity>(asset);
+  },
+  rococo: {
+    name: 'Rococo',
+    symbol: 'ROC',
+    decimals: 12,
+  },
 }
 
-export async function forceCreateUsdtAsset(context: BlockHandlerContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.block.height}`);
+export const ALLOW_LIST = ['1984']
+
+/**
+ * Forcefully create the system asset
+ * @param context - BatchContext
+ */
+export async function forceCreateSystemAsset(context: BatchContext<Store>): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
+  const selected = systemAsset[CHAIN]
+
+  const asset = create<AssetEntity>(AssetEntity, '', selected)
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`)
+  await context.store.save<AssetEntity>(asset)
+}
+
+/**
+ * Forcefully create the USDT asset
+ * @param context - BatchContext
+ */
+export async function forceCreateUsdtAsset(context: BatchContext): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const asset = create<AssetEntity>(AssetEntity, '1984', {
     name: 'Tether USD',
     symbol: 'USDt',
     decimals: 6,
-  });
-  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
-  await context.store.save<AssetEntity>(asset);
+  })
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`)
+  await context.store.save<AssetEntity>(asset)
 }
 
-export async function forceCreateRmrkAsset(context: BlockHandlerContext<Store>): Promise<void> {
-  pending(OPERATION, `${context.block.height}`);
+/**
+ * Forcefully create the RMRK asset
+ * @param context - BatchContext
+ */
+export async function forceCreateRmrkAsset(context: BatchContext): Promise<void> {
+  pending(OPERATION, `${context.blocks.at(0)?.header.height}`)
   const asset = create<AssetEntity>(AssetEntity, '8', {
     name: 'RMRK.app',
     symbol: 'RMRK',
     decimals: 10,
-  });
-  success(OPERATION,`${asset.id} is ${asset.name || ''}`);
-  await context.store.save<AssetEntity>(asset);
+  })
+  success(OPERATION,`${asset.id} is ${asset.name || ''}`)
+  await context.store.save<AssetEntity>(asset)
 }

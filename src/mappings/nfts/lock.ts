@@ -7,6 +7,12 @@ import { getLockCollectionEvent } from './getters'
 
 const OPERATION = Action.LOCK
 
+/**
+ * Handle the collection lock event (Nfts.CollectionMaxSupplySet)
+ * Sets the max supply of the collection
+ * Logs Action.LOCK event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionLock(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getLockCollectionEvent)
