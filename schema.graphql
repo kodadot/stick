@@ -1,3 +1,6 @@
+# Entity to represent a collection
+# defined on chain as  pub type Collection<T: Config<I>, I: 'static = ()> 
+# https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L217
 type CollectionEntity @entity {
   attributes: [Attribute!]
   blockNumber: BigInt @index
@@ -26,8 +29,13 @@ type CollectionEntity @entity {
   updatedAt: DateTime! @index
   version: Int!
   volume: BigInt! @index
+  type: CollectionType
+  settings: CollectionSettings
 }
 
+# Entity to group NFTEntity by common metadata
+# grouping is done either by NFTEntity.image or NFTEntity.media 
+# https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L293
 type TokenEntity @entity {
   id: ID!
   blockNumber: BigInt
@@ -45,6 +53,9 @@ type TokenEntity @entity {
   count: Int!
 }
 
+# Entity to represent a collection
+# defined on chain as  pub type Item<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L271
 type NFTEntity @entity {
   attributes: [Attribute!]
   blockNumber: BigInt @index
@@ -71,6 +82,9 @@ type NFTEntity @entity {
   token: TokenEntity
 }
 
+# Entity to represent a Metadata
+# defined on chain as  pub type Metadata<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L283
 type MetadataEntity @entity {
   id: ID!
   name: String
@@ -82,12 +96,27 @@ type MetadataEntity @entity {
   banner: String
 }
 
+# Entity to represent an Attribute
+# defined on chain as  pub type Attribute<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/master/substrate/frame/nfts/src/lib.rs#L305
 type Attribute @jsonField {
   display: String
   trait: String
   value: String!
 }
 
+# Entity to represent a CollectionSettings
+# defined on chain as  pub type CollectionSettings<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L366
+type CollectionSettings @jsonField {
+  value: String
+  startBlock: BigInt
+  endBlock: BigInt
+  price: BigInt
+}
+
+# Abstract entity to represent an event
+# https://graphql.org/learn/schema/#interfaces
 interface EventType {
   id: ID!
   blockNumber: BigInt
@@ -99,6 +128,7 @@ interface EventType {
   meta: String!
 }
 
+# Entity to represent an event defined by Interaction
 type Event implements EventType @entity {
   id: ID!
   blockNumber: BigInt
@@ -123,6 +153,7 @@ type CollectionEvent implements EventType @entity {
   # version: Int!
 }
 
+# Possible on-chain interactions that we listen for
 enum Interaction {
   BURN
   BUY
@@ -134,11 +165,32 @@ enum Interaction {
   UNLIST
   LOCK
   CHANGEISSUER
+  PAY_ROYALTY
+  # ROYALTY
 }
 
+# Possible collection types
+# HolderOf: user can mint if they hold a NFT from a specific collection
+# Issuer: only the issuer can mint
+# Public: anyone can mint
+enum CollectionType {
+  HolderOf
+  Issuer
+  Public
+}
+
+# Entity to represent a Fungible Asset
+# defined on chain as  pub type Asset<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/99234440f0f8b24f7e4d1d3a0102a9b19a408dd3/substrate/frame/assets/src/lib.rs#L325
 type AssetEntity @entity {
   id: ID!
   name: String
   symbol: String
   decimals: Int
+}
+
+# Entity to represent when the cache was last updated
+type CacheStatus @entity {
+  id: ID!
+  lastBlockTimestamp: DateTime!
 }

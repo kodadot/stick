@@ -1,0 +1,104 @@
+{
+  "outDir": "src/types/polkadot",
+  "specVersions": "https://v2.archive.subsquid.io/metadata/asset-hub-polkadot",
+  "pallets": {
+    "Assets": {
+      "events": [
+        "Created",
+        "Destroyed",
+        "ForceCreated",
+        "MetadataCleared",
+        "MetadataSet"
+      ],
+      "calls": [],
+      "storage": [],
+      "constants": []
+    },
+    "Uniques": {
+      "events": [
+        "AttributeCleared",
+        "AttributeSet",
+        "Burned",
+        "ClassFrozen",
+        "ClassMetadataCleared",
+        "ClassMetadataSet",
+        "ClassThawed",
+        "CollectionFrozen",
+        "CollectionMaxSupplySet",
+        "CollectionMetadataCleared",
+        "CollectionMetadataSet",
+        "CollectionThawed",
+        "Created",
+        "Destroyed",
+        "ForceCreated",
+        "Frozen",
+        "Issued",
+        "ItemBought",
+        "ItemPriceRemoved",
+        "ItemPriceSet",
+        "MetadataCleared",
+        "MetadataSet",
+        "OwnerChanged",
+        "OwnershipAcceptanceChanged",
+        "TeamChanged",
+        "Thawed",
+        "Transferred"
+      ],
+      "calls": [],
+      "storage": [
+        "Class",
+        "InstanceMetadataOf"
+      ],
+      "constants": []
+    },
+    "Nfts": {
+      "events": [
+        "AllApprovalsCancelled",
+        "ApprovalCancelled",
+        "AttributeCleared",
+        "AttributeSet",
+        "Burned",
+        "CollectionConfigChanged",
+        "CollectionLocked",
+        "CollectionMaxSupplySet",
+        "CollectionMetadataCleared",
+        "CollectionMetadataSet",
+        "CollectionMintSettingsUpdated",
+        "Created",
+        "Destroyed",
+        "ForceCreated",
+        "Issued",
+        "ItemAttributesApprovalAdded",
+        "ItemAttributesApprovalRemoved",
+        "ItemBought",
+        "ItemMetadataCleared",
+        "ItemMetadataSet",
+        "ItemPriceRemoved",
+        "ItemPriceSet",
+        "ItemPropertiesLocked",
+        "ItemTransferLocked",
+        "ItemTransferUnlocked",
+        "NextCollectionIdIncremented",
+        "OwnerChanged",
+        "OwnershipAcceptanceChanged",
+        "PalletAttributeSet",
+        "PreSignedAttributesSet",
+        "SwapCancelled",
+        "SwapClaimed",
+        "SwapCreated",
+        "TeamChanged",
+        "TipSent",
+        "TransferApproved",
+        "Transferred"
+      ],
+      "calls": [
+        "update_mint_settings"
+      ],
+      "storage": [
+        "Collection",
+        "ItemMetadataOf"
+      ],
+      "constants": []
+    }
+  }
+}

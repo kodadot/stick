@@ -5,19 +5,14 @@ import { CHAIN } from '../../../environment'
 
 export const OPERATION = 'TokenEntity' as any
 
-export function generateTokenId(collectionId: string, nftMedia: string): string {
-  return `${collectionId}-${md5(nftMedia)}`
-}
-
-export const mediaOf = (nft: NE): string | undefined => {
-  const nftMedia = nft.image ?? nft.media
-
-  if (!nftMedia || nftMedia === '') {
+export function generateTokenId(collectionId: string, nft: NE): string | undefined {
+  if (!nft.image && !nft.media) {
     warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
     return undefined
   }
-
-  return nftMedia
+  const image = nft.image ?? ''
+  const media = nft.media ?? ''
+  return `${collectionId}-${md5(image)}:${md5(media)}`
 }
 
 export const collectionsToKeepNameAsIs: Record<string, string[]> = {

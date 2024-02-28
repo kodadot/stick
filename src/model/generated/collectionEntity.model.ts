@@ -4,6 +4,8 @@ import {Attribute} from "./_attribute"
 import {CollectionEvent} from "./collectionEvent.model"
 import {MetadataEntity} from "./metadataEntity.model"
 import {NFTEntity} from "./nftEntity.model"
+import {CollectionType} from "./_collectionType"
+import {CollectionSettings} from "./_collectionSettings"
 
 @Entity_()
 export class CollectionEntity {
@@ -102,4 +104,10 @@ export class CollectionEntity {
     @Index_()
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     volume!: bigint
+
+    @Column_("varchar", {length: 8, nullable: true})
+    type!: CollectionType | undefined | null
+
+    @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.toJSON(), from: obj => obj == null ? undefined : new CollectionSettings(undefined, obj)}, nullable: true})
+    settings!: CollectionSettings | undefined | null
 }

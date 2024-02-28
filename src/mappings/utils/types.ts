@@ -1,7 +1,18 @@
-import { EventHandlerContext } from '@subsquid/substrate-processor'
+import {
+  DataHandlerContext,
+  SubstrateBatchProcessorFields,
+  Block as _Block,
+  Call as _Call,
+  Event as _Event,
+  Extrinsic as _Extrinsic,
+  type SubstrateBatchProcessor as SubstrateProcessor,
+  BlockHeader
+} from '@subsquid/substrate-processor'
 import { nanoid } from 'nanoid'
-import { EntityManager } from 'typeorm'
 // impsort { Interaction } from '../../model/generated/_interaction';
+import { Store as SquidStore } from '@subsquid/typeorm-store'
+import { EntityManager } from 'typeorm'
+import { Logger } from '@subsquid/logger'
 import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
@@ -12,6 +23,35 @@ export type BaseCall = {
   blockNumber: string
   timestamp: Date
 }
+// In case of fire consult this repo:
+// https://github.com/subsquid-labs/squid-substrate-template/tree/main
+
+export const fieldSelection = {
+  block: {
+    timestamp: true
+  },
+  extrinsic: {
+    signature: true,
+  },
+  call: {
+      name: true,
+      args: true,
+      origin: true
+  },
+  event: {
+      name: true,
+      args: true,
+  }
+} as const
+
+export type SelectedFields = typeof fieldSelection
+
+type Fields = SubstrateBatchProcessorFields<SubstrateProcessor<SelectedFields>>
+export type Block = _Block<Fields>
+export type Event = _Event<Fields>
+export type Call = _Call<Fields>
+export type Extrinsic = _Extrinsic<Fields>
+
 
 export type CollectionInteraction = Interaction.CREATE | Interaction.DESTROY
 
@@ -56,8 +96,22 @@ export function attributeFrom(attribute: MetadataAttribute): Attribute {
   )
 }
 
-export type Store = EntityManager
-export type Context = EventHandlerContext<Store>
+export type ManagedStore = SquidStore & { em: () => EntityManager }
+export type Store =  SquidStore // & { em: () => EntityManager }
+export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
+export type SelectedBlock = Pick<BlockHeader<Fields>, 'height' | 'timestamp' | 'hash'>
+export type SelectedEvent = Pick<Event, 'name' | 'args'>
+export type SelectedExtrinsic = Pick<Extrinsic, 'signature'>
+export type SelectedCall = Pick<Call, 'name' | 'origin'>
+
+export type Context<S = Store>  = {
+  store: S
+  block: SelectedBlock
+  event: SelectedEvent
+  extrinsic: SelectedExtrinsic | undefined
+  call: SelectedCall | undefined
+  // log: Logger
+}
 
 export type Optional<T> = T | null
 

@@ -11,6 +11,7 @@ services:
     ports:
       - "${DB_PORT}:5432"
       # command: ["postgres", "-c", "log_statement=all"]
-#    volumes:
+    # volumes:
+      # - ./assets/${CHAIN}/init.sql:/docker-entrypoint-initdb.d/init.sql
 #      - ./data/db:/var/lib/postgresql/data
 

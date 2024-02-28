@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: speck
-version: 10
+version: 11
 description: 'SubSquid indexer for Uniques and Assets on Statemint'
 build: 
 deploy:
@@ -14,7 +14,7 @@ deploy:
       - node
       - lib/processor
     env:
-      CHAIN: statemint
+      CHAIN: polkadot
   api:
     cmd:
       - npx
@@ -33,5 +33,5 @@ scale:
   dedicated: true
   addons:
     postgres:
-      storage: 5G
+      storage: 2G
       profile: medium
