@@ -1,6 +1,6 @@
 {
   "extends": ["eslint-config-unjs"],
-  "ignorePatterns": ["tests/**", "src/model", "lib/**"],
+  "ignorePatterns": ["tests/**", "src/model", "src/server-extension", "src/types", "lib/**"],
   "rules": {
     "@typescript-eslint/no-inferrable-types": 0,
     "@typescript-eslint/no-unused-vars": 0,
@@ -23,6 +23,7 @@
     "unicorn/prefer-code-point": 0,
     "unicorn/prefer-math-trunc": 0,
     "unicorn/text-encoding-identifier-case": 0,
-    "no-useless-constructor": 0
+    "no-useless-constructor": 0,
+    "semi": ["error", "never"]
   }
 }

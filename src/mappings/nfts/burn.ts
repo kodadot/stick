@@ -10,6 +10,12 @@ import { getBurnTokenEvent } from './getters'
 
 const OPERATION = Action.BURN
 
+/**
+ * Handle the token burn event (Nfts.Burned)
+ * Marks the token as burned
+ * Logs Action.BURN event
+ * @param context - the context for the event
+**/
 export async function handleTokenBurn(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getBurnTokenEvent)

@@ -1,18 +1,18 @@
-import { getOptional } from '@kodadot1/metasquid/entity'
+import { emOf, getOptional } from '@kodadot1/metasquid/entity'
 import { Context } from '../../utils/types'
 import { NFTEntity as NE, TokenEntity as TE } from '../../../model'
 import { debug } from '../../utils/logger'
-import { OPERATION, generateTokenId, mediaOf } from './utils'
+import { OPERATION, generateTokenId } from './utils'
 
 export async function burnHandler(context: Context, nft: NE): Promise<void> {
   debug(OPERATION, { handleBurn: `Handle Burn for NFT ${nft.id}` })
 
-  const nftMedia = mediaOf(nft)
-  if (!nftMedia) {
+  const tokenId = generateTokenId(nft.collection.id, nft)
+  if (!tokenId) {
     return
   }
 
-  const token = await getOptional<TE>(context.store, TE, generateTokenId(nft.collection.id, nftMedia))
+  const token = await getOptional<TE>(context.store, TE, tokenId)
 
   if (!token) {
     return
@@ -20,5 +20,5 @@ export async function burnHandler(context: Context, nft: NE): Promise<void> {
 
   debug(OPERATION, { BURN: `decrement Token's ${token.id} supply` })
 
-  await context.store.update(TE, token.id, { supply: token.supply - 1, updatedAt: nft.updatedAt })
+  await emOf(context.store).update(TE, token.id, { supply: token.supply - 1, updatedAt: nft.updatedAt })
 }

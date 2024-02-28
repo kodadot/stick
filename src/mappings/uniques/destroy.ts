@@ -7,6 +7,12 @@ import { getDestroyCollectionEvent } from './getters'
 
 const OPERATION = Action.DESTROY
 
+/**
+ * Handle the collection destroy event (Uniques.Destroyed)
+ * Marks the collection as burned
+ * Logs Action.DESTROY event
+ * @param context - the context for the event
+ **/
 export async function handleCollectionDestroy(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getDestroyCollectionEvent)

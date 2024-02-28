@@ -77,8 +77,8 @@ export class NFTEntity {
     royalty!: number | undefined | null
 
     @Index_()
-    @Column_("text", {nullable: false})
-    sn!: string
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    sn!: bigint
 
     @Index_()
     @Column_("timestamp with time zone", {nullable: false})

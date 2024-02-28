@@ -9,6 +9,12 @@ import { getPriceTokenEvent } from './getters'
 const OPERATION = Action.LIST
 const UNLIST = Action.UNLIST
 
+/**
+ * Handle the token list event (Nfts.ItemPriceSet)
+ * Sets the price of the token, updates the collection floor
+ * Logs Action.LIST event
+ * @param context - the context for the event
+ **/
 export async function handleTokenList(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getPriceTokenEvent)
