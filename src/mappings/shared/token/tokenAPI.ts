@@ -44,12 +44,11 @@ export class TokenAPI {
     debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}` })
 
     await emOf(this.store).update(NE, nft.id, { token: null })
-    const count = await emOf(this.store).countBy(NE, {
+    const updatedCount = await emOf(this.store).countBy(NE, {
       token: {
           id: token.id,
       },
   })
-    const updatedCount = count
     await emOf(this.store).update(TE, token.id, {
       supply: token.supply - 1,
       count: updatedCount,
