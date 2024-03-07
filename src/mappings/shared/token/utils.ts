@@ -30,3 +30,4 @@ export const tokenName = (nftName: string | undefined | null, collectionId: stri
 
   return doNotAlter ? nftName : nftName.replace(/([#_]\d+$)/g, '')
 }
+

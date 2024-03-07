@@ -57,8 +57,14 @@ export class TokenAPI {
 
     if (updatedCount === 0) {
       debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
-
-      await emOf(this.store).delete(TE, token.id)
+      try {
+        await emOf(this.store).delete(TE, token.id)
+      } catch (error) {
+        debug(OPERATION, {
+          deleteEmptyToken: `Failed to delete token ${token.id}`,
+          error,
+        })
+      }
     }
   }
 
