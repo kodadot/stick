@@ -3,7 +3,7 @@ import md5 from 'md5'
 import { Store } from '../../utils/types'
 import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
 import { debug } from '../../utils/logger'
-import { OPERATION, generateTokenId, tokenName } from './utils'
+import { OPERATION, attemptDelete, generateTokenId, tokenName } from './utils'
 
 export class TokenAPI {
   constructor(private store: Store) {}
@@ -57,8 +57,7 @@ export class TokenAPI {
 
     if (updatedCount === 0) {
       debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
-
-      await emOf(this.store).delete(TE, token.id)
+      await attemptDelete(this.store, token.id)
     }
   }
 
