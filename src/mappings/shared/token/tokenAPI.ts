@@ -44,7 +44,11 @@ export class TokenAPI {
     debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}` })
 
     await emOf(this.store).update(NE, nft.id, { token: null })
-    const updatedCount = token.count - 1
+    const updatedCount = await emOf(this.store).countBy(NE, {
+      token: {
+          id: token.id,
+      },
+  })
     await emOf(this.store).update(TE, token.id, {
       supply: token.supply - 1,
       count: updatedCount,
@@ -53,8 +57,14 @@ export class TokenAPI {
 
     if (updatedCount === 0) {
       debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
-
-      await emOf(this.store).delete(TE, token.id)
+      try {
+        await emOf(this.store).delete(TE, token.id)
+      } catch (error) {
+        debug(OPERATION, {
+          deleteEmptyToken: `Failed to delete token ${token.id}`,
+          error,
+        })
+      }
     }
   }
 
