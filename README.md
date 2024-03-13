@@ -144,3 +144,15 @@ SQD_DEBUG=squid:log
 ```
 pbpaste | grep 'export'  | xargs -I_ echo "_  return proc.  }"
 ```
+
+
+## Funding
+
+Project was funded as a common good by
+
+<div align="center">
+  <img width="200" alt="version" src="https://user-images.githubusercontent.com/55763425/211145923-f7ee2a57-3e63-4b7d-9674-2da9db46b2ee.png" />
+</div>
+
+
+
