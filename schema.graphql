@@ -51,6 +51,7 @@ type TokenEntity @entity {
   createdAt: DateTime!
   supply: Int!
   count: Int!
+  deleted: Boolean!
 }
 
 # Entity to represent a collection
