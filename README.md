@@ -8,7 +8,7 @@
 
 * Kusama AssetHub Processor (Statemine -> KSM): https://squid.subsquid.io/stick/graphql
 * Polkadot AssetHub Processor (Statemint -> DOT): https://squid.subsquid.io/speck/graphql
-* Rococo Testnet Processor: 🚧 WIP 🚧
+* Pasoe Testnet Processor: 🚧 Coming soon 🚧
 
 ## Project structure
 
