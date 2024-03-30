@@ -1,8 +1,9 @@
-import { emOf, getOptional } from '@kodadot1/metasquid/entity'
+import { getWith } from '@kodadot1/metasquid/entity'
 import { Context } from '../../utils/types'
-import { NFTEntity as NE, TokenEntity as TE } from '../../../model'
-import { debug } from '../../utils/logger'
+import { NFTEntity as NE } from '../../../model'
+import { debug, warn } from '../../utils/logger'
 import { OPERATION, generateTokenId } from './utils'
+import { TokenAPI } from './tokenAPI'
 
 export async function burnHandler(context: Context, nft: NE): Promise<void> {
   debug(OPERATION, { handleBurn: `Handle Burn for NFT ${nft.id}` })
@@ -12,13 +13,13 @@ export async function burnHandler(context: Context, nft: NE): Promise<void> {
     return
   }
 
-  const token = await getOptional<TE>(context.store, TE, tokenId)
-
-  if (!token) {
-    return
+  const tokenAPI = new TokenAPI(context.store)
+  try {
+    const nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
+    if (nftWithToken?.token) {
+      await tokenAPI.removeNftFromToken(nft, nftWithToken.token)
+    }
+  } catch (error) {
+    warn(OPERATION, `ERROR ${error}`)
   }
-
-  debug(OPERATION, { BURN: `decrement Token's ${token.id} supply` })
-
-  await emOf(context.store).update(TE, token.id, { supply: token.supply - 1, updatedAt: nft.updatedAt })
 }

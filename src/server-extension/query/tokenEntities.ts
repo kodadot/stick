@@ -62,5 +62,6 @@ FROM
         LEFT JOIN cheapest ON t.id = cheapest.token_id
 WHERE
     nc.supply > 0 AND 
+    t.deleted = false AND
     ($10::text IS NULL OR LOWER(t.name) LIKE LOWER('%' || $10 || '%'))
 `

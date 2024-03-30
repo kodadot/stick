@@ -20,7 +20,7 @@ export class TokenAPI {
       collection,
       name: tokenName(nft.name, collection.id),
       count: 1,
-      supply: 1,
+      supply: nft.burned ? 0 : 1,
       hash: md5(tokenId),
       image: nft.image,
       media: nft.media,
@@ -29,6 +29,7 @@ export class TokenAPI {
       blockNumber: nft.blockNumber,
       updatedAt: nft.updatedAt,
       id: tokenId,
+      deleted: false,
     })
 
     await this.store.save(token)
@@ -46,11 +47,18 @@ export class TokenAPI {
     await emOf(this.store).update(NE, nft.id, { token: null })
     const updatedCount = await emOf(this.store).countBy(NE, {
       token: {
-          id: token.id,
+        id: token.id,
       },
-  })
+    })
+
+    const updatedSupply = await emOf(this.store).countBy(NE, {
+      token: {
+        id: token.id,
+      },
+      burned: false,
+    })
     await emOf(this.store).update(TE, token.id, {
-      supply: token.supply - 1,
+      supply: updatedSupply,
       count: updatedCount,
       updatedAt: nft.updatedAt,
     })
@@ -58,7 +66,7 @@ export class TokenAPI {
     if (updatedCount === 0) {
       debug(OPERATION, { deleteEmptyToken: `delete empty token ${token.id}` })
       try {
-        await emOf(this.store).delete(TE, token.id)
+        await emOf(this.store).update(TE, token.id, { deleted: true })
       } catch (error) {
         debug(OPERATION, {
           deleteEmptyToken: `Failed to delete token ${token.id}`,
@@ -69,10 +77,14 @@ export class TokenAPI {
   }
 
   async addNftToToken(nft: NE, token: TE): Promise<TE> {
+    if (nft.token?.id === token.id) {
+      return token
+    }
     debug(OPERATION, { updateToken: `Add NFT ${nft.id} to TOKEN ${token.id} for ` })
     token.count += 1
-    token.supply += 1
+    token.supply += nft.burned ? 0 : 1
     token.updatedAt = nft.updatedAt
+    token.deleted = false
     nft.token = token
     await this.store.save(token)
     await this.store.save(nft)
