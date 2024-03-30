@@ -9,7 +9,7 @@ import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
 import { mainFrame } from './mappings'
 import { SelectedFields, fieldSelection } from './mappings/utils/types'
 
-const database = new Database()
+const database = new Database({ supportHotBlocks: false })
 const processor = new SubstrateProcessor<SelectedFields>()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
