@@ -27,16 +27,14 @@ processor.setBlockRange({ from: STARTING_BLOCK })
 const archive = getArchiveUrl()
 const chain = getNodeUrl()
 
-processor.setDataSource({
-  archive,
-  chain: {
-    url: chain,
-    rateLimit: 10
-  },
+processor.setGateway(archive)
+processor.setRpcEndpoint({
+  url: chain,
+  rateLimit: 10
 })
 
 // disables RPC ingestion and drastically reduce no of RPC calls
-processor.useArchiveOnly(ONLY_ARCHIVE)
+processor.setRpcDataIngestionSettings({ disabled: ONLY_ARCHIVE })
 
 /**
  * Uniques nft pallet
