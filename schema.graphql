@@ -62,7 +62,7 @@ type NFTEntity @entity {
   blockNumber: BigInt @index
   burned: Boolean!
   collection: CollectionEntity!
-  createdAt: DateTime!
+  createdAt: DateTime! @index
   currentOwner: String! @index
   events: [Event!] @derivedFrom(field: "nft")
   hash: String! @index
