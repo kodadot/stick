@@ -26,6 +26,7 @@ export class NFTEntity {
     @ManyToOne_(() => CollectionEntity, {nullable: true})
     collection!: CollectionEntity
 
+    @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     createdAt!: Date
 
