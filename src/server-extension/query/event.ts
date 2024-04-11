@@ -33,6 +33,31 @@ GROUP BY ne.id, me.id, e.current_owner, me.image, ce.name
 ORDER BY MAX(e.timestamp) DESC
 LIMIT $2 OFFSET $3`
 
+export const latestestEventsNFTQuery = `SELECT 
+DISTINCT id, metadata, name, collection_id, image,
+    (SELECT MAX(timestamp) FROM event WHERE nft_id = unique_nfts.id) AS max_timestamp
+FROM (
+    SELECT 
+        ne.id,
+        ne.metadata,
+        ne.name,
+        ne.collection_id,
+        ne.image
+    FROM
+        nft_entity ne
+    JOIN
+        (SELECT DISTINCT nft_id FROM event) e ON ne.id = e.nft_id
+    WHERE
+        ne.collection_id = ANY($1)
+        AND ne.burned = false
+        AND ne.name <> ''
+        AND ne.name IS NOT NULL
+        AND ne.image IS NOT NULL
+    ) AS unique_nfts 
+ORDER BY max_timestamp DESC
+LIMIT $2;`
+
+
 export const collectionEventHistory = (idList: string, dateRange: string) => `SELECT
     ce.id as id,
     DATE(e.timestamp),

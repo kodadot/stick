@@ -67,3 +67,18 @@ export class LastEventEntity {
     Object.assign(this, props);
   }
 }
+
+@ObjectType()
+export class LatestestEventsNFTEntity {
+  @Field(() => String)
+  id!: string;
+
+  @Field(() => String)
+  metadata!: String;
+
+  @Field(() => String, { nullable: true })
+  name!: string;
+
+  @Field(() => String)
+  image!: string;
+}
