@@ -18,7 +18,7 @@
   "dependencies": {
     "@kodadot1/hyperdata": "^0.0.1-rc.4",
     "@kodadot1/metasquid": "^0.3.1-rc.0",
-    "@kodadot1/minipfs": "^0.4.3-rc.1",
+    "@kodadot1/minipfs": "^0.4.3-rc.2",
     "@subsquid/archive-registry": "3.3.2",
     "@subsquid/graphql-server": "4.6.0",
     "@subsquid/ss58": "2.0.2",
