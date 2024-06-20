@@ -16,7 +16,7 @@ export const fetchMetadata = async <T extends Content>(metadata: string): Promis
     if (!metadata) {
       return ensure<T>({})
     }
-    const value = await $obtain<T>(metadata, ['kodadot_beta', 'w3s'], true)
+    const value = await $obtain<T>(metadata, ['kodadot', 'w3s'], true)
     return contentFrom(value as any) as T
   } catch (e) {
     logger.error(`[MINIPFS] ${e}`)
