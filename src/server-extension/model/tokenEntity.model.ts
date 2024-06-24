@@ -10,7 +10,10 @@ export enum OrderBy {
     createdAt_DESC = "createdAt_DESC",
     price_ASC = "price_ASC",
     price_DESC = "price_DESC",
-
+    price_ASC_NULLS_FIRST = "price_ASC_NULLS_FIRST",
+    price_ASC_NULLS_LAST = "price_ASC_NULLS_LAST",
+    price_DESC_NULLS_FIRST = "price_DESC_NULLS_FIRST",
+    price_DESC_NULLS_LAST = "price_DESC_NULLS_LAST",
 }
 
 registerEnumType(OrderBy, {
@@ -167,4 +170,3 @@ export class TokenEntityQueryResult {
         Object.assign(this, props);
     }
 }
-
