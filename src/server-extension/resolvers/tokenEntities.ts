@@ -78,7 +78,11 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
     [OrderBy.updatedAt_DESC]: 'updated_at DESC',
     [OrderBy.price_ASC]: 'cheapest_price ASC',
     [OrderBy.price_DESC]: 'cheapest_price DESC',
-  }
+    [OrderBy.price_ASC_NULLS_FIRST]: 'cheapest_price ASC NULLS FIRST',
+    [OrderBy.price_ASC_NULLS_LAST]: 'cheapest_price ASC NULLS LAST',
+    [OrderBy.price_DESC_NULLS_FIRST]: 'cheapest_price DESC NULLS FIRST',
+    [OrderBy.price_DESC_NULLS_LAST]: 'cheapest_price DESC NULLS LAST',
+  };
 
   private getOrderByQuery(orderBy: string[] = [OrderBy.blockNumber_DESC]): string {
     return orderBy.map((order) => this.ORDER_BY_MAPPING[order]).join(', ')
