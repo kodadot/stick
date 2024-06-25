@@ -28,6 +28,11 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     final.royalty = final.royalty || Number.parseFloat(value || '0')
   }
 
+  if ('baseUri' in final && event.trait === 'baseUri') {
+    const value = unHex(event.value)
+    final.baseUri = final.baseUri || value
+  }
+
   if ('recipient' in final && event.trait === 'recipient') {
     try {
       final.recipient = final.recipient || addressOf(event.value as string)
