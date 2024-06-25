@@ -62,6 +62,20 @@ export function unHex<T>(value: T): T | string {
 }
 
 /**
+ * create a token uri from the base uri and the token id
+ * @param baseUri - base uri from the collection
+ * @param tokenId - the token id
+**/
+export function tokenUri(baseUri: Optional<string>, tokenId: Optional<string>): string {
+  if (!baseUri || !tokenId) {
+    return ''
+  }
+  
+  const uri = baseUri.endsWith('/') ? baseUri : `${baseUri}/`
+  return `${uri}${tokenId}`
+}
+
+/**
  * @deprecated Use the unjs/ufo package
  **/
 export function camelCase(str: string): string {
