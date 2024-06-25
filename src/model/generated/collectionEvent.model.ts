@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
-import * as marshal from "./marshal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, DateTimeColumn as DateTimeColumn_, StringColumn as StringColumn_, ManyToOne as ManyToOne_, Index as Index_} from "@subsquid/typeorm-store"
 import {Interaction} from "./_interaction"
 import {CollectionEntity} from "./collectionEntity.model"
 
@@ -12,22 +11,22 @@ export class CollectionEvent {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    @BigIntColumn_({nullable: true})
     blockNumber!: bigint | undefined | null
 
-    @Column_("timestamp with time zone", {nullable: false})
+    @DateTimeColumn_({nullable: false})
     timestamp!: Date
 
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     caller!: string
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     currentOwner!: string | undefined | null
 
     @Column_("varchar", {length: 12, nullable: false})
     interaction!: Interaction
 
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     meta!: string
 
     @Index_()
