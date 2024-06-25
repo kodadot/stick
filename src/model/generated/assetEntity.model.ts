@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class AssetEntity {
@@ -9,12 +9,12 @@ export class AssetEntity {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     name!: string | undefined | null
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     symbol!: string | undefined | null
 
-    @Column_("int4", {nullable: true})
+    @IntColumn_({nullable: true})
     decimals!: number | undefined | null
 }

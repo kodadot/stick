@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, OneToMany as OneToMany_, ManyToOne as ManyToOne_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_, Index as Index_, BooleanColumn as BooleanColumn_, DateTimeColumn as DateTimeColumn_, IntColumn as IntColumn_, OneToMany as OneToMany_, ManyToOne as ManyToOne_, FloatColumn as FloatColumn_} from "@subsquid/typeorm-store"
 import * as marshal from "./marshal"
 import {Attribute} from "./_attribute"
 import {CollectionEvent} from "./collectionEvent.model"
@@ -16,93 +16,96 @@ export class CollectionEntity {
     @Column_("jsonb", {transformer: {to: obj => obj == null ? undefined : obj.map((val: any) => val.toJSON()), from: obj => obj == null ? undefined : marshal.fromList(obj, val => new Attribute(undefined, marshal.nonNull(val)))}, nullable: true})
     attributes!: (Attribute)[] | undefined | null
 
+    @StringColumn_({nullable: true})
+    baseUri!: string | undefined | null
+
     @Index_()
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    @BigIntColumn_({nullable: true})
     blockNumber!: bigint | undefined | null
 
-    @Column_("bool", {nullable: false})
+    @BooleanColumn_({nullable: false})
     burned!: boolean
 
     @Index_()
-    @Column_("timestamp with time zone", {nullable: false})
+    @DateTimeColumn_({nullable: false})
     createdAt!: Date
 
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     currentOwner!: string
 
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     distribution!: number
 
     @OneToMany_(() => CollectionEvent, e => e.collection)
     events!: CollectionEvent[]
 
     @Index_()
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     floor!: bigint
 
     @Index_({unique: true})
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     hash!: string
 
     @Index_()
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     highestSale!: bigint
 
     @PrimaryColumn_()
     id!: string
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     image!: string | undefined | null
 
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     issuer!: string
 
-    @Column_("int4", {nullable: true})
+    @IntColumn_({nullable: true})
     max!: number | undefined | null
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     media!: string | undefined | null
 
     @Index_()
     @ManyToOne_(() => MetadataEntity, {nullable: true})
     meta!: MetadataEntity | undefined | null
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     metadata!: string | undefined | null
 
     @Index_()
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     name!: string | undefined | null
 
     @Index_()
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     nftCount!: number
 
     @OneToMany_(() => NFTEntity, e => e.collection)
     nfts!: NFTEntity[]
 
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     ownerCount!: number
 
-    @Column_("text", {nullable: true})
+    @StringColumn_({nullable: true})
     recipient!: string | undefined | null
 
-    @Column_("numeric", {transformer: marshal.floatTransformer, nullable: true})
+    @FloatColumn_({nullable: true})
     royalty!: number | undefined | null
 
     @Index_()
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     supply!: number
 
     @Index_()
-    @Column_("timestamp with time zone", {nullable: false})
+    @DateTimeColumn_({nullable: false})
     updatedAt!: Date
 
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     version!: number
 
     @Index_()
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     volume!: bigint
 
     @Column_("varchar", {length: 8, nullable: true})
