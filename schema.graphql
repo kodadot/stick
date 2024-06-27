@@ -3,6 +3,7 @@
 # https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L217
 type CollectionEntity @entity {
   attributes: [Attribute!]
+  baseUri: String
   blockNumber: BigInt @index
   burned: Boolean!
   createdAt: DateTime! @index

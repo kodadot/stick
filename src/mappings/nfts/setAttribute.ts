@@ -25,15 +25,20 @@ export async function handleAttributeSet(context: Context): Promise<void> {
 
   if ('royalty' in final && event.trait === 'royalty') {
     const value = unHex(event.value)
-    final.royalty = final.royalty ?? Number.parseFloat(value || '0')
+    final.royalty = final.royalty || Number.parseFloat(value || '0')
+  }
+
+  if ('baseUri' in final && event.trait === 'baseUri') {
+    const value = unHex(event.value)
+    final.baseUri = final.baseUri || value
   }
 
   if ('recipient' in final && event.trait === 'recipient') {
     try {
-      final.recipient = final.recipient ?? addressOf(event.value as string)
+      final.recipient = final.recipient || addressOf(event.value as string)
     } catch (error) {
       console.log(error)
-      final.recipient = final.recipient ?? (event.value as string)
+      final.recipient = '' // final.recipient ?? (event.value as string)
     }
   }
 

@@ -7,7 +7,7 @@ import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
-import { calculateCollectionOwnerCountAndDistribution, versionOf } from '../utils/helper'
+import { calculateCollectionOwnerCountAndDistribution, tokenUri, versionOf } from '../utils/helper'
 import { mintHandler } from '../shared/token'
 import { getCreateTokenEvent } from './getters'
 
@@ -42,7 +42,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.blockNumber = BigInt(event.blockNumber)
   final.collection = collection
   final.sn = BigInt(event.sn)
-  final.metadata = event.metadata || collection.metadata
+  final.metadata = event.metadata || tokenUri(collection.baseUri, event.sn) || collection.metadata
   final.price = BigInt(0)
   final.burned = false
   final.createdAt = event.timestamp
