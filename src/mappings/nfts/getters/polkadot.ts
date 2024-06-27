@@ -374,3 +374,100 @@ export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
   const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9430.decode(ctx)
   return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
 }
+
+export function getSwapCreatedEvent(ctx: Event) {
+  const event = events.swapCreated
+
+  if (event.v9430.is(ctx)) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
+
+    return {
+      offeredCollection: offeredCollection.toString(),
+      offeredItem: offeredItem.toString(),
+      desiredCollection: desiredCollection.toString(),
+      desiredItem: desiredItem?.toString(),
+      price,
+      deadline
+    }
+  }
+
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
+  return {
+    offeredCollection: offeredCollection.toString(),
+    offeredItem: offeredItem.toString(),
+    desiredCollection: desiredCollection.toString(),
+    desiredItem: desiredItem?.toString(),
+    price,
+    deadline,
+  }
+}
+
+export function getSwapCancelledEvent(ctx: Event) {
+  const event = events.swapCancelled
+
+  if (event.v9430.is(ctx)) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
+
+    return {
+      offeredCollection: offeredCollection.toString(),
+      offeredItem: offeredItem.toString(),
+      desiredCollection: desiredCollection.toString(),
+      desiredItem: desiredItem?.toString(),
+      price,
+      deadline,
+    }
+  }
+
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(
+    ctx
+  )
+  return {
+    offeredCollection: offeredCollection.toString(),
+    offeredItem: offeredItem.toString(),
+    desiredCollection: desiredCollection.toString(),
+    desiredItem: desiredItem?.toString(),
+    price,
+    deadline,
+  }
+}
+
+export function getSwapClaimedEvent(ctx: Event) {
+  const event = events.swapClaimed
+
+  if (event.v9430.is(ctx)) {
+    const { sentCollection, sentItem, sentItemOwner, receivedCollection, receivedItem, receivedItemOwner, price, deadline } = event.v9430.decode(ctx)
+
+    return {
+      sentCollection: sentCollection.toString(),
+      sentItem: sentItem.toString(),
+      sentItemOwner: sentItemOwner ? addressOf(sentItemOwner) : '',
+      receivedCollection: receivedCollection.toString(),
+      receivedItem: receivedItem.toString(),
+      receivedItemOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+      price,
+      deadline,
+    }
+  }
+
+  const {
+    sentCollection,
+    sentItem,
+    sentItemOwner,
+    receivedCollection,
+    receivedItem,
+    receivedItemOwner,
+    price,
+    deadline,
+  } = event.v9430.decode(ctx)
+
+  return {
+    sentCollection: sentCollection.toString(),
+    sentItem: sentItem.toString(),
+    sentItemOwner: sentItemOwner ? addressOf(sentItemOwner) : '',
+    receivedCollection: receivedCollection.toString(),
+    receivedItem: receivedItem.toString(),
+    receivedItemOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+    price,
+    deadline,
+  }
+}

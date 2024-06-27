@@ -144,3 +144,15 @@ export function getUpdateMintCall(_ctx: Context): UpdateMintSettings {
   const ctx = _ctx.call 
  return proc.getUpdateMintCall(ctx)
 }
+
+export function getSwapCreatedEvent(ctx: Context) {
+  return proc.getSwapCreatedEvent(ctx);
+}
+
+export function getSwapCancelledEvent(ctx: Context) {
+  return proc.getSwapCancelledEvent(ctx);
+}
+
+export function getSwapClaimedEvent(ctx: Context) {
+  return proc.getSwapClaimedEvent(ctx);
+}
