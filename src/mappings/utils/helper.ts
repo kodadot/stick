@@ -1,5 +1,5 @@
 import { emOf } from '@kodadot1/metasquid/entity'
-import { ArchiveCallWithOptionalValue, Store } from '@kodadot1/metasquid/types'
+import { ArchiveCallWithOptionalValue, Optional, Store } from '@kodadot1/metasquid/types'
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
 import { CHAIN } from '../../environment'
@@ -10,8 +10,6 @@ const codec = CHAIN
 
 export const UNIQUE_PREFIX = 'u' as const
 export const EMPTY = '' as const
-
-type Optional<T> = T | undefined
 
 /**
  * Check if an object is empty
@@ -59,6 +57,20 @@ export function addressOf(address: Uint8Array | string): string {
 **/
 export function unHex<T>(value: T): T | string {
   return isHex(value) ? decodeHex(value).toString() : value
+}
+
+/**
+ * create a token uri from the base uri and the token id
+ * @param baseUri - base uri from the collection
+ * @param tokenId - the token id
+**/
+export function tokenUri(baseUri: Optional<string>, tokenId: Optional<string>): string {
+  if (!baseUri || !tokenId) {
+    return ''
+  }
+  
+  const uri = baseUri.endsWith('/') ? baseUri : `${baseUri}/`
+  return `${uri}${tokenId}`
 }
 
 /**
