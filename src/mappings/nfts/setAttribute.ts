@@ -2,7 +2,7 @@ import { getOrFail as get } from '@kodadot1/metasquid/entity'
 import { CollectionEntity, NFTEntity } from '../../model'
 import { unwrap } from '../utils/extract'
 import { Context, isNFT } from '../utils/types'
-import { addressOf, unHex } from '../utils/helper'
+import { addressOf, isAddress, unHex } from '../utils/helper'
 import { getAttributeEvent } from './getters'
 import { attributeFrom, tokenIdOf } from './types'
 
@@ -37,8 +37,11 @@ export async function handleAttributeSet(context: Context): Promise<void> {
     try {
       final.recipient = final.recipient || addressOf(event.value as string)
     } catch (error) {
-      console.log(error)
-      final.recipient = '' // final.recipient ?? (event.value as string)
+      const human = unHex(event.value)
+      final.recipient = isAddress(human) ? human : ''
+      if (final.recipient === '') {
+        console.log(error)
+      }
     }
   }
 
