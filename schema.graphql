@@ -204,12 +204,14 @@ type Swap @entity {
   caller: String!
   createdAt: DateTime!
   # events: [OfferEvent!] @derivedFrom(field: "offer")
-  consideration: Consideration!
+  # consideration: Consideration!
+  considered: CollectionEntity! 
+  desired: NFTEntity
   expiration: BigInt!
   nft: NFTEntity!
-  price: BigInt! 
+  price: BigInt
   status: OfferStatus!
-  surcharge: Surcharge!
+  surcharge: Surcharge
   updatedAt: DateTime
 }
 
