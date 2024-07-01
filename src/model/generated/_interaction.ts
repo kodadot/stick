@@ -10,4 +10,6 @@ export enum Interaction {
     LOCK = "LOCK",
     CHANGEISSUER = "CHANGEISSUER",
     PAY_ROYALTY = "PAY_ROYALTY",
+    OFFER = "OFFER",
+    SWAP = "SWAP",
 }
