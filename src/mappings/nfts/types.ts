@@ -102,7 +102,12 @@ export type CreateSwapEvent = BaseSwapEvent & {
 }
 
 export type ClaimSwapEvent = BaseSwapEvent & {
-  
+  sent: {
+    collectionId: string
+    sn: string
+    owner: string
+  }
+  currentOwner: string
 }
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn)
