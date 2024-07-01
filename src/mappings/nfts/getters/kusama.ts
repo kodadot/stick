@@ -1,7 +1,7 @@
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/kusama/events'
 import { nfts as calls } from '../../../types/kusama/calls'
-import { addressOf, onlyKind, unHex } from '../../utils/helper'
+import { addressOf, unHex } from '../../utils/helper'
 import { Event, Call, Optional } from '../../utils/types'
 import {
   BurnTokenEvent,
