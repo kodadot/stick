@@ -1,8 +1,8 @@
 import { serializer } from '@kodadot1/metasquid'
 import { logger } from '@kodadot1/metasquid/logger'
-import { Interaction } from '../../model'
+import { Interaction, OfferStatus } from '../../model'
 
-type Action = Interaction
+type Action = Interaction | OfferStatus
 
 type ErrorCallback = (error: Error) => void
 
