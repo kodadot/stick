@@ -10,6 +10,7 @@ import {
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -21,6 +22,8 @@ import {
   UpdateMintSettings,
 } from '../types'
 import { debug } from '../../utils/logger'
+import { Surcharge } from '../../../model'
+import { Optional } from '@kodadot1/metasquid/types'
 
 export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
   const event = events.created
@@ -375,29 +378,35 @@ export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
   return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
 }
 
-export function getSwapCreatedEvent(ctx: Event) {
+export function getSwapCreatedEvent(ctx: Event): CreateSwapEvent {
   const event = events.swapCreated
 
   if (event.v9430.is(ctx)) {
     const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
 
     return {
-      offeredCollection: offeredCollection.toString(),
-      offeredItem: offeredItem.toString(),
-      desiredCollection: desiredCollection.toString(),
-      desiredItem: desiredItem?.toString(),
-      price,
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
       deadline
     }
   }
 
   const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
   return {
-    offeredCollection: offeredCollection.toString(),
-    offeredItem: offeredItem.toString(),
-    desiredCollection: desiredCollection.toString(),
-    desiredItem: desiredItem?.toString(),
-    price,
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
     deadline,
   }
 }

@@ -6,6 +6,7 @@ import {
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -145,7 +146,7 @@ export function getUpdateMintCall(_ctx: Context): UpdateMintSettings {
  return proc.getUpdateMintCall(ctx)
 }
 
-export function getSwapCreatedEvent(ctx: Context) {
+export function getSwapCreatedEvent(ctx: Context): CreateSwapEvent {
   return proc.getSwapCreatedEvent(ctx);
 }
 

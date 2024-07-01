@@ -1,14 +1,15 @@
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/kusama/events'
 import { nfts as calls } from '../../../types/kusama/calls'
-import { addressOf, onlyValue, unHex } from '../../utils/helper'
-import { Event, Call } from '../../utils/types'
+import { addressOf, onlyKind, unHex } from '../../utils/helper'
+import { Event, Call, Optional } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -19,6 +20,7 @@ import {
   TransferTokenEvent,
   UpdateMintSettings,
 } from '../types'
+import { Surcharge } from '../../../model'
 
 export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
   const event = events.created
@@ -372,29 +374,35 @@ export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
   return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
 }
 
-export function getSwapCreatedEvent(ctx: Event) {
+export function getSwapCreatedEvent(ctx: Event): CreateSwapEvent {
   const event = events.swapCreated
 
   if (event.v9420.is(ctx)) {
     const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(ctx)
 
     return {
-      offeredCollection: offeredCollection.toString(),
-      offeredItem: offeredItem.toString(),
-      desiredCollection: desiredCollection.toString(),
-      desiredItem: desiredItem?.toString(),
-      price,
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
       deadline
     }
   }
 
   const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(ctx)
   return {
-    offeredCollection: offeredCollection.toString(),
-    offeredItem: offeredItem.toString(),
-    desiredCollection: desiredCollection.toString(),
-    desiredItem: desiredItem?.toString(),
-    price,
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
     deadline,
   }
 }
