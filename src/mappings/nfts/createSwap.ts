@@ -29,6 +29,7 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   final.nft = nft
   final.considered = considered
   final.desired = desired
+  final.expiration = deadline
   final.price = event.price
   final.surcharge = event.surcharge
   final.status = final.blockNumber >= deadline ? OfferStatus.EXPIRED : OfferStatus.ACTIVE

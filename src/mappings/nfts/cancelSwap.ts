@@ -11,7 +11,7 @@ const OPERATION = OfferStatus.WITHDRAWN
 export async function handleCancelSwap(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getSwapCancelledEvent)
-  debug(OPERATION, event)
+  debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await get(context.store, Swap, id)

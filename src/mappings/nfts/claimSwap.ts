@@ -11,7 +11,7 @@ const OPERATION = OfferStatus.ACCEPTED
 export async function handleClaimSwap(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getSwapClaimedEvent)
-  debug(OPERATION, event)
+  debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await get(context.store, Swap, id)
