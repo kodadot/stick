@@ -155,6 +155,64 @@ type CollectionEvent implements EventType @entity {
   # version: Int!
 }
 
+# type OfferEvent implements EventType @entity {
+#   id: ID!
+#   blockNumber: BigInt
+#   caller: String!
+#   currentOwner: String # currentOwner
+#   interaction: OfferInteraction!
+#   meta: String!
+#   offer: Offer!
+#   timestamp: DateTime!
+# }
+
+
+# interface OfferType {
+#   id: ID! # should be addr-id-amount?
+#   blockNumber: BigInt!
+#   nft: NFTEntity!
+#   consideration: Consideration
+#   caller: String!
+#   createdAt: DateTime!
+#   expiration: BigInt!
+#   status: OfferStatus!
+#   updatedAt: DateTime
+# }
+
+# type Offer implements OfferType @entity {
+#   id: ID! # should be addr-id-amount?
+#   blockNumber: BigInt!
+#   caller: String!
+#   createdAt: DateTime!
+#   events: [OfferEvent!] @derivedFrom(field: "offer")
+#   expiration: BigInt!
+#   nft: NFTEntity!
+#   price: BigInt! 
+#   status: OfferStatus!
+#   updatedAt: DateTime
+# }
+
+type Consideration @entity {
+  id: ID!
+  collection: CollectionEntity!
+  nft: NFTEntity
+}
+
+type Swap @entity {
+  id: ID! # should be addr-id-amount?
+  blockNumber: BigInt!
+  caller: String!
+  createdAt: DateTime!
+  # events: [OfferEvent!] @derivedFrom(field: "offer")
+  consideration: Consideration!
+  expiration: BigInt!
+  nft: NFTEntity!
+  price: BigInt! 
+  status: OfferStatus!
+  surcharge: Surcharge!
+  updatedAt: DateTime
+}
+
 # Possible on-chain interactions that we listen for
 enum Interaction {
   BURN
@@ -168,6 +226,8 @@ enum Interaction {
   LOCK
   CHANGEISSUER
   PAY_ROYALTY
+  OFFER
+  SWAP
   # ROYALTY
 }
 
@@ -179,6 +239,24 @@ enum CollectionType {
   HolderOf
   Issuer
   Public
+}
+
+enum Surcharge {
+  Receive
+  Send
+}
+
+enum OfferInteraction {
+  CREATE
+  ACCEPT
+  CANCEL
+}
+
+enum OfferStatus {
+  ACTIVE
+  ACCEPTED
+  EXPIRED
+  WITHDRAWN
 }
 
 # Entity to represent a Fungible Asset
