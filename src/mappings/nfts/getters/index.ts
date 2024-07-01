@@ -151,7 +151,7 @@ export function getSwapCreatedEvent(_ctx: Context): CreateSwapEvent {
   return proc.getSwapCreatedEvent(ctx)
 }
 
-export function getSwapCancelledEvent(_ctx: Context) {
+export function getSwapCancelledEvent(_ctx: Context): CreateSwapEvent {
   const ctx = _ctx.event
   return proc.getSwapCancelledEvent(ctx)
 }

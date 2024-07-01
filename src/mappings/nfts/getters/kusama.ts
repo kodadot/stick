@@ -407,18 +407,21 @@ export function getSwapCreatedEvent(ctx: Event): CreateSwapEvent {
   }
 }
 
-export function getSwapCancelledEvent(ctx: Event) {
+export function getSwapCancelledEvent(ctx: Event): CreateSwapEvent {
   const event = events.swapCancelled
 
   if (event.v9420.is(ctx)) {
     const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(ctx)
 
     return {
-      offeredCollection: offeredCollection.toString(),
-      offeredItem: offeredItem.toString(),
-      desiredCollection: desiredCollection.toString(),
-      desiredItem: desiredItem?.toString(),
-      price,
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
       deadline,
     }
   }
@@ -427,11 +430,14 @@ export function getSwapCancelledEvent(ctx: Event) {
     ctx
   )
   return {
-    offeredCollection: offeredCollection.toString(),
-    offeredItem: offeredItem.toString(),
-    desiredCollection: desiredCollection.toString(),
-    desiredItem: desiredItem?.toString(),
-    price,
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
     deadline,
   }
 }
