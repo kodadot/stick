@@ -5,6 +5,7 @@ import {
   BuyTokenEvent,
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
+  ClaimSwapEvent,
   CreateCollectionEvent,
   CreateSwapEvent,
   CreateTokenEvent,
@@ -156,7 +157,7 @@ export function getSwapCancelledEvent(_ctx: Context): CreateSwapEvent {
   return proc.getSwapCancelledEvent(ctx)
 }
 
-export function getSwapClaimedEvent(_ctx: Context) {
+export function getSwapClaimedEvent(_ctx: Context): ClaimSwapEvent {
   const ctx = _ctx.event
   return proc.getSwapClaimedEvent(ctx)
 }
