@@ -6,7 +6,7 @@ import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getSwapCancelledEvent } from './getters'
 
-const OPERATION = Action.SEND
+const OPERATION = OfferStatus.WITHDRAWN
 
 export async function handleCancelSwap(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
