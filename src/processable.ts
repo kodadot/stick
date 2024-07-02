@@ -106,6 +106,7 @@ export enum NonFungibleCall {
   updateMintSettings = 'Nfts.update_mint_settings',
   transfer = 'Nfts.transfer',
   buyItem = 'Nfts.buy_item',
+  claimSwap = 'Nfts.claim_swap',
 }
 
 /**
