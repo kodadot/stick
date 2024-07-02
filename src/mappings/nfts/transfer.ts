@@ -1,10 +1,11 @@
 import { getWith } from '@kodadot1/metasquid/entity'
 import { NFTEntity as NE } from '../../model'
+import { NonFungibleCall } from '../../processable'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
-import { debug, pending, success } from '../utils/logger'
-import { Action, Context, createTokenId } from '../utils/types'
 import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
+import { debug, pending, skip, success } from '../utils/logger'
+import { Action, Context, createTokenId } from '../utils/types'
 import { getTransferTokenEvent } from './getters'
 
 const OPERATION = Action.SEND
@@ -19,6 +20,12 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getTransferTokenEvent)
   debug(OPERATION, event)
+
+  // Check if event has a name and can be skipped in some canses
+  if (event.name && [NonFungibleCall.buyItem].includes(event.name as NonFungibleCall)) {
+    skip(OPERATION, `because it is **${event.name}**`)
+    return
+  }
 
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
