@@ -35,6 +35,15 @@ export const pending = (action: Action, message: string) => {
 }
 
 /**
+ * Log a started action
+ * @param action - the action being performed
+ * @param message - the message to log
+**/
+export const skip = (action: Action, message: string) => {
+  logger.info(`⏩ [${action}] ${message}`)
+}
+
+/**
  * Log a debug message
  * @param action - the action being performed
  * @param message - the message to log
