@@ -22,6 +22,7 @@ export type BaseCall = {
   caller: string
   blockNumber: string
   timestamp: Date
+  name?: string
 }
 // In case of fire consult this repo:
 // https://github.com/subsquid-labs/squid-substrate-template/tree/main
