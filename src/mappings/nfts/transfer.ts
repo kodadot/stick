@@ -4,11 +4,11 @@ import { NonFungibleCall } from '../../processable'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
 import { calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
-import { debug, pending, skip, success } from '../utils/logger'
+import { debug, pending, skip, success, warn } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getTransferTokenEvent } from './getters'
 
-const OPERATION = Action.SEND
+let OPERATION = Action.SEND
 
 /**
  * Handle the token transfer event (Nfts.Transferred)
@@ -22,9 +22,16 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   debug(OPERATION, event)
 
   // Check if event has a name and can be skipped in some canses
-  if (event.name && [NonFungibleCall.buyItem].includes(event.name as NonFungibleCall)) {
-    skip(OPERATION, `because it is **${event.name}**`)
-    return
+  switch (event.name) {
+    case NonFungibleCall.buyItem:
+      skip(OPERATION, `because it is **${event.name}**`)
+      return
+    case NonFungibleCall.claimSwap:
+      warn(OPERATION, `Will be treated as **${Action.SWAP}**`)
+      OPERATION = Action.SWAP
+      break
+    default:
+      break
   }
 
   const id = createTokenId(event.collectionId, event.sn)
