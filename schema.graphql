@@ -79,6 +79,7 @@ type NFTEntity @entity {
   recipient: String
   royalty: Float
   sn: BigInt! @index
+  # swap: Swap @derivedFrom(field: "nft")
   updatedAt: DateTime! @index
   version: Int!
   token: TokenEntity
@@ -208,10 +209,10 @@ type Swap @entity {
   considered: CollectionEntity! 
   desired: NFTEntity
   expiration: BigInt!
-  nft: NFTEntity!
+  nft: NFTEntity! # @unique
   price: BigInt
-  status: OfferStatus!
   surcharge: Surcharge
+  status: OfferStatus!
   updatedAt: DateTime
 }
 
