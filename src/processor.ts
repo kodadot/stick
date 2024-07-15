@@ -13,7 +13,7 @@ const database = new Database({ supportHotBlocks: false })
 const processor = new SubstrateProcessor<SelectedFields>()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
-// const _NFT_STARTING_BLOCK = 4_556_552
+const _NFT_STARTING_BLOCK = 4_556_552
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 const ONLY_ARCHIVE = false
 
@@ -27,11 +27,13 @@ processor.setBlockRange({ from: STARTING_BLOCK })
 const archive = getArchiveUrl()
 const chain = getNodeUrl()
 
-processor.setGateway(archive)
+
 processor.setRpcEndpoint({
   url: chain,
   rateLimit: 10
 })
+
+processor.setGateway(archive);
 
 // disables RPC ingestion and drastically reduce no of RPC calls
 processor.setRpcDataIngestionSettings({ disabled: ONLY_ARCHIVE })
