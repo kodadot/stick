@@ -21,7 +21,7 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   // the nft that is being swapped
   const nft = await get(context.store, NE, id)
   const considered = await get(context.store, CE, event.consideration.collectionId)
-  const desired = isNFT(event.consideration) ? await get(context.store, NE, tokenIdOf(event as any)) : undefined
+  const desired = isNFT(event.consideration) ? await get(context.store, NE, tokenIdOf(event.consideration as any)) : undefined
 
   final.blockNumber = BigInt(event.blockNumber)
   final.createdAt = event.timestamp
