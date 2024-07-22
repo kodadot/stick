@@ -49,8 +49,8 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   await createEvent(entity, OPERATION, event, meta, context.store)
 
   const swap = await getOptional(context.store, Swap, id)
-  if (swap) {
-    swap.status = TradeStatus.WITHDRAWN
+  if (swap && swap.status === TradeStatus.ACTIVE) {
+    swap.status = TradeStatus.CANCELLED
     swap.updatedAt = event.timestamp
     await context.store.save(swap)
   }

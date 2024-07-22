@@ -62,8 +62,8 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   // remove swap if exists
   // PendingSwapOf::<T, I>::remove(&collection, &item);
   const swap = await getOptional(context.store, Swap, id)
-  if (swap) {
-    swap.status = TradeStatus.WITHDRAWN
+  if (swap && swap.status === TradeStatus.ACTIVE) {
+    swap.status = TradeStatus.CANCELLED
     swap.updatedAt = event.timestamp
     await context.store.save(swap)
   }
