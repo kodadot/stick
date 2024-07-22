@@ -167,6 +167,9 @@ type CollectionEvent implements EventType @entity {
 #   timestamp: DateTime!
 # }
 
+# Entity to represent a Offer
+# defined on chain as pub type PendingSwapOf<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/d0d8e29197a783f3ea300569afc50244a280cafa/substrate/frame/nfts/src/types.rs#L207
 type Offer @entity {
   id: ID! # collection-id // same as NFTEntity.id
   # events: [TradeEvent!] @derivedFrom(field: "offer")
