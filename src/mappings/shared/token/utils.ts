@@ -16,7 +16,7 @@ export function generateTokenId(collectionId: string, nft: NE): string | undefin
 }
 
 export const collectionsToKeepNameAsIs: Record<string, string[]> = {
-  statemine: [
+  kusama: [
     '176', // chained - generative art
   ],
 }
