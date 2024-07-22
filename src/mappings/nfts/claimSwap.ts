@@ -1,13 +1,18 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
-import { NFTEntity as NE, TradeStatus, Swap } from '../../model'
-import { createEvent } from '../shared/event'
+import { Swap, TradeStatus } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
-import { Action, Context, createTokenId } from '../utils/types'
+import { Context, createTokenId } from '../utils/types'
 import { getSwapClaimedEvent } from './getters'
 
 const OPERATION = TradeStatus.ACCEPTED
 
+/**
+ * Handle the atomic swap claim event (Nfts.SwapClaimed)
+ * Marks the swap as accepted
+ * Logs Nothing
+ * @param context - the context for the event
+**/
 export async function handleClaimSwap(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getSwapClaimedEvent)

@@ -1,6 +1,5 @@
 import { getOrFail as get, getOrCreate } from '@kodadot1/metasquid/entity'
-import { CollectionEntity as CE, NFTEntity as NE, TradeStatus, Swap, Offer } from '../../model'
-import { createEvent } from '../shared/event'
+import { CollectionEntity as CE, NFTEntity as NE, Offer, Swap, TradeStatus } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success, warn } from '../utils/logger'
 import { Action, Context, createTokenId, isNFT, isOffer } from '../utils/types'
@@ -9,8 +8,14 @@ import { tokenIdOf } from './types'
 
 const OPERATION = Action.SWAP
 
+/**
+ * Handle the atomic swap create event (Nfts.SwapCreated)
+ * Marks the swap as active
+ * Logs Action.SWAP event
+ * @param context - the context for the event
+ **/
 export async function handleCreateSwap(context: Context): Promise<void> {
-  let TRUE_OPERATION = OPERATION;
+  // let TRUE_OPERATION = OPERATION;
 
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getSwapCreatedEvent)
@@ -21,7 +26,7 @@ export async function handleCreateSwap(context: Context): Promise<void> {
     // Validate offer
     offer = Boolean(event.price && event.price > 0n && event.surcharge === 'Send')
     warn(OPERATION, `Will be treated as **${Action.OFFER}**`)
-    TRUE_OPERATION = Action.OFFER
+    // TRUE_OPERATION = Action.OFFER
   }
   const Entity = offer ? Offer : Swap
   // TODO: SWAP CAN BE OVERWRITTEN!

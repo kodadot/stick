@@ -8,6 +8,12 @@ import { getSwapCancelledEvent } from './getters'
 
 const OPERATION = TradeStatus.WITHDRAWN
 
+/**
+ * Handle the atomic swap cancel event (Nfts.SwapCancelled)
+ * Marks the swap as withdrawn
+ * Logs Nothing
+ * @param context - the context for the event
+ **/
 export async function handleCancelSwap(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getSwapCancelledEvent)
