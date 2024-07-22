@@ -1,0 +1,8 @@
+export enum TradeStatus {
+    ACCEPTED = "ACCEPTED",
+    ACTIVE = "ACTIVE",
+    CANCELLED = "CANCELLED",
+    EXPIRED = "EXPIRED",
+    INVALID = "INVALID",
+    WITHDRAWN = "WITHDRAWN",
+}

@@ -2,11 +2,10 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, B
 import {CollectionEntity} from "./collectionEntity.model"
 import {NFTEntity} from "./nftEntity.model"
 import {TradeStatus} from "./_tradeStatus"
-import {Surcharge} from "./_surcharge"
 
 @Entity_()
-export class Swap {
-    constructor(props?: Partial<Swap>) {
+export class Offer {
+    constructor(props?: Partial<Offer>) {
         Object.assign(this, props)
     }
 
@@ -38,14 +37,11 @@ export class Swap {
     @JoinColumn_()
     nft!: NFTEntity
 
-    @BigIntColumn_({nullable: true})
-    price!: bigint | undefined | null
+    @BigIntColumn_({nullable: false})
+    price!: bigint
 
     @Column_("varchar", {length: 9, nullable: false})
     status!: TradeStatus
-
-    @Column_("varchar", {length: 7, nullable: true})
-    surcharge!: Surcharge | undefined | null
 
     @DateTimeColumn_({nullable: true})
     updatedAt!: Date | undefined | null
