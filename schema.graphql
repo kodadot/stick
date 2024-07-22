@@ -41,18 +41,18 @@ type TokenEntity @entity {
   id: ID!
   blockNumber: BigInt
   collection: CollectionEntity
-  nfts: [NFTEntity!] @derivedFrom(field: "token")
+  count: Int!
+  createdAt: DateTime!
+  deleted: Boolean!
   hash: String! @index
   image: String
   media: String
   meta: MetadataEntity
   metadata: String
   name: String @index
-  updatedAt: DateTime!
-  createdAt: DateTime!
+  nfts: [NFTEntity!] @derivedFrom(field: "token")
   supply: Int!
-  count: Int!
-  deleted: Boolean!
+  updatedAt: DateTime!
 }
 
 # Entity to represent a collection
