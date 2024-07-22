@@ -1,5 +1,5 @@
 import { getOptional, getWith } from '@kodadot1/metasquid/entity'
-import { NFTEntity as NE, OfferStatus, Swap } from '../../model'
+import { NFTEntity as NE, TradeStatus, Swap } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
@@ -50,7 +50,7 @@ export async function handleTokenBurn(context: Context): Promise<void> {
 
   const swap = await getOptional(context.store, Swap, id)
   if (swap) {
-    swap.status = OfferStatus.WITHDRAWN
+    swap.status = TradeStatus.WITHDRAWN
     swap.updatedAt = event.timestamp
     await context.store.save(swap)
   }

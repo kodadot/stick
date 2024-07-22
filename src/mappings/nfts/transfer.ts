@@ -1,5 +1,5 @@
 import { getOptional, getWith } from '@kodadot1/metasquid/entity'
-import { NFTEntity as NE, OfferStatus, Swap } from '../../model'
+import { NFTEntity as NE, TradeStatus, Swap } from '../../model'
 import { NonFungibleCall } from '../../processable'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
@@ -63,7 +63,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   // PendingSwapOf::<T, I>::remove(&collection, &item);
   const swap = await getOptional(context.store, Swap, id)
   if (swap) {
-    swap.status = OfferStatus.WITHDRAWN
+    swap.status = TradeStatus.WITHDRAWN
     swap.updatedAt = event.timestamp
     await context.store.save(swap)
   }
