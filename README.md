@@ -1,6 +1,6 @@
 # stick
 
-![](https://media1.tenor.com/m/Eu0LNbU4hQMAAAAC/jeanne-darc-vanitas-no-carte.gif)
+![](https://media.tenor.com/Eu0LNbU4hQMAAAAC/jeanne-darc-vanitas-no-carte.gif)
 
 [Squid](https://docs.subsquid.io) based data used to index, process, and query on top of AssetHub for [KodaDot](https://kodadot.xyz) NFT Marketplace.
 
