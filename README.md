@@ -1,6 +1,6 @@
 # stick
 
-![](https://media.tenor.com/eK1dyB3TOLsAAAAC/anime-stick.gif)
+![](https://media1.tenor.com/m/Eu0LNbU4hQMAAAAC/jeanne-darc-vanitas-no-carte.gif)
 
 [Squid](https://docs.subsquid.io) based data used to index, process, and query on top of AssetHub for [KodaDot](https://kodadot.xyz) NFT Marketplace.
 
@@ -8,7 +8,7 @@
 
 * Kusama AssetHub Processor (Statemine -> KSM): https://squid.subsquid.io/stick/graphql
 * Polkadot AssetHub Processor (Statemint -> DOT): https://squid.subsquid.io/speck/graphql
-* Pasoe Testnet Processor: 🚧 Coming soon 🚧
+* Paseo Testnet Processor: 🚧 Coming soon 🚧
 
 ## Project structure
 
@@ -129,22 +129,29 @@ The architecture of this project is following:
 
 1. fast generate event handlers 
 
-```
+```bash
 pbpaste | cut -d '=' -f 1 | tr -d ' '  | xargs -I_ echo "processor.addEventHandler(Event._, dummy);"
 ```
 
 2. enable debug logs (in .env)
 
-```
+```bash
 SQD_DEBUG=squid:log
 ```
 
 3. generate metagetters from getters 
 
-```
+```bash
 pbpaste | grep 'export'  | xargs -I_ echo "_  return proc.  }"
 ```
 
+4. enable offers 
+
+`Offers` support is a hack on top of the `Atomic Swap` to enable `Offers` set in `.env` file
+
+```bash
+OFFER=<ID_OF_THE_COLLECTION>
+```
 
 ## Funding
 
