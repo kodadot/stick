@@ -1,8 +1,8 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
-import { Swap, TradeStatus } from '../../model'
+import { Offer, Swap, TradeStatus } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
-import { Context, createTokenId } from '../utils/types'
+import { Context, createTokenId, isOffer } from '../utils/types'
 import { getSwapClaimedEvent } from './getters'
 
 const OPERATION = TradeStatus.ACCEPTED
@@ -19,7 +19,8 @@ export async function handleClaimSwap(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await get(context.store, Swap, id)
+  const offer = isOffer(event)
+  const entity = offer ? await get(context.store, Offer, id) : await get(context.store, Swap, id)
 
   entity.status = TradeStatus.ACCEPTED
   entity.updatedAt = event.timestamp

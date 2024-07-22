@@ -1,9 +1,8 @@
 import { getOrFail as get } from '@kodadot1/metasquid/entity'
-import { TradeStatus, Swap } from '../../model'
-import { createEvent } from '../shared/event'
+import { Offer, Swap, TradeStatus } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
-import { Action, Context, createTokenId } from '../utils/types'
+import { Context, createTokenId, isOffer } from '../utils/types'
 import { getSwapCancelledEvent } from './getters'
 
 const OPERATION = TradeStatus.WITHDRAWN
@@ -20,7 +19,8 @@ export async function handleCancelSwap(context: Context): Promise<void> {
   debug(OPERATION, event, true)
 
   const id = createTokenId(event.collectionId, event.sn)
-  const entity = await get(context.store, Swap, id)
+  const offer = isOffer(event)
+  const entity = offer ? await get(context.store, Offer, id) : await get(context.store, Swap, id)
 
   entity.status = TradeStatus.WITHDRAWN
   entity.updatedAt = event.timestamp

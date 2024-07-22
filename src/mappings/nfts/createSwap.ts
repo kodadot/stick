@@ -28,7 +28,6 @@ export async function handleCreateSwap(context: Context): Promise<void> {
     warn(OPERATION, `Will be treated as **${Action.OFFER}**`)
     // TRUE_OPERATION = Action.OFFER
   }
-  const Entity = offer ? Offer : Swap
   // TODO: SWAP CAN BE OVERWRITTEN!
   const id = createTokenId(event.collectionId, event.sn)
   const final = offer ? await getOrCreate(context.store, Offer, id, {}) : await getOrCreate(context.store, Swap, id, {})
