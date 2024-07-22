@@ -8,7 +8,7 @@ import { debug, pending, skip, success, warn } from '../utils/logger'
 import { Action, Context, createTokenId } from '../utils/types'
 import { getTransferTokenEvent } from './getters'
 
-let OPERATION = Action.SEND
+const OPERATION = Action.SEND
 
 /**
  * Handle the token transfer event (Nfts.Transferred)
@@ -17,6 +17,9 @@ let OPERATION = Action.SEND
  * @param context - the context for the event
  **/
 export async function handleTokenTransfer(context: Context): Promise<void> {
+  // Handling swaps and other operations
+  let TRUE_OPERATION = OPERATION;
+
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getTransferTokenEvent)
   debug(OPERATION, event)
@@ -28,7 +31,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
       return
     case NonFungibleCall.claimSwap:
       warn(OPERATION, `Will be treated as **${Action.SWAP}**`)
-      OPERATION = Action.SWAP
+      TRUE_OPERATION = Action.SWAP
       break
     default:
       break
@@ -51,10 +54,10 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   entity.collection.ownerCount = ownerCount
   entity.collection.distribution = distribution
 
-  success(OPERATION, `${id} from ${event.caller} to ${event.to}`)
+  success(TRUE_OPERATION, `${id} from ${event.caller} to ${event.to}`)
   await context.store.save(entity)
   await context.store.save(entity.collection)
-  await createEvent(entity, OPERATION, event, event.to, context.store, oldOwner)
+  await createEvent(entity, TRUE_OPERATION, event, event.to, context.store, oldOwner)
 
   // remove swap if exists
   // PendingSwapOf::<T, I>::remove(&collection, &item);
