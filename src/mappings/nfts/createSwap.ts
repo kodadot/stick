@@ -1,22 +1,32 @@
 import { getOrFail as get, getOrCreate } from '@kodadot1/metasquid/entity'
-import { CollectionEntity as CE, NFTEntity as NE, OfferStatus, Swap } from '../../model'
+import { CollectionEntity as CE, NFTEntity as NE, TradeStatus, Swap, Offer } from '../../model'
 import { createEvent } from '../shared/event'
 import { unwrap } from '../utils/extract'
-import { debug, pending, success } from '../utils/logger'
-import { Action, Context, createTokenId, isNFT } from '../utils/types'
+import { debug, pending, success, warn } from '../utils/logger'
+import { Action, Context, createTokenId, isNFT, isOffer } from '../utils/types'
 import { getSwapCreatedEvent } from './getters'
 import { tokenIdOf } from './types'
 
 const OPERATION = Action.SWAP
 
 export async function handleCreateSwap(context: Context): Promise<void> {
+  let TRUE_OPERATION = OPERATION;
+
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getSwapCreatedEvent)
   debug(OPERATION, event, true)
+  let offer = false
 
+  if (isOffer(event)) {
+    // Validate offer
+    offer = Boolean(event.price && event.price > 0n && event.surcharge === 'Send')
+    warn(OPERATION, `Will be treated as **${Action.OFFER}**`)
+    TRUE_OPERATION = Action.OFFER
+  }
+  const Entity = offer ? Offer : Swap
   // TODO: SWAP CAN BE OVERWRITTEN!
   const id = createTokenId(event.collectionId, event.sn)
-  const final = await getOrCreate(context.store, Swap, id, {})
+  const final = offer ? await getOrCreate(context.store, Offer, id, {}) : await getOrCreate(context.store, Swap, id, {})
   const deadline = BigInt(event.deadline)
   // the nft that is being swapped
   const nft = await get(context.store, NE, id)
@@ -31,14 +41,15 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   final.desired = desired
   final.expiration = deadline
   final.price = event.price
-  final.surcharge = event.surcharge
-  final.status = final.blockNumber >= deadline ? OfferStatus.EXPIRED : OfferStatus.ACTIVE
+  if ('surcharge' in final) {
+    final.surcharge = event.surcharge
+  }
+  final.status = final.blockNumber >= deadline ? TradeStatus.EXPIRED : TradeStatus.ACTIVE
   final.updatedAt = event.timestamp
 
   // TODO: SAVE SOMEWHERE
-
-  // success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   await context.store.save(final)
+  success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
   
   // SwapCreated {
   //   offered_collection: T::CollectionId,
