@@ -1,5 +1,5 @@
 # Entity to represent a collection
-# defined on chain as  pub type Collection<T: Config<I>, I: 'static = ()> 
+# defined on chain as  pub type Collection<T: Config<I>, I: 'static = ()>
 # https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L217
 type CollectionEntity @entity {
   attributes: [Attribute!]
@@ -35,7 +35,7 @@ type CollectionEntity @entity {
 }
 
 # Entity to group NFTEntity by common metadata
-# grouping is done either by NFTEntity.image or NFTEntity.media 
+# grouping is done either by NFTEntity.image or NFTEntity.media
 # https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L293
 type TokenEntity @entity {
   id: ID!
@@ -156,63 +156,55 @@ type CollectionEvent implements EventType @entity {
   # version: Int!
 }
 
-# type OfferEvent implements EventType @entity {
+# type TradeEvent implements EventType @entity {
 #   id: ID!
 #   blockNumber: BigInt
 #   caller: String!
 #   currentOwner: String # currentOwner
 #   interaction: OfferInteraction!
 #   meta: String!
-#   offer: Offer!
+#   trade: Swap!
 #   timestamp: DateTime!
 # }
 
-
-# interface OfferType {
-#   id: ID! # should be addr-id-amount?
-#   blockNumber: BigInt!
-#   nft: NFTEntity!
-#   consideration: Consideration
-#   caller: String!
-#   createdAt: DateTime!
-#   expiration: BigInt!
-#   status: OfferStatus!
-#   updatedAt: DateTime
-# }
-
-# type Offer implements OfferType @entity {
-#   id: ID! # should be addr-id-amount?
-#   blockNumber: BigInt!
-#   caller: String!
-#   createdAt: DateTime!
-#   events: [OfferEvent!] @derivedFrom(field: "offer")
-#   expiration: BigInt!
-#   nft: NFTEntity!
-#   price: BigInt! 
-#   status: OfferStatus!
-#   updatedAt: DateTime
-# }
-
-type Consideration @entity {
-  id: ID!
-  collection: CollectionEntity!
-  nft: NFTEntity
-}
-
-type Swap @entity {
-  id: ID! # should be addr-id-amount?
+type Offer @entity {
+  id: ID! # collection-id // same as NFTEntity.id
+  # events: [TradeEvent!] @derivedFrom(field: "offer")
   blockNumber: BigInt!
   caller: String!
+  considered: CollectionEntity!
   createdAt: DateTime!
-  # events: [OfferEvent!] @derivedFrom(field: "offer")
-  # consideration: Consideration!
-  considered: CollectionEntity! 
   desired: NFTEntity
   expiration: BigInt!
-  nft: NFTEntity! # @unique
+  nft: NFTEntity! @unique
+  price: BigInt!
+  status: TradeStatus!
+  updatedAt: DateTime
+}
+
+# DEV: Consideration is not used
+# type Consideration @entity {
+#   id: ID!
+#   collection: CollectionEntity!
+#   nft: NFTEntity
+# }
+
+# Entity to represent a Swap
+# defined on chain as pub type PendingSwapOf<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/d0d8e29197a783f3ea300569afc50244a280cafa/substrate/frame/nfts/src/types.rs#L207
+type Swap @entity {
+  id: ID! # collection-id // same as NFTEntity.id
+  # events: [TradeEvent!] @derivedFrom(field: "offer")
+  blockNumber: BigInt!
+  caller: String!
+  considered: CollectionEntity!
+  createdAt: DateTime!
+  desired: NFTEntity
+  expiration: BigInt!
+  nft: NFTEntity! @unique
   price: BigInt
+  status: TradeStatus!
   surcharge: Surcharge
-  status: OfferStatus!
   updatedAt: DateTime
 }
 
@@ -249,16 +241,18 @@ enum Surcharge {
   Send
 }
 
-enum OfferInteraction {
+enum TradeInteraction {
   CREATE
   ACCEPT
   CANCEL
 }
 
-enum OfferStatus {
-  ACTIVE
+enum TradeStatus {
   ACCEPTED
+  ACTIVE
+  CANCELLED
   EXPIRED
+  INVALID
   WITHDRAWN
 }
 
