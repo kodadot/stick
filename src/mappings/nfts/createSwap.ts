@@ -49,7 +49,7 @@ export async function handleCreateSwap(context: Context): Promise<void> {
 
   // TODO: SAVE SOMEWHERE
   await context.store.save(final)
-  success(OPERATION, `${id} by ${event.caller} for ${String(event.price)}`)
+  success(OPERATION, `${id} by ${event.caller} by ${event.caller}`)
   
   // SwapCreated {
   //   offered_collection: T::CollectionId,
