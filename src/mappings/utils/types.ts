@@ -17,6 +17,7 @@ import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
 import { SetMetadata } from '../nfts/types'
+import { COLLECTION_OFFER } from '../../environment'
 
 export type BaseCall = {
   caller: string
@@ -68,6 +69,10 @@ export function collectionEventFrom(
 
 export function isNFT<T extends SetMetadata>(event: T) {
   return event.sn !== undefined
+}
+
+export function isOffer<T extends SetMetadata>(event: T): boolean {
+  return event.collectionId === COLLECTION_OFFER
 }
 
 export function eventFrom<T>(
