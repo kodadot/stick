@@ -145,7 +145,16 @@ SQD_DEBUG=squid:log
 pbpaste | grep 'export'  | xargs -I_ echo "_  return proc.  }"
 ```
 
-4. enable offers 
+4. Enable different chain (currently only Kusama and Polkadot are supported)
+
+> [!NOTE]
+> By default the chain is set to `kusama`
+
+```bash
+CHAIN=polkadot # or kusama
+```
+
+5. enable offers 
 
 `Offers` support is a hack on top of the `Atomic Swap` to enable `Offers` set in `.env` file
 
