@@ -151,6 +151,15 @@ export async function nfts<T extends SelectedEvent>(item: T, ctx: Context): Prom
     case NewNonFungible.sendTip:
       await n.handleTipSend(ctx)
       break
+    case NewNonFungible.createSwap:
+      await n.handleCreateSwap(ctx)
+      break
+    case NewNonFungible.claimSwap:
+      await n.handleClaimSwap(ctx)
+      break
+    case NewNonFungible.cancelSwap:
+      await n.handleCancelSwap(ctx)
+      break
     default:
       throw new Error(`Unknown event ${item.name}`)
   }

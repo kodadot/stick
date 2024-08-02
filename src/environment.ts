@@ -1,6 +1,7 @@
 export type Chain = 'kusama' | 'rococo' | 'polkadot'
 
 export const CHAIN: Chain = process.env.CHAIN as Chain || 'kusama'
+export const COLLECTION_OFFER: string = process.env.OFFER || ''
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 // const _NFT_STARTING_BLOCK = 4_556_552
@@ -14,6 +15,7 @@ export const isProd = CHAIN !== 'rococo'
 
 console.table({
   CHAIN, ARCHIVE_URL, NODE_URL, STARTING_BLOCK,
+  COLLECTION_OFFER,
   disabledRPC: false,
   environment: isProd ? 'production' : 'development',
 })

@@ -15,6 +15,7 @@ deploy:
       - lib/processor
     env:
       CHAIN: polkadot
+      OFFER: 174
   api:
     cmd:
       - npx

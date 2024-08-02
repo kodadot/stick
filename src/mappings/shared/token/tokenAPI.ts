@@ -1,9 +1,13 @@
 import { create as createEntity, emOf } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
 import { Store } from '../../utils/types'
-import { CollectionEntity as CE, NFTEntity as NE, TokenEntity as TE } from '../../../model'
+import {
+  CollectionEntity as CE,
+  NFTEntity as NE,
+  TokenEntity as TE,
+} from '../../../model'
 import { debug } from '../../utils/logger'
-import { OPERATION, generateTokenId, tokenName } from './utils'
+import { generateTokenId, OPERATION, tokenName } from './utils'
 
 export class TokenAPI {
   constructor(private store: Store) {}
@@ -13,7 +17,9 @@ export class TokenAPI {
     if (!tokenId) {
       return
     }
-    debug(OPERATION, { createToken: `Create TOKEN ${tokenId} for NFT ${nft.id}` })
+    debug(OPERATION, {
+      createToken: `Create TOKEN ${tokenId} for NFT ${nft.id}`,
+    })
 
     const token = createEntity(TE, tokenId, {
       createdAt: nft.createdAt,
@@ -42,7 +48,9 @@ export class TokenAPI {
     if (!token) {
       return
     }
-    debug(OPERATION, { removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}` })
+    debug(OPERATION, {
+      removeNftFromToken: `Unlink NFT ${nft.id} from  TOKEN ${token.id}`,
+    })
 
     await emOf(this.store).update(NE, nft.id, { token: null })
     const updatedCount = await emOf(this.store).countBy(NE, {
@@ -80,7 +88,9 @@ export class TokenAPI {
     if (nft.token?.id === token.id) {
       return token
     }
-    debug(OPERATION, { updateToken: `Add NFT ${nft.id} to TOKEN ${token.id} for ` })
+    debug(OPERATION, {
+      updateToken: `Add NFT ${nft.id} to TOKEN ${token.id} for `,
+    })
     token.count += 1
     token.supply += nft.burned ? 0 : 1
     token.updatedAt = nft.updatedAt

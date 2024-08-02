@@ -3,7 +3,7 @@ import {
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { Asset, NonFungible, NonFungibleCall, Unique } from './processable'
+import { Asset, NewNonFungible, NonFungible, NonFungibleCall, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
 import { mainFrame } from './mappings'
@@ -13,7 +13,7 @@ const database = new Database({ supportHotBlocks: false })
 const processor = new SubstrateProcessor<SelectedFields>()
 
 const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
-// const _NFT_STARTING_BLOCK = 4_556_552
+const _NFT_STARTING_BLOCK = 4_556_552
 const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 const ONLY_ARCHIVE = false
 
@@ -27,11 +27,13 @@ processor.setBlockRange({ from: STARTING_BLOCK })
 const archive = getArchiveUrl()
 const chain = getNodeUrl()
 
-processor.setGateway(archive)
+
 processor.setRpcEndpoint({
   url: chain,
   rateLimit: 10
 })
+
+processor.setGateway(archive);
 
 // disables RPC ingestion and drastically reduce no of RPC calls
 processor.setRpcDataIngestionSettings({ disabled: ONLY_ARCHIVE })
@@ -100,6 +102,11 @@ processor.addEvent({ name: [NonFungible.changeIssuer], call: true, extrinsic: tr
 processor.addEvent({ name: [NonFungible.changeTeam], call: true, extrinsic: true }) // n.handleCollectionTeamChange)
 // processor.addEvent({   name: [NonFungible.thaw, dummy);
 processor.addEvent({ name: [NonFungible.transfer], call: true, extrinsic: true }) // n.handleTokenTransfer)
+
+
+processor.addEvent({ name: [NewNonFungible.createSwap], call: true, extrinsic: true }) 
+processor.addEvent({ name: [NewNonFungible.cancelSwap], call: true, extrinsic: true }) 
+processor.addEvent({ name: [NewNonFungible.claimSwap], call: true, extrinsic: true }) 
 
 processor.addCall({ name: [NonFungibleCall.updateMintSettings], extrinsic: true })
 

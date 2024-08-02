@@ -1,7 +1,7 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_, StringColumn as StringColumn_, DateTimeColumn as DateTimeColumn_, IntColumn as IntColumn_, BooleanColumn as BooleanColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, ManyToOne as ManyToOne_, Index as Index_, IntColumn as IntColumn_, DateTimeColumn as DateTimeColumn_, BooleanColumn as BooleanColumn_, StringColumn as StringColumn_, OneToMany as OneToMany_} from "@subsquid/typeorm-store"
 import {CollectionEntity} from "./collectionEntity.model"
-import {NFTEntity} from "./nftEntity.model"
 import {MetadataEntity} from "./metadataEntity.model"
+import {NFTEntity} from "./nftEntity.model"
 
 @Entity_()
 export class TokenEntity {
@@ -19,8 +19,14 @@ export class TokenEntity {
     @ManyToOne_(() => CollectionEntity, {nullable: true})
     collection!: CollectionEntity | undefined | null
 
-    @OneToMany_(() => NFTEntity, e => e.token)
-    nfts!: NFTEntity[]
+    @IntColumn_({nullable: false})
+    count!: number
+
+    @DateTimeColumn_({nullable: false})
+    createdAt!: Date
+
+    @BooleanColumn_({nullable: false})
+    deleted!: boolean
 
     @Index_()
     @StringColumn_({nullable: false})
@@ -43,18 +49,12 @@ export class TokenEntity {
     @StringColumn_({nullable: true})
     name!: string | undefined | null
 
-    @DateTimeColumn_({nullable: false})
-    updatedAt!: Date
-
-    @DateTimeColumn_({nullable: false})
-    createdAt!: Date
+    @OneToMany_(() => NFTEntity, e => e.token)
+    nfts!: NFTEntity[]
 
     @IntColumn_({nullable: false})
     supply!: number
 
-    @IntColumn_({nullable: false})
-    count!: number
-
-    @BooleanColumn_({nullable: false})
-    deleted!: boolean
+    @DateTimeColumn_({nullable: false})
+    updatedAt!: Date
 }

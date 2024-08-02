@@ -1,8 +1,8 @@
 import { serializer } from '@kodadot1/metasquid'
 import { logger } from '@kodadot1/metasquid/logger'
-import { Interaction } from '../../model'
+import { Interaction, TradeStatus } from '../../model'
 
-type Action = Interaction
+type Action = Interaction | TradeStatus
 
 type ErrorCallback = (error: Error) => void
 
@@ -32,6 +32,15 @@ export const error = (e: Error | unknown, action: Action, message: string) => {
 **/
 export const pending = (action: Action, message: string) => {
   logger.info(`⏳ [${action}] ${message}`)
+}
+
+/**
+ * Log a started action
+ * @param action - the action being performed
+ * @param message - the message to log
+**/
+export const skip = (action: Action, message: string) => {
+  logger.info(`⏩ [${action}] ${message}`)
 }
 
 /**

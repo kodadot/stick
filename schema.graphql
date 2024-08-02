@@ -1,5 +1,5 @@
 # Entity to represent a collection
-# defined on chain as  pub type Collection<T: Config<I>, I: 'static = ()> 
+# defined on chain as  pub type Collection<T: Config<I>, I: 'static = ()>
 # https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L217
 type CollectionEntity @entity {
   attributes: [Attribute!]
@@ -35,24 +35,24 @@ type CollectionEntity @entity {
 }
 
 # Entity to group NFTEntity by common metadata
-# grouping is done either by NFTEntity.image or NFTEntity.media 
+# grouping is done either by NFTEntity.image or NFTEntity.media
 # https://github.com/paritytech/polkadot-sdk/blob/b8ad0d1f565659f004165c5244acba78828d0bf7/substrate/frame/nfts/src/lib.rs#L293
 type TokenEntity @entity {
   id: ID!
   blockNumber: BigInt
   collection: CollectionEntity
-  nfts: [NFTEntity!] @derivedFrom(field: "token")
+  count: Int!
+  createdAt: DateTime!
+  deleted: Boolean!
   hash: String! @index
   image: String
   media: String
   meta: MetadataEntity
   metadata: String
   name: String @index
-  updatedAt: DateTime!
-  createdAt: DateTime!
+  nfts: [NFTEntity!] @derivedFrom(field: "token")
   supply: Int!
-  count: Int!
-  deleted: Boolean!
+  updatedAt: DateTime!
 }
 
 # Entity to represent a collection
@@ -79,6 +79,7 @@ type NFTEntity @entity {
   recipient: String
   royalty: Float
   sn: BigInt! @index
+  # swap: Swap @derivedFrom(field: "nft")
   updatedAt: DateTime! @index
   version: Int!
   token: TokenEntity
@@ -155,6 +156,61 @@ type CollectionEvent implements EventType @entity {
   # version: Int!
 }
 
+# type TradeEvent implements EventType @entity {
+#   id: ID!
+#   blockNumber: BigInt
+#   caller: String!
+#   currentOwner: String # currentOwner
+#   interaction: OfferInteraction!
+#   meta: String!
+#   trade: Swap!
+#   timestamp: DateTime!
+# }
+
+# Entity to represent a Offer
+# defined on chain as pub type PendingSwapOf<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/d0d8e29197a783f3ea300569afc50244a280cafa/substrate/frame/nfts/src/types.rs#L207
+type Offer @entity {
+  id: ID! # collection-id // same as NFTEntity.id
+  # events: [TradeEvent!] @derivedFrom(field: "offer")
+  blockNumber: BigInt!
+  caller: String!
+  considered: CollectionEntity!
+  createdAt: DateTime!
+  desired: NFTEntity
+  expiration: BigInt!
+  nft: NFTEntity! @unique
+  price: BigInt!
+  status: TradeStatus!
+  updatedAt: DateTime
+}
+
+# DEV: Consideration is not used
+# type Consideration @entity {
+#   id: ID!
+#   collection: CollectionEntity!
+#   nft: NFTEntity
+# }
+
+# Entity to represent a Swap
+# defined on chain as pub type PendingSwapOf<T: Config<I>, I: 'static = ()>
+# https://github.com/paritytech/polkadot-sdk/blob/d0d8e29197a783f3ea300569afc50244a280cafa/substrate/frame/nfts/src/types.rs#L207
+type Swap @entity {
+  id: ID! # collection-id // same as NFTEntity.id
+  # events: [TradeEvent!] @derivedFrom(field: "offer")
+  blockNumber: BigInt!
+  caller: String!
+  considered: CollectionEntity!
+  createdAt: DateTime!
+  desired: NFTEntity
+  expiration: BigInt!
+  nft: NFTEntity! @unique
+  price: BigInt
+  status: TradeStatus!
+  surcharge: Surcharge
+  updatedAt: DateTime
+}
+
 # Possible on-chain interactions that we listen for
 enum Interaction {
   BURN
@@ -168,6 +224,8 @@ enum Interaction {
   LOCK
   CHANGEISSUER
   PAY_ROYALTY
+  OFFER
+  SWAP
   # ROYALTY
 }
 
@@ -179,6 +237,26 @@ enum CollectionType {
   HolderOf
   Issuer
   Public
+}
+
+enum Surcharge {
+  Receive
+  Send
+}
+
+enum TradeInteraction {
+  CREATE
+  ACCEPT
+  CANCEL
+}
+
+enum TradeStatus {
+  ACCEPTED
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  INVALID
+  WITHDRAWN
 }
 
 # Entity to represent a Fungible Asset
