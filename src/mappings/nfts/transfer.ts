@@ -24,7 +24,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   const event = unwrap(context, getTransferTokenEvent)
   debug(OPERATION, event)
 
-  // Check if event has a name and can be skipped in some canses
+  // Check if event has a name and can be skipped in some cases
   switch (event.name) {
     case NonFungibleCall.buyItem:
       skip(OPERATION, `because it is **${event.name}**`)
