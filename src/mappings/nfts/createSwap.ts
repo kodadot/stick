@@ -51,8 +51,14 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   final.status = final.blockNumber >= deadline ? TradeStatus.EXPIRED : TradeStatus.ACTIVE
   final.updatedAt = event.timestamp
 
-  // TODO: SAVE SOMEWHERE
   await context.store.save(final)
+
+  // DEV_NOTE: need to be first enabled by schema (line 82)
+  // if ('swap' in nft) {
+  //   nft.swap = final
+  //   await context.store.save(nft)
+  // }
+
   success(OPERATION, `${id} by ${event.caller} by ${event.caller}`)
   
   // SwapCreated {
