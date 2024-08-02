@@ -162,6 +162,19 @@ CHAIN=polkadot # or kusama
 OFFER=<ID_OF_THE_COLLECTION>
 ```
 
+### Note on Swaps
+
+1. Swaps can be overwritten at any time
+
+Therefore if you have a swap, and will create a new one, the old one will be overwritten. This is mentioned in `createSwap.ts` Line 31.
+
+2. Swaps are autocancelled by few conditions
+
+- if you `burn` the NFT
+- if you `transfer` the NFT
+
+in any other condition the swap will have to be cancelled manually.
+
 ## Funding
 
 Project was funded as a common good by
