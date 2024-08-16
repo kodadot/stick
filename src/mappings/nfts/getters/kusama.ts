@@ -1,14 +1,16 @@
 import { NonFungible } from '../../../processable'
 import { nfts as events } from '../../../types/kusama/events'
 import { nfts as calls } from '../../../types/kusama/calls'
-import { addressOf, onlyValue, unHex } from '../../utils/helper'
-import { Event, Call } from '../../utils/types'
+import { addressOf, unHex } from '../../utils/helper'
+import { Event, Call, Optional } from '../../utils/types'
 import {
   BurnTokenEvent,
   BuyTokenEvent,
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
+  ClaimSwapEvent,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -19,6 +21,7 @@ import {
   TransferTokenEvent,
   UpdateMintSettings,
 } from '../types'
+import { Surcharge } from '../../../model'
 
 export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
   const event = events.created
@@ -370,4 +373,119 @@ export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
 
   const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9420.decode(ctx)
   return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
+}
+
+export function getSwapCreatedEvent(ctx: Event): CreateSwapEvent {
+  const event = events.swapCreated
+
+  if (event.v9420.is(ctx)) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(ctx)
+
+    return {
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
+      deadline
+    }
+  }
+
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(ctx)
+  return {
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
+    deadline,
+  }
+}
+
+export function getSwapCancelledEvent(ctx: Event): CreateSwapEvent {
+  const event = events.swapCancelled
+
+  if (event.v9420.is(ctx)) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(ctx)
+
+    return {
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
+      deadline,
+    }
+  }
+
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9420.decode(
+    ctx
+  )
+  return {
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
+    deadline,
+  }
+}
+
+export function getSwapClaimedEvent(ctx: Event): ClaimSwapEvent {
+  const event = events.swapClaimed
+
+  if (event.v9420.is(ctx)) {
+    const { sentCollection, sentItem, sentItemOwner, receivedCollection, receivedItem, receivedItemOwner, price, deadline } = event.v9420.decode(ctx)
+
+    return {
+      collectionId: receivedCollection.toString(),
+      sn: receivedItem.toString(),
+      currentOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+      sent: {
+        collectionId: sentCollection.toString(),
+        sn: sentItem.toString(),
+        owner: sentItemOwner ? addressOf(sentItemOwner) : '',
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
+      deadline,
+    }
+  }
+
+  const {
+    sentCollection,
+    sentItem,
+    sentItemOwner,
+    receivedCollection,
+    receivedItem,
+    receivedItemOwner,
+    price,
+    deadline,
+  } = event.v9420.decode(ctx)
+
+  return {
+    collectionId: receivedCollection.toString(),
+    sn: receivedItem.toString(),
+    currentOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+    sent: {
+      collectionId: sentCollection.toString(),
+      sn: sentItem.toString(),
+      owner: sentItemOwner ? addressOf(sentItemOwner) : '',
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
+    deadline,
+  }
 }

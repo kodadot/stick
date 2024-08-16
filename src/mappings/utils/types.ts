@@ -17,11 +17,13 @@ import { Attribute } from '../../model/generated/_attribute'
 
 import { Interaction } from '../../model'
 import { SetMetadata } from '../nfts/types'
+import { COLLECTION_OFFER } from '../../environment'
 
 export type BaseCall = {
   caller: string
   blockNumber: string
   timestamp: Date
+  name?: string
 }
 // In case of fire consult this repo:
 // https://github.com/subsquid-labs/squid-substrate-template/tree/main
@@ -65,8 +67,20 @@ export function collectionEventFrom(
   return eventFrom<CollectionInteraction>(interaction, basecall, meta)
 }
 
+/**
+ * Check is current entity is NFT
+ * @param event - event should satisfy { collectionId: string, sn: string } interface
+**/
 export function isNFT<T extends SetMetadata>(event: T) {
   return event.sn !== undefined
+}
+
+/**
+ * Check is current entity is Offer
+ * @param event - event should satisfy { collectionId: string, sn: string } interface
+**/
+export function isOffer<T extends SetMetadata>(event: T): boolean {
+  return event.collectionId === COLLECTION_OFFER
 }
 
 export function eventFrom<T>(
