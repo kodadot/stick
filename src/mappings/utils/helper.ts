@@ -51,6 +51,19 @@ export function addressOf(address: Uint8Array | string): string {
   return ss58.codec(codec).encode(value)
 }
 
+export function isAddress(value: Optional<string>): value is string {
+  if (!value) {
+    return false
+  }
+
+  try {
+    ss58.decode(value)
+    return true
+  } catch {
+    return false
+  }
+}
+
 /**
  * Decode a hex value
  * @param value - the value to decode

@@ -2,7 +2,7 @@ import { getWith } from '@kodadot1/metasquid/entity'
 import { Context } from '../../utils/types'
 import { NFTEntity as NE } from '../../../model'
 import { debug, warn } from '../../utils/logger'
-import { OPERATION, generateTokenId } from './utils'
+import { generateTokenId, OPERATION } from './utils'
 import { TokenAPI } from './tokenAPI'
 
 export async function burnHandler(context: Context, nft: NE): Promise<void> {
@@ -15,7 +15,9 @@ export async function burnHandler(context: Context, nft: NE): Promise<void> {
 
   const tokenAPI = new TokenAPI(context.store)
   try {
-    const nftWithToken = await getWith(context.store, NE, nft.id, { token: true })
+    const nftWithToken = await getWith(context.store, NE, nft.id, {
+      token: true,
+    })
     if (nftWithToken?.token) {
       await tokenAPI.removeNftFromToken(nft, nftWithToken.token)
     }
