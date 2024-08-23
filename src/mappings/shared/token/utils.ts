@@ -5,7 +5,10 @@ import { CHAIN } from '../../../environment'
 
 export const OPERATION = 'TokenEntity' as any
 
-export function generateTokenId(collectionId: string, nft: NE): string | undefined {
+export function generateTokenId(
+  collectionId: string,
+  nft: NE,
+): string | undefined {
   if (!nft.image && !nft.media) {
     warn(OPERATION, `MISSING NFT MEDIA ${nft.id}`)
     return undefined
@@ -16,12 +19,15 @@ export function generateTokenId(collectionId: string, nft: NE): string | undefin
 }
 
 export const collectionsToKeepNameAsIs: Record<string, string[]> = {
-  statemine: [
+  kusama: [
     '176', // chained - generative art
   ],
 }
 
-export const tokenName = (nftName: string | undefined | null, collectionId: string): string => {
+export const tokenName = (
+  nftName: string | undefined | null,
+  collectionId: string,
+): string => {
   if (typeof nftName !== 'string') {
     return ''
   }
@@ -30,4 +36,3 @@ export const tokenName = (nftName: string | undefined | null, collectionId: stri
 
   return doNotAlter ? nftName : nftName.replace(/([#_]\d+$)/g, '')
 }
-

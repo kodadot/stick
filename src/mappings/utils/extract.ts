@@ -19,8 +19,9 @@ function toBaseEvent(ctx: Context): BaseCall {
   const caller = addressOf(address)
   const blockNumber = ctx.block.height.toString()
   const timestamp = ctx.block.timestamp ? new Date(ctx.block.timestamp) : new Date()
+  const name = ctx.call?.name
 
-  return { caller, blockNumber, timestamp }
+  return { caller, blockNumber, timestamp, name }
 }
 
 /**

@@ -9,7 +9,9 @@ import {
   BuyTokenEvent,
   ChangeCollectionOwnerEvent,
   ChangeCollectionTeam,
+  ClaimSwapEvent,
   CreateCollectionEvent,
+  CreateSwapEvent,
   CreateTokenEvent,
   DestroyCollectionEvent,
   ForceCreateCollectionEvent,
@@ -21,6 +23,8 @@ import {
   UpdateMintSettings,
 } from '../types'
 import { debug } from '../../utils/logger'
+import { Surcharge } from '../../../model'
+import { Optional } from '@kodadot1/metasquid/types'
 
 export function getCreateCollectionEvent(ctx: Event): CreateCollectionEvent {
   const event = events.created
@@ -373,4 +377,119 @@ export function getUpdateMintCall(ctx: Call): UpdateMintSettings {
 
   const { collection: classId, mintSettings: { mintType, startBlock, endBlock, price } }  = call.v9430.decode(ctx)
   return { id: classId.toString(), type: mintType, startBlock, endBlock, price }
+}
+
+export function getSwapCreatedEvent(ctx: Event): CreateSwapEvent {
+  const event = events.swapCreated
+
+  if (event.v9430.is(ctx)) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
+
+    return {
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
+      deadline
+    }
+  }
+
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
+  return {
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
+    deadline,
+  }
+}
+
+export function getSwapCancelledEvent(ctx: Event): CreateSwapEvent {
+  const event = events.swapCancelled
+
+  if (event.v9430.is(ctx)) {
+    const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(ctx)
+
+    return {
+      collectionId: offeredCollection.toString(),
+      sn: offeredItem.toString(),
+      consideration: {
+        collectionId: desiredCollection.toString(),
+        sn: desiredItem?.toString(),
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
+      deadline,
+    }
+  }
+
+  const { offeredCollection, offeredItem, desiredCollection, desiredItem, price, deadline } = event.v9430.decode(
+    ctx
+  )
+  return {
+    collectionId: offeredCollection.toString(),
+    sn: offeredItem.toString(),
+    consideration: {
+      collectionId: desiredCollection.toString(),
+      sn: desiredItem?.toString(),
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
+    deadline,
+  }
+}
+
+export function getSwapClaimedEvent(ctx: Event): ClaimSwapEvent {
+  const event = events.swapClaimed
+
+  if (event.v9430.is(ctx)) {
+    const { sentCollection, sentItem, sentItemOwner, receivedCollection, receivedItem, receivedItemOwner, price, deadline } = event.v9430.decode(ctx)
+
+    return {
+      collectionId: receivedCollection.toString(),
+      sn: receivedItem.toString(),
+      currentOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+      sent: {
+        collectionId: sentCollection.toString(),
+        sn: sentItem.toString(),
+        owner: sentItemOwner ? addressOf(sentItemOwner) : '',
+      },
+      price: price?.amount,
+      surcharge: price?.direction.__kind as Optional<Surcharge>,
+      deadline,
+    }
+  }
+
+  const {
+    sentCollection,
+    sentItem,
+    sentItemOwner,
+    receivedCollection,
+    receivedItem,
+    receivedItemOwner,
+    price,
+    deadline,
+  } = event.v9430.decode(ctx)
+
+  return {
+    collectionId: receivedCollection.toString(),
+    sn: receivedItem.toString(),
+    currentOwner: receivedItemOwner ? addressOf(receivedItemOwner) : '',
+    sent: {
+      collectionId: sentCollection.toString(),
+      sn: sentItem.toString(),
+      owner: sentItemOwner ? addressOf(sentItemOwner) : '',
+    },
+    price: price?.amount,
+    surcharge: price?.direction.__kind as Optional<Surcharge>,
+    deadline,
+  }
 }

@@ -1,5 +1,5 @@
 import { ArchiveCall, ArchiveCallWithOptionalValue, MetadataAttribute, Optional } from '@kodadot1/metasquid/types'
-import { Attribute, CollectionSettings } from '../../model'
+import { Attribute, CollectionSettings, Surcharge } from '../../model'
 import { createTokenId } from '../utils/types'
 
 export type WithId = {
@@ -84,6 +84,30 @@ export type UpdateMintSettings = WithId & {
   startBlock: Optional<number>,
   endBlock: Optional<number>,
   price: Optional<bigint>,
+}
+
+type SwapData = {
+  price: Optional<bigint>,
+  surcharge: Optional<Surcharge>,
+  deadline: number,
+}
+
+type BaseSwapEvent = BaseTokenEvent & SwapData
+
+export type CreateSwapEvent = BaseSwapEvent & {
+  consideration: {
+    collectionId: string
+    sn?: string
+  }
+}
+
+export type ClaimSwapEvent = BaseSwapEvent & {
+  sent: {
+    collectionId: string
+    sn: string
+    owner: string
+  }
+  currentOwner: string
 }
 
 export const tokenIdOf = (base: BaseTokenEvent): string => createTokenId(base.collectionId, base.sn)
