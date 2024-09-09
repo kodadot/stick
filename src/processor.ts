@@ -5,7 +5,7 @@ import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
 import { Asset, NewNonFungible, NonFungible, NonFungibleCall, Unique } from './processable'
 
-import { CHAIN, getArchiveUrl, getNodeUrl } from './environment'
+import { CHAIN, getArchiveUrl, getNodeUrl, UNIQUES_ENABLED } from './environment'
 import { mainFrame } from './mappings'
 import { SelectedFields, fieldSelection } from './mappings/utils/types'
 
@@ -41,26 +41,28 @@ processor.setRpcDataIngestionSettings({ disabled: ONLY_ARCHIVE })
 /**
  * Uniques nft pallet
  */
-processor.addEvent({ name: [Unique.createCollection], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.clearAttribute], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.setAttribute], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.burn], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.forceCreateClass], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.clearClassMetadata], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.setClassMetadata], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.setCollectionMaxSupply], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.clearCollectionMetadata], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.setCollectionMetadata], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.destroyCollection], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.createItem], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.sold], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.clearPrice], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.setPrice], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.clearMetadata], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.setMetadata], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.changeIssuer], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.changeTeam], call: true, extrinsic: true }) 
-processor.addEvent({ name: [Unique.transfer], call: true, extrinsic: true }) 
+if (UNIQUES_ENABLED) {
+  processor.addEvent({ name: [Unique.createCollection], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.clearAttribute], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.setAttribute], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.burn], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.forceCreateClass], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.clearClassMetadata], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.setClassMetadata], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.setCollectionMaxSupply], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.clearCollectionMetadata], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.setCollectionMetadata], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.destroyCollection], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.createItem], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.sold], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.clearPrice], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.setPrice], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.clearMetadata], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.setMetadata], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.changeIssuer], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.changeTeam], call: true, extrinsic: true }) 
+  processor.addEvent({ name: [Unique.transfer], call: true, extrinsic: true }) 
+}
 
 /**
  * NonFungibles nft pallet
