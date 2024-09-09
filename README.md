@@ -162,6 +162,16 @@ CHAIN=polkadot # or kusama
 OFFER=<ID_OF_THE_COLLECTION>
 ```
 
+6. debugging the processor
+
+As the processor can run for a longer period of time it is useful to turn off the "features" that you do not need,
+Handlers that need to be always enabled are `createCollection` and `createItem` as they are the base for the rest of the processor.
+
+> [!NOTE]
+> If you do not wish to index `uniques` pallet you can turn it off by setting `UNIQUES_ENABLED=false` in `.env` file
+
+```bash
+
 ### Note on Swaps
 
 1. Swaps can be overwritten at any time
