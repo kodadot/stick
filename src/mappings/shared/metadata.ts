@@ -3,7 +3,7 @@ import { Optional } from '@kodadot1/metasquid/types'
 
 import type { Content } from '@kodadot1/hyperdata'
 import { logger } from '@kodadot1/metasquid/logger'
-import { MetadataEntity as Metadata } from '../../model/generated'
+import { Kind, MetadataEntity as Metadata } from '../../model/generated'
 import { isEmpty } from '../utils/helper'
 import { fetchMetadata } from '../utils/metadata'
 import { Store, attributeFrom } from '../utils/types'
@@ -31,6 +31,7 @@ export async function handleMetadata(id: string, store: Store): Promise<Optional
     name: metadata.name || '',
     type: metadata.type || '',
     banner: metadata.banner || '',
+    kind: metadata.kind as Kind || Kind.mixed,
   }
 
   const final = create<Metadata>(Metadata, id, partial)
