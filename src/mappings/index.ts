@@ -8,8 +8,7 @@ import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
-import { updateCache } from './utils/cache'
-import { logError } from './utils/logger'
+import { updateOfferCache } from './utils/cache'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
@@ -234,16 +233,35 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
     }
   }
 
-  // const lastDate = new Date(ctx.blocks[ctx.blocks.length - 1].header.timestamp || start)
-  // await updateCache(lastDate, ctx.store)  
+  if (ctx.isHead) {
+    const lastBlock = ctx.blocks[ctx.blocks.length - 1].header
+    const lastDate = new Date(lastBlock.timestamp || Date.now())
+    logger.info(`Found head block, updating cache`)
+    await updateOfferCache(lastDate, lastBlock.height, ctx.store)  
+  }
+
 
   // const { contracts, tokens } = uniqueEntitySets(items)
   // const collections = await finalizeCollections(contracts, ctx)
   // const finish = await whatToDoWithTokens({ tokens, collections, items }, ctx)
   // const complete = await completeTokens(ctx, finish)
-
-  // logger.info(`Batch completed, ${complete.length} tokens saved`)
 }
+
+// class Head {
+//   #height: number
+
+//   constructor(height: number) {
+//     this.#height = height
+//   }
+
+//   get height() {
+//     return this.#height
+//   }
+
+//   set height(height: number) {
+//     this.#height = height
+//   }
+// }
 
 // function unwrapLog(log: Log, block: BlockData) {
 //   switch (log.topics[0]) {
