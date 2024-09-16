@@ -1,6 +1,6 @@
 import { type Content } from '@kodadot1/hyperdata'
 import { EntityWithId, create, emOf, getOrCreate } from '@kodadot1/metasquid/entity'
-import { CacheStatus, MetadataEntity } from '../../model'
+import { CacheStatus, Interaction, MetadataEntity } from '../../model'
 import logger, { logError, pending, success } from './logger'
 import { fetchAllMetadata } from './metadata'
 import { Store } from './types'
@@ -10,6 +10,8 @@ const STATUS_ID = '0'
 const METADATA_STATUS_ID = '1'
 const METADATA_DELAY_MIN = 15 // every 24 hours
 const TO_MINUTES = 60_000
+const OFFER_STATUS_ID = '2'
+// const OFFER_DELAY_MIN = 30 // every 15 minutes
 
 enum MetadataQuery {
   missing = `SELECT 
@@ -62,6 +64,15 @@ enum MetadataQuery {
   `,
 }
 
+enum OfferQuery {
+  expired = `UPDATE 
+    offer oe
+  SET status = 'EXPIRED'
+  WHERE status = 'ACTIVE'
+  AND expiration <= $1
+  RETURNING oe.id;`
+}
+
 const OPERATION = 'METADATA_CACHE' as any
 
 /**
@@ -104,6 +115,28 @@ export async function updateMetadataCache(timestamp: Date, store: Store): Promis
 }
 
 /**
+ * Main entry point for updating the metadata cache
+ * @param timestamp - the timestamp of the block
+ * @param store - subsquid store to handle the cache
+**/
+export async function updateOfferCache(timestamp: Date, blockNumber: number, store: Store): Promise<void> {
+  const lastUpdate = await getOrCreate(store, CacheStatus, OFFER_STATUS_ID, { id: OFFER_STATUS_ID, lastBlockTimestamp: new Date(0) })
+  const passedMins = getPassedMinutes(timestamp, lastUpdate.lastBlockTimestamp)
+  pending(Interaction.OFFER, `${passedMins} MINS SINCE LAST UPDATE`)
+  if (passedMins >= DELAY_MIN) {
+    try {
+      await updateOfferAsExpired(store, blockNumber)
+      lastUpdate.lastBlockTimestamp = timestamp
+      await store.save(lastUpdate)
+      // success('[METADATA CACHE UPDATE]');
+    } catch (e) {
+      logError(e, (err) => logger.error(`[OFFER CACHE UPDATE] ${err.message}`))
+    }
+  }
+}
+
+
+/**
  * Main entry point for the cache update
  * @param timestamp - the timestamp of the block
  * @param store - subsquid store to handle the cache
@@ -144,4 +177,13 @@ async function updateMissingMetadata(store: Store) {
   // const nft = await emOf(store).query(MetadataQuery.nft);
   // const collection = await emOf(store).query(MetadataQuery.collection);
   // logger.info(`[CACHE UPDATE] MISSING METADATA - ${missing.length} NFTs, ${nft.length} NFTs, ${collection.length} Collections`);
+}
+
+export async function updateOfferAsExpired(store: Store, blockNumber: string | bigint | number): Promise<void> {
+  try {
+    const rows = await emOf(store).query(OfferQuery.expired, [blockNumber])
+    logger.info(`[OFFERS EXPIRATION POOLER] ${rows.length} Offers updated`)
+  } catch (e) {
+    logError(e, (err) => logger.error(`[OFFERS EXPIRATION POOLER] ${err.message}`))
+  }
 }
