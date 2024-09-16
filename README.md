@@ -170,8 +170,6 @@ Handlers that need to be always enabled are `createCollection` and `createItem` 
 > [!NOTE]
 > If you do not wish to index `uniques` pallet you can turn it off by setting `UNIQUES_ENABLED=false` in `.env` file
 
-```bash
-
 ### Note on Swaps
 
 1. Swaps can be overwritten at any time
