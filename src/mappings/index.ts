@@ -8,8 +8,7 @@ import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
-import { updateCache } from './utils/cache'
-import { logError } from './utils/logger'
+import { updateOfferCache } from './utils/cache'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
@@ -234,105 +233,26 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
     }
   }
 
-  // const lastDate = new Date(ctx.blocks[ctx.blocks.length - 1].header.timestamp || start)
-  // await updateCache(lastDate, ctx.store)  
-
-  // const { contracts, tokens } = uniqueEntitySets(items)
-  // const collections = await finalizeCollections(contracts, ctx)
-  // const finish = await whatToDoWithTokens({ tokens, collections, items }, ctx)
-  // const complete = await completeTokens(ctx, finish)
-
-  // logger.info(`Batch completed, ${complete.length} tokens saved`)
+  if (ctx.isHead) {
+    const lastBlock = ctx.blocks[ctx.blocks.length - 1].header
+    const lastDate = new Date(lastBlock.timestamp || Date.now())
+    logger.info(`Found head block, updating cache`)
+    await updateOfferCache(lastDate, lastBlock.height, ctx.store)  
+  }
 }
 
-// function unwrapLog(log: Log, block: BlockData) {
-//   switch (log.topics[0]) {
-//     case ERC721_TRANSFER:
+// class Head {
+//   #height: number
 
-//       if (log.address !== Contracts.HueNft) {
-//         return null
-//       }
-//       return handle721Token(log, block)
-//     default:
-//       // console.log('unknown log', log.topics[0])
-//       return null
-//     // throw new Error('unknown log')
+//   constructor(height: number) {
+//     this.#height = height
+//   }
+
+//   get height() {
+//     return this.#height
+//   }
+
+//   set height(height: number) {
+//     this.#height = height
 //   }
 // }
-
-type What = {
-  // tokens: Set<string>,
-  // collections: EnMap<CE>,
-  // items: ItemStateUpdate[],
-}
-
-export async function whatToDoWithTokens(x: What, ctx: Context) {
-  // // ctx.store.findBy(CE, {id: In([...collectionMap.keys()])})
-  // const knownTokens = await findByIdListAsMap(ctx.store, NE, tokens)
-  // const events: EventEntity[] = []
-  // for (const item of items) {
-  //   logger.debug(`APPLY ${item.interaction} on ${item.id}`)
-  //   let knownToken = knownTokens.get(item.id) ?? create(NE, item.id, {})
-  //   if (item.applyFrom) {
-  //     const collection = collections.get(item.contract)!
-  //     item.applyFrom(collection)
-  //   }
-  //   if (item.applyTo) {
-  //     knownToken = item.applyTo(knownToken)
-  //   }
-  //   events.push(item.event)
-  //   knownTokens.set(item.id, knownToken)
-  // }
-  // const values = [...knownTokens.values()]
-  // await ctx.store.upsert(values)
-  // await ctx.store.save(events)
-  // return knownTokens
-}
-
-type EnMap<T> = Map<string, T>
-// TODO: do only if event was mint.
-async function completeTokens(ctx: Context, tokenMap: EnMap<NE>) {
-  //   const collections = groupedItemsByCollection(tokenMap.keys())
-  //   const final: NE[] = []
-  //   const metadataFutures: Promise<Optional<MetadataEntity>>[] = []
-  //   for (const [contract, ids] of collections.entries()) {
-  //     const list = Array.from(ids)
-  //     const tokens = await multicallMetadataFetch(ctx, contract, list)
-  //     for (const [i, id] of list.entries()) {
-  //       const realId = createTokenId(contract, id)
-  //       const token = tokenMap.get(realId)!
-  //       if (!token.metadata) {
-  //         const metadata = tokens[i]
-  //         token.metadata = metadata
-  //         const getMeta = handleMetadata(metadata, ctx.store).then(m => {
-  //           if (m) {
-  //             token.meta = m
-  //             token.name = m.name
-  //             token.image = m.image
-  //             token.media = m.animationUrl
-  //           }
-  //           return m
-  //         })
-  //         metadataFutures.push(getMeta)
-  //         final.push(token)
-  //       }
-  //     }
-  //   }
-  //   const metaList = await Promise.all(metadataFutures)
-  //   const filtered = metaList.filter(m => m) as MetadataEntity[]
-  //   logger.debug(`Saving ${filtered.length} metadata`)
-  //   await ctx.store.save(filtered)
-  //   await ctx.store.save(final)
-  //   return final
-  // }
-  // async function multicallMetadataFetch(ctx: Context, collection: string, tokens: Array<string>): Promise<string[]> {
-  //   const tokenIds = tokens.map((id) => [BigInt(id)])
-  //   const contract = new Multicall(ctx, lastBatchBlock(ctx), MULTICALL_ADDRESS)
-  //   const metadata = await contract.aggregate(
-  //     erc721.functions.tokenURI,
-  //     collection,
-  //     tokenIds,
-  //     MULTICALL_BATCH_SIZE
-  //   )
-  //   return metadata
-}

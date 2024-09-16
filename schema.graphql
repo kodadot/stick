@@ -16,6 +16,7 @@ type CollectionEntity @entity {
   id: ID!
   image: String
   issuer: String!
+  kind: Kind
   max: Int
   media: String
   meta: MetadataEntity
@@ -97,6 +98,7 @@ type MetadataEntity @entity {
   animationUrl: String
   type: String
   banner: String
+  kind: Kind
 }
 
 # Entity to represent an Attribute
@@ -257,6 +259,15 @@ enum TradeStatus {
   EXPIRED
   INVALID
   WITHDRAWN
+}
+
+enum Kind {
+  poap
+  pfp
+  genart
+  mixed
+  # audio
+  # video
 }
 
 # Entity to represent a Fungible Asset

@@ -1,6 +1,7 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_} from "@subsquid/typeorm-store"
 import * as marshal from "./marshal"
 import {Attribute} from "./_attribute"
+import {Kind} from "./_kind"
 
 @Entity_()
 export class MetadataEntity {
@@ -31,4 +32,7 @@ export class MetadataEntity {
 
     @StringColumn_({nullable: true})
     banner!: string | undefined | null
+
+    @Column_("varchar", {length: 6, nullable: true})
+    kind!: Kind | undefined | null
 }

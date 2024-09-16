@@ -16,6 +16,7 @@ deploy:
     env:
       CHAIN: kusama
       OFFER: 464
+      UNIQUES_ENABLED: true
   api:
     cmd:
       - npx
