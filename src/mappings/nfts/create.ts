@@ -1,6 +1,6 @@
 import { getOrCreate } from '@kodadot1/metasquid/entity'
 import md5 from 'md5'
-import { CollectionEntity as CE } from '../../model'
+import { CollectionEntity as CE, Kind } from '../../model'
 import { handleMetadata } from '../shared/metadata'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
@@ -50,6 +50,7 @@ export async function handleCollectionCreate(context: Context): Promise<void> {
     final.name = metadata?.name
     final.image = metadata?.image
     final.media = metadata?.animationUrl
+    final.kind = metadata?.kind || Kind.mixed
   }
 
   success(OPERATION, `[COLLECTION] ${final.id}`)
