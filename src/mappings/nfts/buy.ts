@@ -26,7 +26,7 @@ export async function handleTokenBuy(context: Context): Promise<void> {
   const originalPrice = event.price
   const originalOwner = entity.currentOwner ?? undefined
 
-  entity.price = BigInt(0)
+  entity.price = null
   entity.currentOwner = event.caller
   entity.updatedAt = event.timestamp
 

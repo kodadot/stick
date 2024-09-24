@@ -23,7 +23,7 @@ export async function handleTokenList(context: Context): Promise<void> {
   const id = createTokenId(event.collectionId, event.sn)
   const entity = await getWith(context.store, NE, id, { collection: true })
 
-  entity.price = event.price
+  entity.price = Boolean(event.price) ? event.price : null
 
   if (event.price && (entity.collection.floor === 0n || event.price < entity.collection.floor)) {
     entity.collection.floor = event.price

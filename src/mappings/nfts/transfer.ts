@@ -41,7 +41,7 @@ export async function handleTokenTransfer(context: Context): Promise<void> {
   const entity = await getWith(context.store, NE, id, { collection: true })
 
   const oldOwner = entity.currentOwner
-  entity.price = BigInt(0)
+  entity.price = null
   entity.currentOwner = event.to
   entity.updatedAt = event.timestamp
 
