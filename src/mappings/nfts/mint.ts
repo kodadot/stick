@@ -43,7 +43,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.collection = collection
   final.sn = BigInt(event.sn)
   final.metadata = event.metadata || tokenUri(collection.baseUri, event.sn) || collection.metadata
-  final.price = BigInt(0)
+  final.price = null
   final.burned = false
   final.createdAt = event.timestamp
   final.updatedAt = event.timestamp
