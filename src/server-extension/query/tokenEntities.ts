@@ -53,7 +53,7 @@ SELECT
     nc.count as count,
     nc.supply as supply,
     col.id AS collection_id,
-    col.name AS collection_name
+    col.name AS collection_name,
     col.kind AS kind
 FROM
     token_entity as t
