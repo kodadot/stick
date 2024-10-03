@@ -12,18 +12,18 @@ export enum Unique {
   setAttribute = 'Uniques.AttributeSet',
   burn = 'Uniques.Burned',
   forceCreateClass = 'Uniques.ForceCreated',
-  freezeClass = 'Uniques.ClassFrozen',
+  freezeClass = 'Uniques.ClassFrozen', // unused
   clearClassMetadata = 'Uniques.ClassMetadataCleared',
   setClassMetadata = 'Uniques.ClassMetadataSet',
-  thawClass = 'Uniques.ClassThawed',
-  freezeCollection = 'Uniques.CollectionFrozen',
+  thawClass = 'Uniques.ClassThawed', // unused
+  freezeCollection = 'Uniques.CollectionFrozen', // unused
   setCollectionMaxSupply = 'Uniques.CollectionMaxSupplySet',
   clearCollectionMetadata = 'Uniques.CollectionMetadataCleared',
   setCollectionMetadata = 'Uniques.CollectionMetadataSet',
-  thawCollection = 'Uniques.CollectionThawed',
+  thawCollection = 'Uniques.CollectionThawed', // unused
   createCollection = 'Uniques.Created',
   destroyCollection = 'Uniques.Destroyed',
-  freeze = 'Uniques.Frozen',
+  freeze = 'Uniques.Frozen', // unused
   createItem = 'Uniques.Issued',
   sold = 'Uniques.ItemBought',
   clearPrice = 'Uniques.ItemPriceRemoved',
@@ -31,9 +31,9 @@ export enum Unique {
   clearMetadata = 'Uniques.MetadataCleared',
   setMetadata = 'Uniques.MetadataSet',
   changeIssuer = 'Uniques.OwnerChanged',
-  changeOwnershipAcceptance = 'Uniques.OwnershipAcceptanceChanged',
+  changeOwnershipAcceptance = 'Uniques.OwnershipAcceptanceChanged', // unused
   changeTeam = 'Uniques.TeamChanged',
-  thaw = 'Uniques.Thawed',
+  thaw = 'Uniques.Thawed', // unused
   transfer = 'Uniques.Transferred',
   // placeOffer = 'Marketplace.OfferPlaced',
   // withdrawOffer = 'Marketplace.OfferWithdrawn',
@@ -54,7 +54,7 @@ export enum Unique {
 export enum NonFungible {
   burn = 'Nfts.Burned',
   changeIssuer = 'Nfts.OwnerChanged',
-  changeOwnershipAcceptance = 'Nfts.OwnershipAcceptanceChanged',
+  changeOwnershipAcceptance = 'Nfts.OwnershipAcceptanceChanged', // unused
   changeTeam = 'Nfts.TeamChanged',
   clearAttribute = 'Nfts.AttributeCleared',
   clearCollectionMetadata = 'Nfts.CollectionMetadataCleared',
@@ -64,16 +64,16 @@ export enum NonFungible {
   createItem = 'Nfts.Issued',
   destroyCollection = 'Nfts.Destroyed',
   forceCreateCollection = 'Nfts.ForceCreated',
-  freeze = 'Nfts.Frozen',
-  freezeCollection = 'Nfts.CollectionFrozen',
+  freeze = 'Nfts.Frozen', // unused
+  freezeCollection = 'Nfts.CollectionFrozen', // unused
   setAttribute = 'Nfts.AttributeSet',
   setCollectionMaxSupply = 'Nfts.CollectionMaxSupplySet',
   setCollectionMetadata = 'Nfts.CollectionMetadataSet',
   setMetadata = 'Nfts.ItemMetadataSet',
   setPrice = 'Nfts.ItemPriceSet',
   sold = 'Nfts.ItemBought',
-  thaw = 'Nfts.Thawed',
-  thawCollection = 'Nfts.CollectionThawed',
+  thaw = 'Nfts.Thawed', // unused
+  thawCollection = 'Nfts.CollectionThawed', // unused
   transfer = 'Nfts.Transferred',
 }
 
@@ -115,9 +115,9 @@ export enum NonFungibleCall {
  * @readonly
  */
 export enum Asset {
-  create = 'Assets.Created',
-  destroy = 'Assets.Destroyed',
-  forceCreate = 'Assets.ForceCreated',
-  clearMetadata = 'Assets.ClassMetadataCleared',
+  create = 'Assets.Created', // unused
+  destroy = 'Assets.Destroyed', // unused
+  forceCreate = 'Assets.ForceCreated', // unused
+  clearMetadata = 'Assets.ClassMetadataCleared', // unused
   setMetadata = 'Assets.MetadataSet',
 }

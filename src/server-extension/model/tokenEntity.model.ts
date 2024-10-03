@@ -41,6 +41,9 @@ class Collection {
 
     @Field(() => String, { nullable: true })
     name!: string;
+
+    @Field(() => String, { nullable: true })
+    kind?: string;
 }
 
 
@@ -100,6 +103,8 @@ export class TokenEntityModel {
     @Field(() => Collection)
     collection!: Collection;
 
+    @Field(() => String, { nullable: true })
+    kind?: string;
 
     constructor(props: Partial<TokenEntityModel>) {
         Object.assign(this, props);
@@ -150,6 +155,8 @@ export class TokenEntityQueryResult {
     @Field(() => String, { nullable: false })
     collection_name!: string;
 
+    @Field(() => String, { nullable: true })
+    kind?: string;
 
     @Field(() => String, { nullable: false })
     meta_id!: string;

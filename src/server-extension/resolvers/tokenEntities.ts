@@ -22,7 +22,8 @@ export class TokenResolver {
     @Arg('price_lte', { nullable: true }) price_lte?: number,
     @Arg('denyList', () => [String], { nullable: true }) denyList?: string[],
     @Arg('collections', () => [String], { nullable: true }) collections?: string[],
-    @Arg('name', { nullable: true }) name?: string
+    @Arg('name', { nullable: true }) name?: string,
+    @Arg('kind', { nullable: true }) kind?: string
   ): Promise<TokenEntityModel[]> {
     const orderQuery = this.getOrderByQuery(orderBy)
 
@@ -40,7 +41,8 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       denyList,
       issuer,
       collections,
-      name
+      name,
+      kind
     ])
     return result.map(this.mapRowToTokenEntityByOwner)
   }
@@ -51,6 +53,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       blockNumber: row.block_number,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
+      kind: row.kind,
       cheapest: {
         id: row.cheapest_id,
         price: row.cheapest_price,
@@ -59,6 +62,7 @@ ORDER BY ${orderQuery} LIMIT $2 OFFSET $3;
       collection: {
         id: row.collection_id,
         name: row.collection_name,
+        kind: row.kind,
       },
       meta: {
         id: row.meta_id,

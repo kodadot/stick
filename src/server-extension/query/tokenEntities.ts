@@ -53,7 +53,8 @@ SELECT
     nc.count as count,
     nc.supply as supply,
     col.id AS collection_id,
-    col.name AS collection_name
+    col.name AS collection_name,
+    col.kind AS kind
 FROM
     token_entity as t
         JOIN collection_entity as col ON t.collection_id = col.id
@@ -64,4 +65,5 @@ WHERE
     nc.supply > 0 AND 
     t.deleted = false AND
     ($10::text IS NULL OR LOWER(t.name) LIKE LOWER('%' || $10 || '%'))
+    AND ($11::text IS NULL OR col.kind = $11)
 `
