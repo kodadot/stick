@@ -3,6 +3,7 @@ SELECT COUNT(DISTINCT ne.token_id) as total_count
 FROM nft_entity as ne
 JOIN token_entity ON ne.token_id = token_entity.id AND
 token_entity.deleted = false
+JOIN collection_entity as col ON token_entity.collection_id = col.id
 WHERE
     ($1::text IS NULL OR ne.current_owner = $1) AND
     ($6::text IS NULL OR ne.issuer = $6) AND 
@@ -12,5 +13,5 @@ WHERE
     ($4::bigint IS NULL OR ne.price <= $4::bigint) AND
     ($7::text[] IS NULL OR ne.collection_id = ANY($7)) AND
     ($8::text IS NULL OR LOWER(ne.name) LIKE LOWER('%' || $8 || '%')) AND
-    ($9::text IS NULL OR ne.kind = $9);
+    ($9::text IS NULL OR col.kind = $9);
 `;
