@@ -11,5 +11,6 @@ WHERE
     ($3::bigint IS NULL OR ne.price > $3::bigint) AND
     ($4::bigint IS NULL OR ne.price <= $4::bigint) AND
     ($7::text[] IS NULL OR ne.collection_id = ANY($7)) AND
-    ($8::text IS NULL OR LOWER(ne.name) LIKE LOWER('%' || $8 || '%'));
+    ($8::text IS NULL OR LOWER(ne.name) LIKE LOWER('%' || $8 || '%')) AND
+    ($9::text IS NULL OR ne.kind = $9);
 `;
