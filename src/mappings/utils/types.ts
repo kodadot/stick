@@ -18,6 +18,7 @@ import { Attribute } from '../../model/generated/_attribute'
 import { Interaction } from '../../model'
 import { SetMetadata } from '../nfts/types'
 import { COLLECTION_OFFER } from '../../environment'
+import { type Attribute as HyperAttribute, attributeFrom as hyperAttributeFrom } from '@kodadot1/hyperdata'
 
 export type BaseCall = {
   caller: string
@@ -99,12 +100,12 @@ export function eventFrom<T>(
   }
 }
 
-export function attributeFrom(attribute: MetadataAttribute): Attribute {
+export function attributeFrom(attribute: HyperAttribute): Attribute {
   return new Attribute(
     {},
     {
-      display: attribute.display_type ? String(attribute.display_type) : null,
-      trait: String(attribute.trait_type),
+      display: attribute.display ? String(attribute.display) : null,
+      trait: attribute.trait ? String(attribute.trait) : null,
       value: String(attribute.value),
     }
   )
