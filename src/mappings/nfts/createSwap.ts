@@ -45,8 +45,8 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   final.desired = desired
   final.expiration = deadline
   final.price = event.price
-  if ('surcharge' in final) {
-    final.surcharge = event.surcharge
+  if (!offer) {
+    (final as Swap).surcharge = event.surcharge
   }
   final.status = final.blockNumber >= deadline ? TradeStatus.EXPIRED : TradeStatus.ACTIVE
   final.updatedAt = event.timestamp
