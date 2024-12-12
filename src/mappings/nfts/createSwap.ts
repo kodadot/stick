@@ -35,7 +35,7 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   // the nft that is being swapped
   const nft = await get(context.store, NE, id)
   const considered = await get(context.store, CE, event.consideration.collectionId)
-  const desired = isNFT(event.consideration) ? await get(context.store, NE, tokenIdOf(event.consideration as any)) : undefined
+  const desired = isNFT(event.consideration) ? await get(context.store, NE, tokenIdOf(event.consideration as any)) : null
 
   final.blockNumber = BigInt(event.blockNumber)
   final.createdAt = event.timestamp
@@ -44,9 +44,9 @@ export async function handleCreateSwap(context: Context): Promise<void> {
   final.considered = considered
   final.desired = desired
   final.expiration = deadline
-  final.price = event.price
+  final.price = event.price || null
   if (!offer) {
-    (final as Swap).surcharge = event.surcharge
+    (final as Swap).surcharge = event.surcharge || null
   }
   final.status = final.blockNumber >= deadline ? TradeStatus.EXPIRED : TradeStatus.ACTIVE
   final.updatedAt = event.timestamp
