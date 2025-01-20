@@ -8,7 +8,7 @@ import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
-import { updateOfferCache } from './utils/cache'
+import { updateSwapsCache } from './utils/cache'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
@@ -237,7 +237,7 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
     const lastBlock = ctx.blocks[ctx.blocks.length - 1].header
     const lastDate = new Date(lastBlock.timestamp || Date.now())
     logger.info(`Found head block, updating cache`)
-    await updateOfferCache(lastDate, lastBlock.height, ctx.store)  
+    await updateSwapsCache(lastDate, lastBlock.height, ctx.store)
   }
 }
 
