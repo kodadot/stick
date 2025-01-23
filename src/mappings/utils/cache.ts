@@ -11,7 +11,7 @@ const METADATA_STATUS_ID = '1'
 const METADATA_DELAY_MIN = 15 // every 24 hours
 const TO_MINUTES = 60_000
 const SWAP_STATUS_ID = '2'
-const OFFER_DELAY_MIN = 15 // every 15 minutes
+const SWAP_DELAY_MIN = 15 // every 15 minutes
 
 enum MetadataQuery {
   missing = `SELECT 
@@ -129,7 +129,7 @@ export async function updateSwapsCache(timestamp: Date, blockNumber: number, sto
   const passedMins = getPassedMinutes(timestamp, lastUpdate.lastBlockTimestamp)
   pending(Interaction.SWAP, `${passedMins} MINS SINCE LAST UPDATE`)
 
-  if (passedMins >= OFFER_DELAY_MIN) {
+  if (passedMins >= SWAP_DELAY_MIN) {
     try {
       for (const type of [Interaction.OFFER, Interaction.SWAP] as const) {
         await updateSwapAsExpired(type, blockNumber, store)
