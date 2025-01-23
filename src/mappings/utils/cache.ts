@@ -10,8 +10,8 @@ const STATUS_ID = '0'
 const METADATA_STATUS_ID = '1'
 const METADATA_DELAY_MIN = 15 // every 24 hours
 const TO_MINUTES = 60_000
-const OFFER_STATUS_ID = '2'
-// const OFFER_DELAY_MIN = 30 // every 15 minutes
+const SWAP_STATUS_ID = '2'
+const SWAP_DELAY_MIN = 15 // every 15 minutes
 
 enum MetadataQuery {
   missing = `SELECT 
@@ -64,13 +64,18 @@ enum MetadataQuery {
   `,
 }
 
-enum OfferQuery {
-  expired = `UPDATE 
-    offer oe
+const SwapQuery = {
+  expired: (table: string) => `UPDATE
+    ${table} oe
   SET status = 'EXPIRED'
   WHERE status = 'ACTIVE'
   AND expiration <= $1
   RETURNING oe.id;`
+}
+
+const SWAP_INTERACTION_TO_TABLE_MAP = {
+  [Interaction.SWAP]: 'swap',
+  [Interaction.OFFER]: 'offer',
 }
 
 const OPERATION = 'METADATA_CACHE' as any
@@ -119,18 +124,21 @@ export async function updateMetadataCache(timestamp: Date, store: Store): Promis
  * @param timestamp - the timestamp of the block
  * @param store - subsquid store to handle the cache
 **/
-export async function updateOfferCache(timestamp: Date, blockNumber: number, store: Store): Promise<void> {
-  const lastUpdate = await getOrCreate(store, CacheStatus, OFFER_STATUS_ID, { id: OFFER_STATUS_ID, lastBlockTimestamp: new Date(0) })
+export async function updateSwapsCache(timestamp: Date, blockNumber: number, store: Store): Promise<void> {
+  const lastUpdate = await getOrCreate(store, CacheStatus, SWAP_STATUS_ID, { id: SWAP_STATUS_ID, lastBlockTimestamp: new Date(0) })
   const passedMins = getPassedMinutes(timestamp, lastUpdate.lastBlockTimestamp)
-  pending(Interaction.OFFER, `${passedMins} MINS SINCE LAST UPDATE`)
-  if (passedMins >= DELAY_MIN) {
+  pending(Interaction.SWAP, `${passedMins} MINS SINCE LAST UPDATE`)
+
+  if (passedMins >= SWAP_DELAY_MIN) {
     try {
-      await updateOfferAsExpired(store, blockNumber)
+      for (const type of [Interaction.OFFER, Interaction.SWAP] as const) {
+        await updateSwapAsExpired(type, blockNumber, store)
+      }
       lastUpdate.lastBlockTimestamp = timestamp
       await store.save(lastUpdate)
       // success('[METADATA CACHE UPDATE]');
     } catch (e) {
-      logError(e, (err) => logger.error(`[OFFER CACHE UPDATE] ${err.message}`))
+      logError(e, (err) => logger.error(`[SWAPS CACHE UPDATE] ${err.message}`))
     }
   }
 }
@@ -179,11 +187,11 @@ async function updateMissingMetadata(store: Store) {
   // logger.info(`[CACHE UPDATE] MISSING METADATA - ${missing.length} NFTs, ${nft.length} NFTs, ${collection.length} Collections`);
 }
 
-export async function updateOfferAsExpired(store: Store, blockNumber: string | bigint | number): Promise<void> {
+export async function updateSwapAsExpired(type: Interaction.SWAP | Interaction.OFFER, blockNumber: string | bigint | number, store: Store): Promise<void> {
   try {
-    const rows = await emOf(store).query(OfferQuery.expired, [blockNumber])
-    logger.info(`[OFFERS EXPIRATION POOLER] ${rows.length} Offers updated`)
+    const [rows] = await emOf(store).query(SwapQuery.expired(SWAP_INTERACTION_TO_TABLE_MAP[type]), [blockNumber])
+    logger.info(`[SWAPS EXPIRATION POOLER] ${rows.length} ${type.toLowerCase()}s updated`)
   } catch (e) {
-    logError(e, (err) => logger.error(`[OFFERS EXPIRATION POOLER] ${err.message}`))
+    logError(e, (err) => logger.error(`[SWAPS EXPIRATION POOLER] ${err.message}`))
   }
 }
