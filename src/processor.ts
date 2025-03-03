@@ -12,12 +12,9 @@ import { SelectedFields, fieldSelection } from './mappings/utils/types'
 const database = new Database({ supportHotBlocks: false })
 const processor = new SubstrateProcessor<SelectedFields>()
 
-// const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
-
-const STARTING_BLOCK = 8_296_929
-
+const UNIQUE_STARTING_BLOCK = 323_750 // 618838;
 const _NFT_STARTING_BLOCK = 4_556_552
-// const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
+const STARTING_BLOCK = UNIQUE_STARTING_BLOCK
 const ONLY_ARCHIVE = false
 
 // In case you need custom types
