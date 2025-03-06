@@ -6,8 +6,8 @@
 
 ## Hosted Squids
 
-* Kusama AssetHub Processor (Statemine -> KSM): https://squid.subsquid.io/stick/graphql
-* Polkadot AssetHub Processor (Statemint -> DOT): https://squid.subsquid.io/speck/graphql
+* Kusama AssetHub Processor (Statemine -> KSM): [AHK GraphQL](https://kodadot.squids.live/stick:prod/api/graphql)
+* Polkadot AssetHub Processor (Statemint -> DOT): [AHP GraphQL](https://kodadot.squids.live/speck:prod/api/graphql)
 * Paseo Testnet Processor: 🚧 Coming soon 🚧
 
 ## Project structure
