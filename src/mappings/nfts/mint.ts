@@ -84,12 +84,13 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   await context.store.save(final)
   await context.store.save(collection)
   
-
+  const destinationAddress = final.issuer !== final.currentOwner ? final.currentOwner : ''
+  
   await createEvent(
     final,
     OPERATION,
     event,
-    mintingPrice,
+    destinationAddress,
     context.store,
     final.issuer !== final.currentOwner ? final.issuer : undefined
   )
