@@ -52,9 +52,16 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.recipient = collection.recipient
   final.royalty = collection.royalty
 
+  const mintingPrice = context.call?.args?.witnessData?.mintPrice ?? 0
+
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
   collection.supply += 1
+  collection.volume += mintingPrice
+  if (mintingPrice > collection.highestSale) {
+    collection.highestSale = mintingPrice
+  }
+
   const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
     context.store,
     collection.id,
@@ -82,7 +89,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
     final,
     OPERATION,
     event,
-    context.call?.args?.witnessData?.mintPrice || '0',
+    mintingPrice,
     context.store,
     final.issuer !== final.currentOwner ? final.issuer : undefined
   )
