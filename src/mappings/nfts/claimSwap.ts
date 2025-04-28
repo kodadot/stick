@@ -1,4 +1,4 @@
-import { getOrFail as get, getOptional } from '@kodadot1/metasquid/entity'
+import { getOrFail as get } from '@kodadot1/metasquid/entity'
 import { CollectionEntity as CE, Offer, Swap, TradeStatus } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
