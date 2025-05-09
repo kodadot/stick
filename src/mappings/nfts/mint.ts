@@ -52,7 +52,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   final.recipient = collection.recipient
   final.royalty = collection.royalty
 
-  const mintingPrice = context.call?.args?.witnessData?.mintPrice ?? 0
+  const mintingPrice = BigInt(context.call?.args?.witnessData?.mintPrice ?? 0)
 
   collection.updatedAt = event.timestamp
   collection.nftCount += 1
