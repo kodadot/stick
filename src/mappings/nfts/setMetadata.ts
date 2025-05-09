@@ -2,9 +2,9 @@ import { get, getOptional } from '@kodadot1/metasquid/entity'
 import { isFetchable } from '@kodadot1/minipfs'
 import { unwrap } from '../utils/extract'
 import { Context, isNFT } from '../utils/types'
-import { CollectionEntity, NFTEntity } from '../../model'
+import { CollectionEntity, Kind, NFTEntity } from '../../model'
 import { handleMetadata } from '../shared/metadata'
-import { debug, warn } from '../utils/logger'
+import { debug, success, warn } from '../utils/logger'
 import { updateItemMetadataByCollection } from '../utils/cache'
 import { setMetadataHandler } from '../shared/token'
 import { tokenIdOf } from './types'
@@ -51,6 +51,11 @@ export async function handleMetadataSet(context: Context): Promise<void> {
     final.name = metadata?.name
     final.image = metadata?.image
     final.media = metadata?.animationUrl
+
+    if (final instanceof CollectionEntity) {
+      final.kind = metadata?.kind || Kind.mixed
+      success(OPERATION, `[COLLECTION METADATA SET] ${final.id} - ${metadata?.kind || Kind.mixed}`)
+    }
 
     await context.store.save(final)
 
