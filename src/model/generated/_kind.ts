@@ -3,4 +3,5 @@ export enum Kind {
     pfp = "pfp",
     genart = "genart",
     mixed = "mixed",
+    collectible = "collectible",
 }

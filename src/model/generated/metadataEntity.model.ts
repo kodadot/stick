@@ -33,6 +33,6 @@ export class MetadataEntity {
     @StringColumn_({nullable: true})
     banner!: string | undefined | null
 
-    @Column_("varchar", {length: 6, nullable: true})
+    @Column_("varchar", {length: 11, nullable: true})
     kind!: Kind | undefined | null
 }
