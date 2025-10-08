@@ -61,7 +61,7 @@ export class CollectionEntity {
     @StringColumn_({nullable: false})
     issuer!: string
 
-    @Column_("varchar", {length: 6, nullable: true})
+    @Column_("varchar", {length: 11, nullable: true})
     kind!: Kind | undefined | null
 
     @IntColumn_({nullable: true})
