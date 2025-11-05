@@ -126,7 +126,7 @@ export type Context<S = Store>  = {
   extrinsic: SelectedExtrinsic | undefined
   call: SelectedCall | undefined
   /** Relay chain block number */
-  relayParentNumber?: number
+  relayParentNumber: number | undefined
   // log: Logger
 }
 
