@@ -8,6 +8,7 @@ import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
 import { BatchContext, Context, SelectedEvent } from './utils/types'
+import { ParachainSystemCall } from '../processable'
 import { updateSwapsCache } from './utils/cache'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
@@ -215,6 +216,14 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
   )
 
   for (const block of ctx.blocks) {
+    let relayParentNumber: number | undefined
+
+    const validationCall = block.calls?.find((c) => c.name === ParachainSystemCall.setValidationData)
+
+    if (validationCall) {
+      relayParentNumber = validationCall.args?.data?.validationData?.relayParentNumber as number | undefined
+    }
+
     for (let event of block.events) {
       logger.debug(`Processing ${event.name}`)
       const [pallet] = event.name.split('.')
@@ -228,6 +237,7 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
         store: ctx.store,
         extrinsic: event.extrinsic,
         call: event.call,
+        relayParentNumber,
       })
       // const item = event
     }

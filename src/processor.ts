@@ -3,7 +3,7 @@ import {
 } from '@subsquid/substrate-processor'
 import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
-import { Asset, NewNonFungible, NonFungible, NonFungibleCall, Unique } from './processable'
+import { Asset, NewNonFungible, NonFungible, NonFungibleCall, ParachainSystemCall, Unique } from './processable'
 
 import { CHAIN, getArchiveUrl, getNodeUrl, UNIQUES_ENABLED } from './environment'
 import { mainFrame } from './mappings'
@@ -92,6 +92,9 @@ processor.addEvent({ name: [NewNonFungible.cancelSwap], call: true, extrinsic: t
 processor.addEvent({ name: [NewNonFungible.claimSwap], call: true, extrinsic: true }) 
 // IMPORTANT: THIS IS CALL NOT EVENT!
 processor.addCall({ name: [NonFungibleCall.updateMintSettings], extrinsic: true })
+
+// Capture relay chain context from inherent call
+processor.addCall({ name: [ParachainSystemCall.setValidationData] })
 
 processor.setFields(fieldSelection)
 
