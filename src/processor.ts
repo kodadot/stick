@@ -112,4 +112,3 @@ logger.info(`PROCESSING ~~ ${CHAIN.toUpperCase()} ~~ EVENTS`)
 
 // mainFrame function is called when the processor is ready to process the data
 processor.run(database, mainFrame)
-
