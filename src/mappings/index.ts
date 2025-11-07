@@ -230,7 +230,6 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
   for (const block of ctx.blocks) {
     const relayParentNumber = getRelayParentNumber(block)
 
-
     for (let event of block.events) {
       logger.debug(`Processing ${event.name}`)
       const [pallet] = event.name.split('.')
