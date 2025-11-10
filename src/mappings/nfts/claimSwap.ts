@@ -3,6 +3,7 @@ import { CollectionEntity as CE, Offer, Swap, TradeStatus } from '../../model'
 import { unwrap } from '../utils/extract'
 import { debug, pending, success } from '../utils/logger'
 import { Context, createTokenId, isOffer } from '../utils/types'
+import { calculateCollectionFloor, calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { getSwapClaimedEvent } from './getters'
 
 const OPERATION = TradeStatus.ACCEPTED
@@ -34,6 +35,18 @@ export async function handleClaimSwap(context: Context): Promise<void> {
       collection.highestSale = event.price
     }
   }
+
+  const { floor } = await calculateCollectionFloor(context.store, collection.id, id)
+  const { ownerCount, distribution } = await calculateCollectionOwnerCountAndDistribution(
+    context.store,
+    collection.id,
+    event.currentOwner,
+    event.sent.owner
+  )
+  collection.floor = floor
+  collection.ownerCount = ownerCount
+  collection.distribution = distribution
+  collection.updatedAt = event.timestamp
 
   success(OPERATION, `${id} by ${event.caller}`)
 
