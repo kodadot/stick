@@ -110,6 +110,14 @@ export enum NonFungibleCall {
 }
 
 /**
+ * Parachain System Calls
+ * Used to extract relay chain context (e.g., relay parent block number)
+ */
+export enum ParachainSystemCall {
+  setValidationData = 'ParachainSystem.set_validation_data',
+}
+
+/**
  * Assets Pallet Events
  * @enum {string}
  * @readonly
