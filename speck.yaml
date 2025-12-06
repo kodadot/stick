@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
 name: speck
 version: 16
-description: 'SubSquid indexer for Uniques and Assets on Statemint'
+description: 'SubSquid indexer for Uniques and Assets on AssetHub Polkadot'
 build: 
 deploy:
   addons:
@@ -17,6 +17,7 @@ deploy:
       CHAIN: polkadot
       OFFER: 174
       UNIQUES_ENABLED: true
+      PORTAL_URL: ${{ addons.portal.asset_hub_polkadot.http }}
   api:
     cmd:
       - npx

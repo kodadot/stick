@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
 name: stick
 version: 14
-description: 'SubSquid indexer for Uniques and Assets on Statemine'
+description: 'SubSquid indexer for Uniques and Assets on AssetHub Kusama'
 build: 
 deploy:
   addons:
@@ -17,6 +17,7 @@ deploy:
       CHAIN: kusama
       OFFER: 464
       UNIQUES_ENABLED: true
+      PORTAL_URL: ${{ addons.portal.asset_hub_kusama.http }}
   api:
     cmd:
       - npx
