@@ -5,7 +5,7 @@ import { TypeormDatabase as Database } from '@subsquid/typeorm-store'
 import logger from './mappings/utils/logger'
 import { Asset, NewNonFungible, NonFungible, NonFungibleCall, ParachainSystemCall, Unique } from './processable'
 
-import { CHAIN, getArchiveUrl, getNodeUrl, UNIQUES_ENABLED } from './environment'
+import { CHAIN, getArchiveUrl, getNodeUrl, getPortalUrl, UNIQUES_ENABLED } from './environment'
 import { mainFrame } from './mappings'
 import { SelectedFields, fieldSelection } from './mappings/utils/types'
 
@@ -26,6 +26,7 @@ processor.setBlockRange({ from: STARTING_BLOCK })
 // Get this from the environment based on the chain from .env
 const archive = getArchiveUrl()
 const chain = getNodeUrl()
+const portal = getPortalUrl()
 
 
 processor.setRpcEndpoint({
@@ -33,7 +34,9 @@ processor.setRpcEndpoint({
   rateLimit: 10
 })
 
-processor.setGateway(archive);
+// processor.setGateway(archive);
+
+processor.setPortal(portal);
 
 // disables RPC ingestion and drastically reduce no of RPC calls
 processor.setRpcDataIngestionSettings({ disabled: ONLY_ARCHIVE })
