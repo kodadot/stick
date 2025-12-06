@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
-name: stick
-version: 14
-description: 'SubSquid indexer for Uniques and Assets on Statemine'
+name: snack
+version: 1
+description: 'SubSquid indexer for Uniques and Assets on AssetHub Paseo'
 build: 
 deploy:
   addons:
@@ -14,11 +14,11 @@ deploy:
       - node
       - lib/processor
     env:
-      CHAIN: kusama
-      OFFER: 464
-      UNIQUES_ENABLED: true
-      STARTING_BLOCK: 4556552
-      UNIQUE_STARTING_BLOCK: 618838
+      CHAIN: paseo
+      OFFER: ''
+      UNIQUES_ENABLED: false
+      STARTING_BLOCK:	142362
+      UNIQUE_STARTING_BLOCK: 360613
   api:
     cmd:
       - npx
@@ -34,7 +34,7 @@ deploy:
       - '1000'
 
 scale:
-  dedicated: true
+  dedicated: false
   addons:
     postgres:
       storage: 2G

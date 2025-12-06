@@ -1,4 +1,4 @@
-export type Chain = 'kusama' | 'rococo' | 'polkadot'
+export type Chain = 'kusama' | 'paseo' | 'polkadot'
 
 export const CHAIN: Chain = process.env.CHAIN as Chain || 'kusama'
 export const COLLECTION_OFFER: string = process.env.OFFER || ''
@@ -12,7 +12,7 @@ export const STARTING_BLOCK = UNIQUES_ENABLED ? UNIQUE_STARTING_BLOCK : NFT_STAR
 const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/asset-hub-${CHAIN}`
 const NODE_URL = `wss://${CHAIN}-asset-hub-rpc.polkadot.io`
 
-export const isProd = CHAIN !== 'rococo'
+export const isProd = CHAIN !== 'paseo'
 
 console.table({
   CHAIN, ARCHIVE_URL, NODE_URL, STARTING_BLOCK,
