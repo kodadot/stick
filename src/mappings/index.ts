@@ -7,7 +7,8 @@ import { Asset, NonFungible, NonFungibleCall, NewNonFungible, Unique } from '../
 import * as a from './assets'
 import * as n from './nfts'
 import * as u from './uniques'
-import { BatchContext, Context, SelectedEvent } from './utils/types'
+import { BatchContext, Block, Context, SelectedEvent } from './utils/types'
+import { ParachainSystemCall } from '../processable'
 import { updateSwapsCache } from './utils/cache'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
@@ -199,6 +200,18 @@ const globalHandler: Record<string, HandlerFunction> = {
   Assets: assets,
 }
 
+function getRelayParentNumber(block: Block): number | undefined {
+  let relayParentNumber: number | undefined
+
+  const validationCall = block.calls?.find((c) => c.name === ParachainSystemCall.setValidationData)
+
+  if (validationCall) {
+    relayParentNumber = validationCall.args?.data?.validationData?.relayParentNumber as number | undefined
+  }
+
+  return relayParentNumber
+}
+
 /**
  * mainFrame is the main entry point for processing a batch of blocks
 **/
@@ -215,6 +228,8 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
   )
 
   for (const block of ctx.blocks) {
+    const relayParentNumber = getRelayParentNumber(block)
+
     for (let event of block.events) {
       logger.debug(`Processing ${event.name}`)
       const [pallet] = event.name.split('.')
@@ -228,16 +243,18 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
         store: ctx.store,
         extrinsic: event.extrinsic,
         call: event.call,
+        relayParentNumber,
       })
       // const item = event
     }
   }
 
   if (ctx.isHead) {
-    const lastBlock = ctx.blocks[ctx.blocks.length - 1].header
-    const lastDate = new Date(lastBlock.timestamp || Date.now())
+    const lastBlock = ctx.blocks[ctx.blocks.length - 1]
+    const relayParentNumber = getRelayParentNumber(lastBlock)
+    const lastDate = new Date(lastBlock.header.timestamp || Date.now())
     logger.info(`Found head block, updating cache`)
-    await updateSwapsCache(lastDate, lastBlock.height, ctx.store)
+    await updateSwapsCache(lastDate, (relayParentNumber || lastBlock.header.height), ctx.store)
   }
 }
 
