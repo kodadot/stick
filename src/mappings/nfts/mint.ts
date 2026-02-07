@@ -10,6 +10,7 @@ import { Action, Context, createTokenId } from '../utils/types'
 import { calculateCollectionOwnerCountAndDistribution, tokenUri, versionOf } from '../utils/helper'
 import { mintHandler } from '../shared/token'
 import { getCreateTokenEvent } from './getters'
+import { markCollectionRarityDirty } from '../utils/rarity'
 
 const OPERATION = Action.MINT
 
@@ -83,6 +84,7 @@ export async function handleTokenCreate(context: Context): Promise<void> {
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
   await context.store.save(collection)
+  markCollectionRarityDirty(collection.id)
   
   const destinationAddress = final.issuer !== final.currentOwner ? final.currentOwner : ''
   

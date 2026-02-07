@@ -9,6 +9,7 @@ import { updateItemMetadataByCollection } from '../utils/cache'
 import { setMetadataHandler } from '../shared/token'
 import { tokenIdOf } from './types'
 import { getMetadataEvent } from './getters'
+import { markCollectionRarityDirty } from '../utils/rarity'
 
 const OPERATION = 'METADATA' as any
 
@@ -20,6 +21,7 @@ const OPERATION = 'METADATA' as any
 export async function handleMetadataSet(context: Context): Promise<void> {
   const event = unwrap(context, getMetadataEvent)
   debug(OPERATION, event)
+  markCollectionRarityDirty(event.collectionId)
 
   if (!event.metadata) {
     return

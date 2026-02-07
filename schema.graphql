@@ -80,6 +80,10 @@ type NFTEntity @entity {
   recipient: String
   royalty: Float
   sn: BigInt! @index
+  rarityScore: Float @index
+  rarityRank: Int @index
+  rarityPercentile: Float @index
+  rarityTier: String @index
   # swap: Swap @derivedFrom(field: "nft")
   updatedAt: DateTime! @index
   version: Int!

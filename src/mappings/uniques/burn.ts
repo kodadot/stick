@@ -7,6 +7,7 @@ import { createEvent } from '../shared/event'
 import { calculateCollectionFloor, calculateCollectionOwnerCountAndDistribution } from '../utils/helper'
 import { burnHandler } from '../shared/token'
 import { getBurnTokenEvent } from './getters'
+import { markCollectionRarityDirty } from '../utils/rarity'
 
 const OPERATION = Action.BURN
 
@@ -45,6 +46,7 @@ export async function handleTokenBurn(context: Context): Promise<void> {
   success(OPERATION, `${id} by ${event.caller}`)
   await context.store.save(entity)
   await context.store.save(entity.collection)
+  markCollectionRarityDirty(entity.collection.id)
   const meta = entity.metadata ?? ''
   await createEvent(entity, OPERATION, event, meta, context.store)
 }

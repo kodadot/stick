@@ -10,6 +10,7 @@ import * as u from './uniques'
 import { BatchContext, Block, Context, SelectedEvent } from './utils/types'
 import { ParachainSystemCall } from '../processable'
 import { updateSwapsCache } from './utils/cache'
+import { flushDirtyCollectionRarity } from './utils/rarity'
 
 type HandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
 
@@ -247,6 +248,8 @@ export async function mainFrame(ctx: BatchContext<Store>): Promise<void> {
       })
       // const item = event
     }
+
+    await flushDirtyCollectionRarity(ctx.store)
   }
 
   if (ctx.isHead) {

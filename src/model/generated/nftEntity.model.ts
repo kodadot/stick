@@ -82,6 +82,22 @@ export class NFTEntity {
     sn!: bigint
 
     @Index_()
+    @FloatColumn_({nullable: true})
+    rarityScore!: number | undefined | null
+
+    @Index_()
+    @IntColumn_({nullable: true})
+    rarityRank!: number | undefined | null
+
+    @Index_()
+    @FloatColumn_({nullable: true})
+    rarityPercentile!: number | undefined | null
+
+    @Index_()
+    @StringColumn_({nullable: true})
+    rarityTier!: string | undefined | null
+
+    @Index_()
     @DateTimeColumn_({nullable: false})
     updatedAt!: Date
 
