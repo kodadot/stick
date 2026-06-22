@@ -26,6 +26,9 @@
 * npm
 * [just](https://github.com/casey/just)
 
+> [!IMPORTANT]
+> To run Subsquid locally [you need to have](https://docs.sqd.dev/announcements/gateway-api-keys) `SQD_API_KEY` in `.env`
+
 ## Quickly running the sample
 
 ```bash
