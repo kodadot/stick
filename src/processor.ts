@@ -33,7 +33,11 @@ processor.setRpcEndpoint({
   rateLimit: 10
 })
 
-processor.setGateway(archive);
+processor.setGateway({
+  url: archive,
+  apiKey: process.env.SQD_API_KEY
+});
+
 
 // disables RPC ingestion and drastically reduce no of RPC calls
 processor.setRpcDataIngestionSettings({ disabled: ONLY_ARCHIVE })
