@@ -12,7 +12,10 @@
     "update": "npx npm-check-updates --filter /subsquid/ --upgrade && npm i -f",
     "db:migrate": "npx squid-typeorm-migration apply",
     "processor:start": "node lib/processor.js",
-    "lint:fix": "eslint --fix --quiet --ignore-path .gitignore --ext .js,.ts .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
     "query-node:start": "squid-graphql-server --subscriptions --max-response-size 10000 --dumb-cache in-memory --dumb-cache-ttl 1000 --dumb-cache-size 100 --dumb-cache-max-age 1000"
   },
   "dependencies": {
@@ -33,6 +36,8 @@
     "typeorm": "0.3.20"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
     "@subsquid/substrate-metadata-explorer": "3.2.0",
     "@subsquid/substrate-typegen": "8.1.0",
     "@subsquid/typeorm-codegen": "2.2.0",
@@ -41,6 +46,8 @@
     "@types/pg": "^8.20.0",
     "eslint": "^10.5.0",
     "eslint-config-unjs": "^0.6.2",
+    "oxfmt": "^0.55.0",
+    "oxlint": "^1.70.0",
     "prettier": "^3.8.4",
     "typescript": "~6.0.3",
     "vitest": "^4.1.9"
