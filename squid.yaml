@@ -17,6 +17,7 @@ deploy:
       CHAIN: kusama
       OFFER: 464
       UNIQUES_ENABLED: true
+      STARTING_BLOCK: 4556552
   api:
     cmd:
       - npx
