@@ -10,6 +10,14 @@
     "*.model.ts",
     "src/model",
     "db/migrations",
-    "*.json"
+    "*.json",
+    "tests/**/*",
+    "src/server-extension",
+    "src/types",
+    "lib/**/*",
+    "*.yaml",
+    "*.yml",
+    "*.md",
+    ".github"
   ]
 }
