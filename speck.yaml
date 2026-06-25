@@ -17,6 +17,8 @@ deploy:
       CHAIN: polkadot
       OFFER: 174
       UNIQUES_ENABLED: true
+      STARTING_BLOCK: 4232387
+      UNIQUE_STARTING_BLOCK: 1212469
   api:
     cmd:
       - npx
